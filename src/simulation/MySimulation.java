@@ -19,7 +19,6 @@ public class MySimulation extends Simulation
 	
 	public MySimulation()
 	{
-		init();
 		aIt = ImportTools.importData();
 		aVozidla = new ArrayList<>(3);
 		aVozidla.add(new LinkedList<>());
@@ -35,6 +34,7 @@ public class MySimulation extends Simulation
 		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
 		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(2)));
 		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(2)));
+		init();
 	}
 	
 	public List<Zastavka> getZastavky() {

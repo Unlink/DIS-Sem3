@@ -116,7 +116,7 @@ public class ImportTools {
 
 	private void spocitajPrichodyAZacZapasu() {
 		double maxD = aZastavky.stream().max((Zastavka z1, Zastavka z2) -> Double.compare(z1.getVzdialenost(), z2.getVzdialenost())).get().getVzdialenost();
-		aZaciatokZapasu = maxD + 75*60;
+		aZaciatokZapasu = maxD + 75 * 60;
 		for (Zastavka z : aZastavky) {
 			z.setZacPrichodov(maxD - z.getVzdialenost());
 		}
@@ -136,7 +136,7 @@ public class ImportTools {
 		}
 		List[] l = aPom.get(linkaId);
 		l[0].add(z);
-		l[1].add(parseDouble(paSplit[2])*60);
+		l[1].add(parseDouble(paSplit[2]) * 60);
 	}
 
 	private void insertGenerator(String[] paSplit) {

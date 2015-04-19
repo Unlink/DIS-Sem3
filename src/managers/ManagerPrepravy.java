@@ -69,24 +69,24 @@ public class ManagerPrepravy extends Manager
 	{
 		switch (message.code())
 		{
-		case Mc.noveVozidlo:
-			processNoveVozidlo(message);
-		break;
-
 		case Mc.init:
 			processInit(message);
 		break;
 
-		case Mc.vylozZakaznikov:
-			processVylozZakaznikov(message);
+		case Mc.noveVozidlo:
+			processNoveVozidlo(message);
+		break;
+
+		case Mc.vybavVozidlo:
+			processVybavVozidlo(message);
 		break;
 
 		case Mc.novyZakaznik:
 			processNovyZakaznik(message);
 		break;
 
-		case Mc.vybavVozidlo:
-			processVybavVozidlo(message);
+		case Mc.vylozZakaznikov:
+			processVylozZakaznikov(message);
 		break;
 
 		case Mc.nalozZakaznikov:

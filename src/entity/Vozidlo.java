@@ -43,31 +43,52 @@ public class Vozidlo {
 		aAktObsadenost++;
 		return this;
 	}
-	
+
 	public Vozidlo obsadDvere() {
 		aAktObsadenostDveri++;
 		return this;
 	}
-	
+
 	public Vozidlo uvoliDvere() {
 		aAktObsadenostDveri--;
 		return this;
 	}
-	
+
 	public boolean maMiesto() {
 		return aAktObsadenost < aTypVozidlo.getKapacita();
 	}
-	
+
 	public boolean maVolneDvere() {
 		return aAktObsadenostDveri < aTypVozidlo.getPocDveri();
 	}
-	
+
 	public boolean nastupujuLudia() {
 		return aAktObsadenostDveri != 0;
 	}
 
 	public void vyprazdniVozidlo() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		aAktObsadenost = 0;
+		aAktObsadenostDveri = 0;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return this.aId;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Vozidlo other = (Vozidlo) obj;
+		if (this.aId != other.aId) {
+			return false;
+		}
+		return true;
+	}
+
 }

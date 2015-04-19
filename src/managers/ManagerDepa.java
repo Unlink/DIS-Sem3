@@ -29,22 +29,23 @@ public class ManagerDepa extends Manager {
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message) {
-		switch (message.code()) {
-			case Mc.init:
-				processInit(message);
-				break;
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.init:
+			processInit(message);
+		break;
 
-			case Mc.finish:
-				processFinish(message);
-				break;
+		case Mc.finish:
+			processFinish(message);
+		break;
 
-			default:
-				processOther(message);
-				break;
+		default:
+			processOther(message);
+		break;
 		}
 	}
-
 	//meta! tag="end"
 	//meta! sender="AgentPrepravy", id="73", type="notice"
 	public void processInit(MessageForm message) {

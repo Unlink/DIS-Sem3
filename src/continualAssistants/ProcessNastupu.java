@@ -16,6 +16,10 @@ public class ProcessNastupu extends Process
 	//meta! sender="AgentNastupov", id="44"
 	public void processStart(MessageForm message)
 	{
+		MyMessage mm = (MyMessage) message;
+		Double sample = ((AgentNastupov)myAgent()).getRNG(mm.getVozidlo().getId()).sample();
+		mm.setCode(Mc.finish);
+		hold(sample, mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -23,6 +27,9 @@ public class ProcessNastupu extends Process
 	{
 		switch (message.code())
 		{
+			case Mc.finish:
+				procesFinnished(message);
+			break;
 		}
 	}
 
@@ -42,4 +49,8 @@ public class ProcessNastupu extends Process
 		}
 	}
 	//meta! tag="end"
+
+	private void procesFinnished(MessageForm message) {
+		assistantFinished(message);
+	}
 }

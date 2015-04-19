@@ -11,6 +11,7 @@ import entity.Vozidlo;
 import entity.Zastavka;
 import instantAssistants.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class AgentNastupov extends Agent
 	private final RNG<Double>[] aGeneratoryNastupov;
 	private final SimQueue<Pasazier>[] aFronta;
 	private final HashMap<Vozidlo, MyMessage>[] aVozidla;
+	private final HashSet<Vozidlo> aCakajuceVozidla;
 	
 	public AgentNastupov(int id, Simulation mySim, Agent parent)
 	{
@@ -40,6 +42,7 @@ public class AgentNastupov extends Agent
 			aFronta[z.getId()] = new SimQueue<>();
 			aVozidla[z.getId()] = new HashMap<>();
 		}
+		aCakajuceVozidla = new HashSet<>();
 	}
 	
 	public SimQueue<Pasazier> getFronta(int paZastavka) {
@@ -48,6 +51,14 @@ public class AgentNastupov extends Agent
 	
 	public HashMap<Vozidlo, MyMessage> getVozidla(int paZastavka) {
 		return aVozidla[paZastavka];
+	}
+	
+	public HashSet<Vozidlo> getCakajuceVozidla() {
+		return aCakajuceVozidla;
+	}
+	
+	public RNG<Double> getRNG(int id) {
+		return aGeneratoryNastupov[id];
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

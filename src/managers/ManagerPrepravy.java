@@ -18,7 +18,7 @@ public class ManagerPrepravy extends Manager
 	public void processVylozZakaznikov(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" odyšlo z stadiona");
+		mm.getVozidlo().setPozicia("Stadion -->");
 		message.setCode(Mc.vybavVozidlo);
 		response(message);
 	}
@@ -27,7 +27,7 @@ public class ManagerPrepravy extends Manager
 	public void processNalozZakaznikov(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" odyšlo zo zastavky" + mm.getZastavka());
+		mm.getVozidlo().setPozicia(((MySimulation)mySim()).getZastavky().get(mm.getZastavka()).getMeno()+"-->");
 		message.setCode(Mc.vybavVozidlo);
 		response(message);
 	}
@@ -39,12 +39,12 @@ public class ManagerPrepravy extends Manager
 		if (mm.getZastavka() < 0) {
 			mm.setAddressee(((MySimulation)mySim()).agentVystupov());
 			mm.setCode(Mc.vylozZakaznikov);
-			System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" prislo na stadion");
+			mm.getVozidlo().setPozicia("Stadion");
 		}
 		else {
-			System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" prislo na zastavku" + mm.getZastavka());
 			mm.setAddressee(((MySimulation)mySim()).agentNastupov());
 			mm.setCode(Mc.nalozZakaznikov);
+			mm.getVozidlo().setPozicia(((MySimulation)mySim()).getZastavky().get(mm.getZastavka()).getMeno());
 		}
 		request(mm);
 	}

@@ -40,6 +40,17 @@ public class AgentNastupov extends Agent
 		for (Zastavka z: ((MySimulation)mySim).getZastavky()) {
 			aFronta[z.getId()] = new SimQueue<>();
 			aVozidla[z.getId()] = new HashMap<>();
+			z.setDfxysfds(() -> {
+				StringBuilder sb = new StringBuilder();
+				for (Vozidlo v : aVozidla[z.getId()].keySet()) {
+					sb.append(v.getId()).append(" (").append(v.getTypVozidlo().getMeno()).append("), ");
+				}
+				if (sb.length() > 0) {
+					sb.delete(sb.length()-2, sb.length());
+				}
+				return sb.toString();
+			});
+			z.setGdhfhg(() -> aFronta[z.getId()].size());
 		}
 	}
 	

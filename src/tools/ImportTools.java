@@ -10,6 +10,7 @@ import OSPRNG.UniformContinuousRNG;
 import entity.IGeneratorFactory;
 import entity.Linka;
 import entity.TypVozidlo;
+import entity.Vozidlo;
 import entity.Zastavka;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class ImportTools {
 	}
 
 	private ImportTools() {
+		Vozidlo.resetCounter();
 		aVozidla = new ArrayList<>();
 		aZastavky = new ArrayList<>();
 		aMappingZastavok = new HashMap<>();

@@ -26,8 +26,9 @@ public class ManagerVystupov extends Manager
 	//meta! sender="ProcessVystupu", id="39"
 	public void processFinish(MessageForm message)
 	{
-		message.setCode(Mc.vylozZakaznikov);
-		response(message);
+		MyMessage mm = (MyMessage) message;
+		mm.setCode(Mc.vylozZakaznikov);
+		response(mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"

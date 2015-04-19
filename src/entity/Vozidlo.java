@@ -8,22 +8,6 @@ package entity;
  * @author Unlink
  */
 public class Vozidlo {
-
-	public static int getCounter() {
-		return aCounter;
-	}
-
-	public static void setCounter(int paCounter) {
-		Vozidlo.aCounter = paCounter;
-	}
-
-	public VozidloState getStav() {
-		return aStav;
-	}
-
-	public void setStav(VozidloState paStav) {
-		this.aStav = paStav;
-	}
 	
 	public static enum VozidloState {
 		NotCreated,
@@ -42,6 +26,8 @@ public class Vozidlo {
 	private int aAktObsadenostDveri;
 	
 	private VozidloState aStav;
+	
+	private String aPozicia;
 
 	public Vozidlo(TypVozidlo paTypVozidlo) {
 		this.aTypVozidlo = paTypVozidlo;
@@ -49,8 +35,13 @@ public class Vozidlo {
 		this.aAktObsadenostDveri = 0;
 		this.aId = aCounter++;
 		this.aStav = VozidloState.NotCreated;
+		this.aPozicia = "depo";
 	}
 
+	public static void resetCounter() {
+		aCounter = 1;
+	}
+	
 	public int getId() {
 		return aId;
 	}
@@ -97,6 +88,22 @@ public class Vozidlo {
 	public void vyprazdniVozidlo() {
 		aAktObsadenost = 0;
 		aAktObsadenostDveri = 0;
+	}
+	
+	public VozidloState getStav() {
+		return aStav;
+	}
+
+	public void setStav(VozidloState paStav) {
+		this.aStav = paStav;
+	}
+
+	public String getPozicia() {
+		return aPozicia;
+	}
+
+	public void setPozicia(String paPozicia) {
+		this.aPozicia = paPozicia;
 	}
 
 	@Override

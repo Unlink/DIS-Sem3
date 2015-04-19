@@ -16,24 +16,10 @@ public class MySimulation extends Simulation
 	
 	private ImportTools aIt;
 	private List<List<Vozidlo>> aVozidla;
-	
-	public MySimulation()
-	{
-		aIt = ImportTools.importData();
-		aVozidla = new ArrayList<>(3);
-		aVozidla.add(new LinkedList<>());
-		aVozidla.add(new LinkedList<>());
-		aVozidla.add(new LinkedList<>());
-		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
+
+	public MySimulation(ImportTools paIt, List<List<Vozidlo>> paVozidla) {
+		this.aIt = paIt;
+		this.aVozidla = paVozidla;
 		init();
 	}
 	

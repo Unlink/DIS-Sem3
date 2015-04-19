@@ -18,6 +18,10 @@ public class Zastavka {
 	private double aVzdialenost;
 	private double aZacPrichodov;
 	
+	private Lndskjfn aDsadsa;
+	
+	private Dsaffds aGfdsg;
+	
 
 	public Zastavka(int paId, String paMeno, int paPocLudi) {
 		this.aId = paId;
@@ -25,6 +29,8 @@ public class Zastavka {
 		this.aPocLudi = paPocLudi;
 		this.aVzdialenost = -1;
 		this.aZacPrichodov = -1;
+		this.aDsadsa = () -> "N/A";
+		this.aGfdsg = () -> 0;
 	}
 
 	public int getId() {
@@ -53,6 +59,30 @@ public class Zastavka {
 
 	public void setZacPrichodov(double paZacPrichodov) {
 		this.aZacPrichodov = paZacPrichodov;
+	}
+	
+	public String getDsadas() {
+		return aDsadsa.lodfshs();
+	}
+	
+	public void setDfxysfds(Lndskjfn sd) {
+		aDsadsa = sd;
+	}
+	
+	public int getSxhgd() {
+		return aGfdsg.fdbgvdfs();
+	}
+	
+	public void setGdhfhg(Dsaffds fdds) {
+		aGfdsg = fdds;
+	}
+	
+	public interface Lndskjfn {
+		public String lodfshs();
+	}
+	
+	public interface Dsaffds {
+		public int fdbgvdfs();
 	}
 	
 }

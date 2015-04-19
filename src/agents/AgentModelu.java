@@ -13,6 +13,7 @@ public class AgentModelu extends Agent
 	{
 		super(id, mySim, parent);
 		init();
+		addOwnMessage(Mc.init);
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

@@ -59,7 +59,7 @@ public class ImportTools {
 					for (int i = 0; i < split.length; i++) {
 						split[i] = split[i].trim();
 					}
-					System.out.println(String.join(",", split));
+					//System.out.println(String.join(",", split));
 					switch (subor) {
 						case "zastavky":
 							insertZastavka(split);

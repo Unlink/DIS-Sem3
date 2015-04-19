@@ -10,18 +10,27 @@ import entity.Zastavka;
 import instantAssistants.*;
 
 //meta! id="2"
-public class AgentOkolia extends Agent
-{
-	
-	public AgentOkolia(int id, Simulation mySim, Agent parent)
-	{
+public class AgentOkolia extends Agent {
+
+	private int aVygenerovanych;
+
+	public AgentOkolia(int id, Simulation mySim, Agent parent) {
 		super(id, mySim, parent);
 		init();
+		addOwnMessage(Mc.novyZakaznik);
+		aVygenerovanych = 0;
 	}
-	
+
+	public int getVygenerovanych() {
+		return aVygenerovanych;
+	}
+
+	public void incVygenerovanych() {
+		this.aVygenerovanych++;
+	}
+
 	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init()
-	{
+	private void init() {
 		new ManagerOkolia(Id.managerOkolia, mySim(), this);
 		addOwnMessage(Mc.init);
 	}

@@ -32,7 +32,7 @@ public class AgentNastupov extends Agent
 		((MySimulation)mySim).getVozidla().stream().forEach((l) -> l.stream().forEach((v) -> vsetkyVozidla.add(v)));
 		aGeneratoryNastupov = new RNG[vsetkyVozidla.size()];
 		for (Vozidlo v : vsetkyVozidla) {
-			aGeneratoryNastupov[v.getId()] = v.getTypVozidlo().createGeneratorNastupu();
+			aGeneratoryNastupov[v.getId()-1] = v.getTypVozidlo().createGeneratorNastupu();
 		}
 		List<Zastavka> zastavky = ((MySimulation)mySim).getZastavky();
 		aFronta = new SimQueue[zastavky.size()];

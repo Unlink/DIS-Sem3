@@ -17,12 +17,18 @@ public class ManagerPrepravy extends Manager
 	//meta! sender="AgentVystupov", id="68", type="response"
 	public void processVylozZakaznikov(MessageForm message)
 	{
+		MyMessage mm = (MyMessage) message;
+		System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" odyšlo z stadiona");
+		message.setCode(Mc.vybavVozidlo);
 		response(message);
 	}
 
 	//meta! sender="AgentNastupov", id="67", type="response"
 	public void processNalozZakaznikov(MessageForm message)
 	{
+		MyMessage mm = (MyMessage) message;
+		System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" odyšlo zo zastavky" + mm.getZastavka());
+		message.setCode(Mc.vybavVozidlo);
 		response(message);
 	}
 
@@ -33,8 +39,10 @@ public class ManagerPrepravy extends Manager
 		if (mm.getZastavka() < 0) {
 			mm.setAddressee(((MySimulation)mySim()).agentVystupov());
 			mm.setCode(Mc.vylozZakaznikov);
+			System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" prislo na stadion");
 		}
 		else {
+			System.out.println(mm.toString()+" Vozidlo "+mm.getVozidlo().getId()+" prislo na zastavku" + mm.getZastavka());
 			mm.setAddressee(((MySimulation)mySim()).agentNastupov());
 			mm.setCode(Mc.nalozZakaznikov);
 		}
@@ -44,6 +52,8 @@ public class ManagerPrepravy extends Manager
 	//meta! sender="AgentDepa", id="30", type="notice"
 	public void processNoveVozidlo(MessageForm message)
 	{
+		MyMessage mm = (MyMessage) message;
+		System.out.println(mm.toString()+" Nové vozidlo:" + mm.getVozidlo().getId());
 		message.setAddressee(((MySimulation)mySim()).agentPresunov());
 		notice(message);
 	}
@@ -51,6 +61,8 @@ public class ManagerPrepravy extends Manager
 	//meta! sender="AgentModelu", id="25", type="notice"
 	public void processNovyZakaznik(MessageForm message)
 	{
+		MyMessage mm = (MyMessage) message;
+		System.out.println(mm.toString()+" Novy zakaznik");
 		message.setAddressee(((MySimulation)mySim()).agentNastupov());
 		notice(message);
 	}

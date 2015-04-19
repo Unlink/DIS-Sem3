@@ -17,7 +17,7 @@ public class ProcessNastupu extends Process
 	public void processStart(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		Double sample = ((AgentNastupov)myAgent()).getRNG(mm.getVozidlo().getId()).sample();
+		Double sample = ((AgentNastupov)myAgent()).getRNG(mm.getVozidlo().getId()-1).sample();
 		mm.setCode(Mc.finish);
 		hold(sample, mm);
 	}

@@ -19,7 +19,7 @@ public class ProcessPresunuVozidla extends Process
 	{
 		MyMessage mm = (MyMessage) message;
 		mm.setCode(Mc.finish);
-		hold(getLinka(message).dajCasKDalsej(mm.getZastavka()), mm);
+		hold(getLinka(message).dajCasKDalsej(mm.getPomNum()), mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -50,13 +50,14 @@ public class ProcessPresunuVozidla extends Process
 	}
 	//meta! tag="end"
 	
-	private Linka getLinka(MessageForm mm) {
+	public Linka getLinka(MessageForm mm) {
 		return ((MySimulation)mySim()).getLinky().get(((MyMessage)mm).getLinka());
 	}
 
 	private void processFinished(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
-		mm.setZastavka(getLinka(message).dajDalsiuZastavku(mm.getZastavka()));
+		mm.setPomNum(getLinka(message).dajDalsiuZastavku(mm.getPomNum()));
+		mm.setZastavka(getLinka(message).getZastavkaId(mm.getPomNum()));
 		assistantFinished(message);
 	}
 }

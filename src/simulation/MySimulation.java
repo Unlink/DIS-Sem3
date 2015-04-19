@@ -24,16 +24,16 @@ public class MySimulation extends Simulation
 		aVozidla.add(new LinkedList<>());
 		aVozidla.add(new LinkedList<>());
 		aVozidla.add(new LinkedList<>());
-		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(0)));
-		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(0)));
-		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(2)));
+		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(1)));
+		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(1)));
+		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(1)));
 		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
 		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(2)));
-		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(0)));
+		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
 		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
-		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(2)));
-		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(2)));
+		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
+		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
+		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
 		init();
 	}
 	

@@ -15,6 +15,9 @@ public class SchedulerCakania extends Scheduler
 	//meta! sender="AgentNastupov", id="59"
 	public void processStart(MessageForm message)
 	{
+		MyMessage mm = (MyMessage) message;
+		mm.setCode(Mc.finish);
+		hold(mm.getVozidlo().getTypVozidlo().getCaka(), mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -22,6 +25,9 @@ public class SchedulerCakania extends Scheduler
 	{
 		switch (message.code())
 		{
+			case Mc.finish:
+				processFinished(message);
+			break;
 		}
 	}
 
@@ -41,4 +47,8 @@ public class SchedulerCakania extends Scheduler
 		}
 	}
 	//meta! tag="end"
+
+	private void processFinished(MessageForm message) {
+		assistantFinished(message);
+	}
 }

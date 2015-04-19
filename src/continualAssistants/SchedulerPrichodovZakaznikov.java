@@ -64,6 +64,7 @@ public class SchedulerPrichodovZakaznikov extends Scheduler {
 		}
 
 		//Oznamenie o vygenerovani
+		mm.setCode(Mc.novyZakaznik);
 		mm.setPasazier(new Pasazier(mySim()));
 		assistantFinished(mm);
 	}

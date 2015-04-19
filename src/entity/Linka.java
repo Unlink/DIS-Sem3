@@ -23,6 +23,10 @@ public class Linka {
 		return (paAkt+1) % aZastavky.length;
 	}
 	
+	public int getZastavkaId(int paAkt) {
+		return aZastavky[paAkt];
+	}
+	
 	public double dajCasKDalsej(int paAkt) {
 		return aPresuny[paAkt];
 	}

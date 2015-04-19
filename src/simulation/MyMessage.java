@@ -14,10 +14,16 @@ public class MyMessage extends MessageForm
 	
 	private int aLinka;
 	
+	private int aPomNum;
+	
 	public MyMessage(MyMessage original)
 	{
 		super(original);
 		// copy() is called in superclass
+	}
+
+	public MyMessage(Simulation paMySim) {
+		super(paMySim);
 	}
 
 	@Override
@@ -58,6 +64,14 @@ public class MyMessage extends MessageForm
 		this.aLinka = paLinka;
 	}
 
+	public int getPomNum() {
+		return aPomNum;
+	}
+
+	public void setPomNum(int paPomNum) {
+		this.aPomNum = paPomNum;
+	}
+
 	@Override
 	protected void copy(MessageForm message)
 	{
@@ -68,6 +82,7 @@ public class MyMessage extends MessageForm
 		aPasazier = original.aPasazier;
 		aVozidlo = original.aVozidlo;
 		aZastavka = original.aZastavka;
+		aPomNum = original.aPomNum;
 	}
 	
 	

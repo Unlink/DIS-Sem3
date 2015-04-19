@@ -5,6 +5,7 @@ import simulation.*;
 import agents.*;
 import OSPABA.Process;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 //meta! id="38"
@@ -20,17 +21,17 @@ public class ProcessVystupu extends Process
 	{
 		MyMessage mm = (MyMessage) message;
 		PriorityQueue<Double> counter = new PriorityQueue<>();
-		for (int i = 0; i < mm.getVozidlo().getAktObsadenostDveri(); i++) {
+		for (int i = 0; i < mm.getVozidlo().getTypVozidlo().getPocDveri(); i++) {
 			counter.add(0d);
 		}
 		
 		for (int i = 0; i < mm.getVozidlo().getAktObsadenost(); i++) {
 			Double min = counter.poll();
-			min+=((AgentVystupov)myAgent()).getRNG(mm.getVozidlo().getId()).sample();
+			min+=((AgentVystupov)myAgent()).getRNG(mm.getVozidlo().getId()-1).sample();
 			counter.add(min);
 		}
 		
-		double trvanie = counter.stream().max(counter.comparator()).get();
+		double trvanie = counter.stream().max((Double d1, Double d2) -> Double.compare(d1, d2)).get();
 		message.setCode(Mc.finish);
 		hold(trvanie, message);
 	}

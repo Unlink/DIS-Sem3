@@ -33,8 +33,10 @@ public class ManagerPresunov extends Manager
 	//meta! sender="AgentPrepravy", id="31", type="notice"
 	public void processNoveVozidlo(MessageForm message)
 	{
-		message.setCode(Mc.vybavVozidlo);
-		message.setAddressee(((MySimulation)mySim()).agentPrepravy());
+		MyMessage mm = (MyMessage) message;
+		mm.setCode(Mc.vybavVozidlo);
+		mm.setAddressee(((MySimulation)mySim()).agentPrepravy());
+		mm.setZastavka(((ProcessPresunuVozidla)myAgent().findAssistant(Id.processPresunuVozidla)).getLinka(message).getZastavkaId(mm.getPomNum()));
 		request(message);
 	}
 

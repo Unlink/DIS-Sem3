@@ -34,10 +34,11 @@ public class SchedulerVozidiel extends Scheduler
 		for (int i = 0; i < aVozidla.size(); i++) {
 			MyMessage mm = (MyMessage) message.createCopy();
 			mm.setVozidlo(aVozidla.get(i).remove());
+			mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
 			mm.setLinka(i);
-			mm.setZastavka(0);
+			mm.setPomNum(0);
 			mm.setCode(Mc.finish);
-			hold(0, message);
+			processFinished(mm);
 		}
 	}
 

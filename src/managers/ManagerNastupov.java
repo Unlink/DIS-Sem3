@@ -4,9 +4,11 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import continualAssistants.*;
+import entity.Pasazier;
 import entity.Vozidlo;
 import entity.Zastavka;
 import instantAssistants.*;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 //meta! id="14"
@@ -27,6 +29,7 @@ public class ManagerNastupov extends Manager {
 	//meta! sender="ProcessNastupu", id="44"
 	public void processFinishProcessNastupu(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
+		mm.getVozidlo().uvoliDvere();
 		nakladajLudi(mm);
 	}
 
@@ -44,6 +47,7 @@ public class ManagerNastupov extends Manager {
 	private void ukonciObsluhuVozidla(MyMessage mm) {
 		myAgent().getVozidla(mm.getZastavka()).remove(mm.getVozidlo());
 		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
+		mm.setCode(Mc.nalozZakaznikov);
 		response(mm);
 	}
 
@@ -54,9 +58,11 @@ public class ManagerNastupov extends Manager {
 		myAgent().getFronta(zastavka).enqueue(mm.getPasazier());
 		//Ak prišiel na prázdnu zastavku
 		if (myAgent().getFronta(zastavka).size() == 1) {
-			Vozidlo vozidlo = myAgent().getVozidla(zastavka).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getMinCasZakaznika() == 0 && v.maMiesto()).findFirst().get();
-			if (vozidlo != null) {
-				mm = (MyMessage) myAgent().getVozidla(zastavka).get(vozidlo).createCopy();
+			Optional<Vozidlo> findFirst = myAgent().getVozidla(zastavka).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getMinCasZakaznika() == 0 && v.maMiesto()).findFirst();
+			if (findFirst.isPresent()) {
+				mm.setPasazier(myAgent().getFronta(zastavka).dequeue());
+				mm = (MyMessage) myAgent().getVozidla(zastavka).get(findFirst.get()).createCopy();
+				mm.getVozidlo().obsadDvere().pridajPasaziera();
 				mm.setAddressee(myAgent().findAssistant(Id.processNastupu));
 				startContinualAssistant(mm);
 			}
@@ -116,14 +122,19 @@ public class ManagerNastupov extends Manager {
 			//Ak je zakaznik ochotný nastupiť do vozidla
 			if (myAgent().getFronta(mm.getZastavka()).peek().timeInSystem() >= mm.getVozidlo().getTypVozidlo().getMinCasZakaznika()) {
 				//Prišlo vozidlo do ktorého niesu zakaznici ochotný nastupiť hneď ale na zastavke je aj iné, do ktorého sú => nenastupujú
-				if (mm.getVozidlo().getTypVozidlo().getMinCasZakaznika() > 0 && myAgent().getVozidla(mm.getZastavka()).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getMinCasZakaznika() == 0).count() == 0) {
+				if (mm.getVozidlo().getTypVozidlo().getMinCasZakaznika() == 0 || myAgent().getVozidla(mm.getZastavka()).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getMinCasZakaznika() == 0).count() == 0) {
 					MyMessage mm2 = (MyMessage) mm.createCopy();
 					mm2.setAddressee(myAgent().findAssistant(Id.processNastupu));
 					mm2.setPasazier(myAgent().getFronta(zastavka).dequeue());
-					mm2.getVozidlo().obsadDvere();
-					mm2.getVozidlo().pridajPasaziera();
+					mm2.getVozidlo().obsadDvere().pridajPasaziera();
 					startContinualAssistant(mm2);
 				}
+				else {
+					break;
+				}
+			}
+			else {
+				break;
 			}
 		}
 		//ak už nikoho som nenaložil tak

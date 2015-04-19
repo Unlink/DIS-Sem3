@@ -17,6 +17,9 @@ public class ManagerDepa extends Manager
 	//meta! sender="SchedulerVozidiel", id="55"
 	public void processFinish(MessageForm message)
 	{
+		message.setAddressee(myAgent().parent());
+		message.setCode(Mc.noveVozidlo);
+		notice(message);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -50,6 +53,14 @@ public class ManagerDepa extends Manager
 	//meta! sender="AgentPrepravy", id="73", type="notice"
 	public void processInit(MessageForm message)
 	{
+		//@TOTO príchod autobusov
+		for (int i=0; i<3; i++) {
+			MyMessage mm = (MyMessage) message.createCopy();
+			mm.setLinka(i);
+			mm.setZastavka(0);
+			mm.setAddressee(myAgent().findAssistant(Id.schedulerVozidiel));
+			startContinualAssistant(mm);
+		}
 	}
 
 }

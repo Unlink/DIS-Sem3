@@ -3,6 +3,7 @@ package simulation;
 import OSPABA.*;
 import agents.*;
 import entity.Linka;
+import entity.TypVozidlo;
 import entity.Zastavka;
 import java.util.List;
 import tools.ImportTools;
@@ -24,6 +25,10 @@ public class MySimulation extends Simulation
 	
 	public List<Linka> getLinky() {
 		return aIt.getLinky();
+	}
+	
+	public List<TypVozidlo> getVozidlaTypy() {
+		return aIt.getVozidla();
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

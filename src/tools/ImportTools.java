@@ -35,6 +35,7 @@ public class ImportTools {
 	private ArrayList<Linka> aLinky;
 	private ArrayList<IGeneratorFactory> aGeneratory;
 	private HashMap<String, List[]> aPom;
+	private double aZaciatokZapasu;
 
 	public static ImportTools importData() {
 		return new ImportTools();
@@ -47,6 +48,7 @@ public class ImportTools {
 		aLinky = new ArrayList<>();
 		aGeneratory = new ArrayList<>();
 		aPom = new HashMap<>();
+		aZaciatokZapasu = -1;
 		String[] subory = new String[]{"zastavky", "linky", "generatory", "dopravneProstriedky"};
 		for (String subor : subory) {
 			String f = "/data/" + subor + ".csv";
@@ -79,6 +81,19 @@ public class ImportTools {
 			}
 		}
 		spocitajLinky();
+		spocitajPrichodyAZacZapasu();
+	}
+
+	public ArrayList<TypVozidlo> getVozidla() {
+		return aVozidla;
+	}
+
+	public ArrayList<Zastavka> getZastavky() {
+		return aZastavky;
+	}
+
+	public ArrayList<Linka> getLinky() {
+		return aLinky;
 	}
 
 	private void spocitajLinky() {
@@ -88,13 +103,22 @@ public class ImportTools {
 			double summator = 0;
 			for (int i = d.length - 1; i >= 0; i--) {
 				d[i] = (double) entrySet.getValue()[1].get(i);
-				z[i] = ((Zastavka) entrySet.getValue()[0].get(i)).getId();
+				Zastavka x = ((Zastavka) entrySet.getValue()[0].get(i));
+				z[i] = (x == null) ? -1 : x.getId();
 				if (i < d.length - 1) {
 					summator += d[i];
 					aZastavky.get(z[i]).setVzdialenost(summator);
 				}
 			}
 			aLinky.add(new Linka(entrySet.getKey(), z, d));
+		}
+	}
+
+	private void spocitajPrichodyAZacZapasu() {
+		double maxD = aZastavky.stream().max((Zastavka z1, Zastavka z2) -> Double.compare(z1.getVzdialenost(), z2.getVzdialenost())).get().getVzdialenost();
+		aZaciatokZapasu = maxD + 75*60;
+		for (Zastavka z : aZastavky) {
+			z.setZacPrichodov(maxD - z.getVzdialenost());
 		}
 	}
 
@@ -112,7 +136,7 @@ public class ImportTools {
 		}
 		List[] l = aPom.get(linkaId);
 		l[0].add(z);
-		l[1].add(parseDouble(paSplit[2]));
+		l[1].add(parseDouble(paSplit[2])*60);
 	}
 
 	private void insertGenerator(String[] paSplit) {
@@ -122,7 +146,7 @@ public class ImportTools {
 				aGeneratory.add(id, (IGeneratorFactory) () -> new TriangularRNG(parseDouble(paSplit[2]), parseDouble(paSplit[4]), parseDouble(paSplit[3])));
 				break;
 			case "unif":
-				aGeneratory.add(id, (IGeneratorFactory) () ->  new UniformContinuousRNG(parseDouble(paSplit[2]), parseDouble(paSplit[3])));
+				aGeneratory.add(id, (IGeneratorFactory) () -> new UniformContinuousRNG(parseDouble(paSplit[2]), parseDouble(paSplit[3])));
 				break;
 			case "exp":
 				aGeneratory.add(id, (IGeneratorFactory) () -> new ExponentialRNG(parseDouble(paSplit[2])));

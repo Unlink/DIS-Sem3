@@ -2,12 +2,23 @@ package simulation;
 
 import OSPABA.*;
 import agents.*;
+import entity.Zastavka;
+import java.util.List;
+import tools.ImportTools;
 
 public class MySimulation extends Simulation
 {
+	
+	private ImportTools aIt;
+	
 	public MySimulation()
 	{
 		init();
+		aIt = ImportTools.importData();
+	}
+	
+	public List<Zastavka> getZastavky() {
+		return aIt.getZastavky();
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

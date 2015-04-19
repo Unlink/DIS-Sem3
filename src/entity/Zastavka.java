@@ -15,17 +15,16 @@ public class Zastavka {
 	private int aId;
 	private String aMeno;
 	private int aPocLudi;
-	private HashSet<TypVozidlo> aVozidla;
-	private SimQueue<Pasazier> aPasazieri;
 	private double aVzdialenost;
+	private double aZacPrichodov;
+	
 
 	public Zastavka(int paId, String paMeno, int paPocLudi) {
 		this.aId = paId;
 		this.aMeno = paMeno;
 		this.aPocLudi = paPocLudi;
-		this.aPasazieri = new SimQueue<>();
-		this.aVozidla = new HashSet<>();
 		this.aVzdialenost = -1;
+		this.aZacPrichodov = -1;
 	}
 
 	public int getId() {
@@ -40,14 +39,6 @@ public class Zastavka {
 		return aPocLudi;
 	}
 
-	public HashSet<TypVozidlo> getVozidla() {
-		return aVozidla;
-	}
-
-	public SimQueue<Pasazier> getPasazieri() {
-		return aPasazieri;
-	}
-
 	public double getVzdialenost() {
 		return aVzdialenost;
 	}
@@ -55,4 +46,13 @@ public class Zastavka {
 	public void setVzdialenost(double paVzdialenost) {
 		this.aVzdialenost = paVzdialenost;
 	}
+
+	public double getZacPrichodov() {
+		return aZacPrichodov;
+	}
+
+	public void setZacPrichodov(double paZacPrichodov) {
+		this.aZacPrichodov = paZacPrichodov;
+	}
+	
 }

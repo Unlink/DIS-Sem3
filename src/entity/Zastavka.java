@@ -12,13 +12,15 @@ import java.util.HashSet;
  */
 public class Zastavka {
 	
+	private int aId;
 	private String aMeno;
 	private int aPocLudi;
 	private HashSet<TypVozidlo> aVozidla;
 	private SimQueue<Pasazier> aPasazieri;
 	private double aVzdialenost;
 
-	public Zastavka(String paMeno, int paPocLudi) {
+	public Zastavka(int paId, String paMeno, int paPocLudi) {
+		this.aId = paId;
 		this.aMeno = paMeno;
 		this.aPocLudi = paPocLudi;
 		this.aPasazieri = new SimQueue<>();
@@ -26,6 +28,10 @@ public class Zastavka {
 		this.aVzdialenost = -1;
 	}
 
+	public int getId() {
+		return aId;
+	}
+	
 	public String getMeno() {
 		return aMeno;
 	}

@@ -29,24 +29,24 @@ import rng.ConstantRNG;
  */
 public class ImportTools {
 
-	private HashMap<String, TypVozidlo> aVozidla;
-	private HashMap<String, Zastavka> aZastavky;
-	private HashMap<String, Linka> aLinky;
+	private ArrayList<TypVozidlo> aVozidla;
+	private ArrayList<Zastavka> aZastavky;
+	private HashMap<String, Zastavka> aMappingZastavok;
+	private ArrayList<Linka> aLinky;
 	private ArrayList<IGeneratorFactory> aGeneratory;
 	private HashMap<String, List[]> aPom;
-	private HashMap<String, Double> aCakania;
 
 	public static ImportTools importData() {
 		return new ImportTools();
 	}
 
 	private ImportTools() {
-		aVozidla = new HashMap<>();
-		aZastavky = new HashMap<>();
-		aLinky = new HashMap<>();
+		aVozidla = new ArrayList<>();
+		aZastavky = new ArrayList<>();
+		aMappingZastavok = new HashMap<>();
+		aLinky = new ArrayList<>();
 		aGeneratory = new ArrayList<>();
 		aPom = new HashMap<>();
-		aCakania = new HashMap<>();
 		String[] subory = new String[]{"zastavky", "linky", "generatory", "dopravneProstriedky"};
 		for (String subor : subory) {
 			String f = "/data/" + subor + ".csv";
@@ -84,28 +84,29 @@ public class ImportTools {
 	private void spocitajLinky() {
 		for (Map.Entry<String, List[]> entrySet : aPom.entrySet()) {
 			double[] d = new double[entrySet.getValue()[1].size()];
-			Zastavka[] z = new Zastavka[d.length];
+			int[] z = new int[d.length];
 			double summator = 0;
 			for (int i = d.length - 1; i >= 0; i--) {
 				d[i] = (double) entrySet.getValue()[1].get(i);
-				z[i] = (Zastavka) entrySet.getValue()[0].get(i);
+				z[i] = ((Zastavka) entrySet.getValue()[0].get(i)).getId();
 				if (i < d.length - 1) {
 					summator += d[i];
-					z[i].setVzdialenost(summator);
+					aZastavky.get(z[i]).setVzdialenost(summator);
 				}
 			}
-			aLinky.put(entrySet.getKey(), new Linka(entrySet.getKey(), z, d));
+			aLinky.add(new Linka(entrySet.getKey(), z, d));
 		}
 	}
 
 	private void insertZastavka(String[] paSplit) {
-		Zastavka z = new Zastavka(paSplit[0], parseInt(paSplit[1]));
-		aZastavky.put(z.getMeno(), z);
+		Zastavka z = new Zastavka(aZastavky.size(), paSplit[0], parseInt(paSplit[1]));
+		aZastavky.add(z);
+		aMappingZastavok.put(z.getMeno(), z);
 	}
 
 	private void insertLinka(String[] paSplit) {
-		Zastavka z = aZastavky.get(paSplit[1]);
-		String linkaId = paSplit[0];
+		Zastavka z = aMappingZastavok.get(paSplit[1]);
+		String linkaId = paSplit[0].intern();
 		if (!aPom.containsKey(linkaId)) {
 			aPom.put(linkaId, new List[]{new LinkedList<>(), new LinkedList<>()});
 		}
@@ -130,9 +131,8 @@ public class ImportTools {
 	}
 
 	private void insertVozidlo(String[] paSplit) {
-		String name = paSplit[0];
-		aVozidla.put(name, new TypVozidlo(name, parseInt(paSplit[1]), parseInt(paSplit[2]), aGeneratory.get(parseInt(paSplit[4])), aGeneratory.get(parseInt(paSplit[5]))));
-		aCakania.put(name, parseDouble(paSplit[3]));
+		String name = paSplit[0].intern();
+		aVozidla.add(new TypVozidlo(aVozidla.size(), name, parseInt(paSplit[1]), parseInt(paSplit[2]), parseDouble(paSplit[3]), aGeneratory.get(parseInt(paSplit[4])), aGeneratory.get(parseInt(paSplit[5]))));
 	}
 
 }

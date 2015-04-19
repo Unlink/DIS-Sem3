@@ -10,10 +10,10 @@ package entity;
 public class Linka {
 
 	private final String aId;
-	private final Zastavka[] aZastavky;
+	private final int[] aZastavky;
 	private final double[] aPresuny;
 
-	public Linka(String paId, Zastavka[] paZastavky, double[] paPresuny) {
+	public Linka(String paId, int[] paZastavky, double[] paPresuny) {
 		this.aId = paId;
 		this.aZastavky = paZastavky;
 		this.aPresuny = paPresuny;
@@ -21,10 +21,6 @@ public class Linka {
 	
 	public int dajDalsiuZastavku(int paAkt) {
 		return (paAkt+1) % aZastavky.length;
-	}
-	
-	public Zastavka dajZastavku(int paAkt) {
-		return aZastavky[paAkt];
 	}
 	
 	public double dajCasKDalsej(int paAkt) {

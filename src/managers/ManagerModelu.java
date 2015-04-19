@@ -3,6 +3,7 @@ package managers;
 import OSPABA.*;
 import simulation.*;
 import agents.*;
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import continualAssistants.*;
 import instantAssistants.*;
 
@@ -17,6 +18,8 @@ public class ManagerModelu extends Manager
 	//meta! sender="AgentOkolia", id="18", type="notice"
 	public void processNovyZakaznik(MessageForm message)
 	{
+		message.setAddressee(((MySimulation)mySim()).agentPrepravy());
+		notice(message);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -24,6 +27,14 @@ public class ManagerModelu extends Manager
 	{
 		switch (message.code())
 		{
+			case Mc.init:
+				MyMessage mm = (MyMessage) message.createCopy();
+				mm.setAddressee(((MySimulation)mySim()).agentOkolia());
+				notice(mm);
+				mm = (MyMessage) message.createCopy();
+				mm.setAddressee(((MySimulation)mySim()).agentPrepravy());
+				notice(mm);
+			break;
 		}
 	}
 

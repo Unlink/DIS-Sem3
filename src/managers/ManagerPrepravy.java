@@ -17,26 +17,42 @@ public class ManagerPrepravy extends Manager
 	//meta! sender="AgentVystupov", id="68", type="response"
 	public void processVylozZakaznikov(MessageForm message)
 	{
+		response(message);
 	}
 
 	//meta! sender="AgentNastupov", id="67", type="response"
 	public void processNalozZakaznikov(MessageForm message)
 	{
+		response(message);
 	}
 
 	//meta! sender="AgentPresunov", id="32", type="request"
 	public void processVybavVozidlo(MessageForm message)
 	{
+		MyMessage mm = (MyMessage) message;
+		if (mm.getZastavka() < 0) {
+			mm.setAddressee(((MySimulation)mySim()).agentVystupov());
+			mm.setCode(Mc.vylozZakaznikov);
+		}
+		else {
+			mm.setAddressee(((MySimulation)mySim()).agentNastupov());
+			mm.setCode(Mc.nalozZakaznikov);
+		}
+		request(mm);
 	}
 
 	//meta! sender="AgentDepa", id="30", type="notice"
 	public void processNoveVozidlo(MessageForm message)
 	{
+		message.setAddressee(((MySimulation)mySim()).agentPresunov());
+		notice(message);
 	}
 
 	//meta! sender="AgentModelu", id="25", type="notice"
 	public void processNovyZakaznik(MessageForm message)
 	{
+		message.setAddressee(((MySimulation)mySim()).agentNastupov());
+		notice(message);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -86,6 +102,8 @@ public class ManagerPrepravy extends Manager
 	//meta! sender="AgentModelu", id="71", type="notice"
 	public void processInit(MessageForm message)
 	{
+		message.setAddressee(((MySimulation)mySim()).agentDepa());
+		notice(message);
 	}
 
 }

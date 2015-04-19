@@ -53,24 +53,28 @@ public class ManagerPrepravy extends Manager
 	{
 		switch (message.code())
 		{
-		case Mc.vybavVozidlo:
-			processVybavVozidlo(message);
-		break;
-
 		case Mc.noveVozidlo:
 			processNoveVozidlo(message);
 		break;
 
-		case Mc.nalozZakaznikov:
-			processNalozZakaznikov(message);
+		case Mc.init:
+			processInit(message);
+		break;
+
+		case Mc.vylozZakaznikov:
+			processVylozZakaznikov(message);
 		break;
 
 		case Mc.novyZakaznik:
 			processNovyZakaznik(message);
 		break;
 
-		case Mc.vylozZakaznikov:
-			processVylozZakaznikov(message);
+		case Mc.vybavVozidlo:
+			processVybavVozidlo(message);
+		break;
+
+		case Mc.nalozZakaznikov:
+			processNalozZakaznikov(message);
 		break;
 
 		default:
@@ -79,4 +83,9 @@ public class ManagerPrepravy extends Manager
 		}
 	}
 	//meta! tag="end"
+	//meta! sender="AgentModelu", id="71", type="notice"
+	public void processInit(MessageForm message)
+	{
+	}
+
 }

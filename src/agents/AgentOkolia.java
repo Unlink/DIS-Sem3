@@ -13,26 +13,17 @@ import instantAssistants.*;
 public class AgentOkolia extends Agent
 {
 	
-	private final RNG[] aGeneratoryPrichodov;
-	
 	public AgentOkolia(int id, Simulation mySim, Agent parent)
 	{
 		super(id, mySim, parent);
 		init();
-		aGeneratoryPrichodov = new RNG[((MySimulation)mySim).getZastavky().size()];
-		for(Zastavka z:((MySimulation)mySim).getZastavky()) {
-			aGeneratoryPrichodov[z.getId()] = new ExponentialRNG(z.getPocLudi()/65d);
-		}
 	}
 	
-	public RNG getRngFor(int z) {
-		return aGeneratoryPrichodov[z];
-	}
-
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	private void init()
 	{
 		new ManagerOkolia(Id.managerOkolia, mySim(), this);
+		addOwnMessage(Mc.init);
 	}
 	//meta! tag="end"
 }

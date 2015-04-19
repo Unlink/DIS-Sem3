@@ -20,6 +20,7 @@ public class AgentDepa extends Agent
 	{
 		new ManagerDepa(Id.managerDepa, mySim(), this);
 		new SchedulerVozidiel(Id.schedulerVozidiel, mySim(), this);
+		addOwnMessage(Mc.init);
 	}
 	//meta! tag="end"
 }

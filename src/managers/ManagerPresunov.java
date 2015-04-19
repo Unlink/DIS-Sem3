@@ -43,12 +43,12 @@ public class ManagerPresunov extends Manager
 	{
 		switch (message.code())
 		{
-		case Mc.vybavVozidlo:
-			processVybavVozidlo(message);
-		break;
-
 		case Mc.noveVozidlo:
 			processNoveVozidlo(message);
+		break;
+
+		case Mc.vybavVozidlo:
+			processVybavVozidlo(message);
 		break;
 
 		case Mc.finish:

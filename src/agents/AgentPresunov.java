@@ -20,8 +20,8 @@ public class AgentPresunov extends Agent
 	{
 		new ManagerPresunov(Id.managerPresunov, mySim(), this);
 		new ProcessPresunuVozidla(Id.processPresunuVozidla, mySim(), this);
-		addOwnMessage(Mc.vybavVozidlo);
 		addOwnMessage(Mc.noveVozidlo);
+		addOwnMessage(Mc.vybavVozidlo);
 	}
 	//meta! tag="end"
 }

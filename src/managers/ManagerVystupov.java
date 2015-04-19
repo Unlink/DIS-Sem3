@@ -38,12 +38,12 @@ public class ManagerVystupov extends Manager
 	{
 		switch (message.code())
 		{
-		case Mc.finish:
-			processFinish(message);
-		break;
-
 		case Mc.vylozZakaznikov:
 			processVylozZakaznikov(message);
+		break;
+
+		case Mc.finish:
+			processFinish(message);
 		break;
 
 		default:

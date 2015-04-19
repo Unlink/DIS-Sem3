@@ -19,9 +19,9 @@ public class AgentNastupov extends Agent
 	private void init()
 	{
 		new ManagerNastupov(Id.managerNastupov, mySim(), this);
+		new QueryNastupu(Id.queryNastupu, mySim(), this);
 		new ProcessNastupu(Id.processNastupu, mySim(), this);
 		new SchedulerCakania(Id.schedulerCakania, mySim(), this);
-		new QueryNastupu(Id.queryNastupu, mySim(), this);
 		addOwnMessage(Mc.novyZakaznik);
 		addOwnMessage(Mc.nalozZakaznikov);
 	}

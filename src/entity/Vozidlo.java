@@ -9,18 +9,46 @@ package entity;
  */
 public class Vozidlo {
 
+	public static int getCounter() {
+		return aCounter;
+	}
+
+	public static void setCounter(int paCounter) {
+		Vozidlo.aCounter = paCounter;
+	}
+
+	public VozidloState getStav() {
+		return aStav;
+	}
+
+	public void setStav(VozidloState paStav) {
+		this.aStav = paStav;
+	}
+	
+	public static enum VozidloState {
+		NotCreated,
+		InRide,
+		NotWaiting,
+		Waiting, 
+		WaitingEnded;
+	}
+
+
 	private static int aCounter = 1;
 
 	private final int aId;
 	private final TypVozidlo aTypVozidlo;
 	private int aAktObsadenost;
 	private int aAktObsadenostDveri;
+	
+	private VozidloState aStav;
 
 	public Vozidlo(TypVozidlo paTypVozidlo) {
 		this.aTypVozidlo = paTypVozidlo;
 		this.aAktObsadenost = 0;
 		this.aAktObsadenostDveri = 0;
 		this.aId = aCounter++;
+		this.aStav = VozidloState.NotCreated;
 	}
 
 	public int getId() {
@@ -90,5 +118,7 @@ public class Vozidlo {
 		}
 		return true;
 	}
+	
+	
 
 }

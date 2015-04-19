@@ -18,7 +18,7 @@ public class ManagerNastupov extends Manager {
 	//meta! sender="AgentPrepravy", id="67", type="request"
 	public void processNalozZakaznikov(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
-		myAgent().getCakajuceVozidla().remove(mm.getVozidlo());
+		mm.getVozidlo().setStav(Vozidlo.VozidloState.NotWaiting);
 		int zastavka = mm.getZastavka();
 		myAgent().getVozidla(zastavka).put(mm.getVozidlo(), mm);
 		nakladajLudi(mm);
@@ -28,16 +28,23 @@ public class ManagerNastupov extends Manager {
 	public void processFinishProcessNastupu(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
 		nakladajLudi(mm);
-		//ak už nikoho som nenaložil tak odchod 
-		if (!mm.getVozidlo().nastupujuLudia() && mm.getVozidlo().getTypVozidlo().getCaka() > 0 && !myAgent().getCakajuceVozidla().contains(mm.getVozidlo())) {
-			mm.setAddressee(myAgent().findAssistant(Id.schedulerCakania));
-			startContinualAssistant(mm);
-			myAgent().getCakajuceVozidla().add(mm.getVozidlo());
-		}
 	}
 
 	//meta! sender="SchedulerCakania", id="59"
 	public void processFinishSchedulerCakania(MessageForm message) {
+		MyMessage mm = (MyMessage) message;
+		if (!mm.getVozidlo().nastupujuLudia()) {
+			ukonciObsluhuVozidla(mm);
+		}
+		else {
+			mm.getVozidlo().setStav(Vozidlo.VozidloState.WaitingEnded);
+		}
+	}
+
+	private void ukonciObsluhuVozidla(MyMessage mm) {
+		myAgent().getVozidla(mm.getZastavka()).remove(mm.getVozidlo());
+		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
+		response(mm);
 	}
 
 	//meta! sender="AgentPrepravy", id="66", type="notice"
@@ -47,7 +54,7 @@ public class ManagerNastupov extends Manager {
 		myAgent().getFronta(zastavka).enqueue(mm.getPasazier());
 		//Ak prišiel na prázdnu zastavku
 		if (myAgent().getFronta(zastavka).size() == 1) {
-			Vozidlo vozidlo = myAgent().getVozidla(zastavka).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getCaka() == 0 && v.maMiesto()).findFirst().get();
+			Vozidlo vozidlo = myAgent().getVozidla(zastavka).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getMinCasZakaznika() == 0 && v.maMiesto()).findFirst().get();
 			if (vozidlo != null) {
 				mm = (MyMessage) myAgent().getVozidla(zastavka).get(vozidlo).createCopy();
 				mm.setAddressee(myAgent().findAssistant(Id.processNastupu));
@@ -102,17 +109,33 @@ public class ManagerNastupov extends Manager {
 		}
 	}
 	//meta! tag="end"
-	
-	
-	private void nakladajLudi(MyMessage paMm) {
-		int zastavka = paMm.getZastavka();
-		while (paMm.getVozidlo().maMiesto() && paMm.getVozidlo().maVolneDvere() && myAgent().getFronta(zastavka).size() > 0) {
-			MyMessage mm2 = (MyMessage) paMm.createCopy();
-			mm2.setAddressee(myAgent().findAssistant(Id.processNastupu));
-			mm2.setPasazier(myAgent().getFronta(zastavka).dequeue());
-			mm2.getVozidlo().obsadDvere();
-			mm2.getVozidlo().pridajPasaziera();
-			startContinualAssistant(mm2);
+
+	private void nakladajLudi(MyMessage mm) {
+		int zastavka = mm.getZastavka();
+		while (mm.getVozidlo().maMiesto() && mm.getVozidlo().maVolneDvere() && myAgent().getFronta(zastavka).size() > 0) {
+			//Ak je zakaznik ochotný nastupiť do vozidla
+			if (myAgent().getFronta(mm.getZastavka()).peek().timeInSystem() >= mm.getVozidlo().getTypVozidlo().getMinCasZakaznika()) {
+				//Prišlo vozidlo do ktorého niesu zakaznici ochotný nastupiť hneď ale na zastavke je aj iné, do ktorého sú => nenastupujú
+				if (mm.getVozidlo().getTypVozidlo().getMinCasZakaznika() > 0 && myAgent().getVozidla(mm.getZastavka()).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getMinCasZakaznika() == 0).count() == 0) {
+					MyMessage mm2 = (MyMessage) mm.createCopy();
+					mm2.setAddressee(myAgent().findAssistant(Id.processNastupu));
+					mm2.setPasazier(myAgent().getFronta(zastavka).dequeue());
+					mm2.getVozidlo().obsadDvere();
+					mm2.getVozidlo().pridajPasaziera();
+					startContinualAssistant(mm2);
+				}
+			}
+		}
+		//ak už nikoho som nenaložil tak
+		if (!mm.getVozidlo().nastupujuLudia()) {
+			if (mm.getVozidlo().getTypVozidlo().getCaka() > 0 && mm.getVozidlo().getStav() == Vozidlo.VozidloState.NotWaiting) {
+				mm.setAddressee(myAgent().findAssistant(Id.schedulerCakania));
+				startContinualAssistant(mm);
+				mm.getVozidlo().setStav(Vozidlo.VozidloState.Waiting);
+			}
+			else if (mm.getVozidlo().getStav() != Vozidlo.VozidloState.Waiting) {
+				ukonciObsluhuVozidla(mm);
+			}
 		}
 	}
 }

@@ -156,7 +156,7 @@ public class ImportTools {
 
 	private void insertVozidlo(String[] paSplit) {
 		String name = paSplit[0].intern();
-		aVozidla.add(new TypVozidlo(aVozidla.size(), name, parseInt(paSplit[1]), parseInt(paSplit[2]), parseDouble(paSplit[3]), aGeneratory.get(parseInt(paSplit[4])), aGeneratory.get(parseInt(paSplit[5]))));
+		aVozidla.add(new TypVozidlo(aVozidla.size(), name, parseInt(paSplit[1]), parseInt(paSplit[2]), parseDouble(paSplit[3]), parseDouble(paSplit[4]), aGeneratory.get(parseInt(paSplit[5])), aGeneratory.get(parseInt(paSplit[6]))));
 	}
 
 }

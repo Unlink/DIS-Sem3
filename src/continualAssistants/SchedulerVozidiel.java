@@ -4,20 +4,41 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import entity.Vozidlo;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 //meta! id="54"
 public class SchedulerVozidiel extends Scheduler
 {
+	private final List<Queue<Vozidlo>> aVozidla;
+	
 	public SchedulerVozidiel(int id, Simulation mySim, CommonAgent myAgent)
 	{
 		super(id, mySim, myAgent);
+		aVozidla = new ArrayList<>();
 	}
 
 	//meta! sender="AgentDepa", id="55"
 	public void processStart(MessageForm message)
 	{
-		message.setCode(Id.finish);
-		hold(0, message);
+		for (List<Vozidlo> vList: ((MySimulation) mySim()).getVozidla()) {
+			Queue<Vozidlo> q = new LinkedList<>();
+			for (Vozidlo v : vList) {
+				q.add(v);
+			}
+			aVozidla.add(q);
+		}
+		
+		for (int i = 0; i < aVozidla.size(); i++) {
+			MyMessage mm = (MyMessage) message.createCopy();
+			mm.setVozidlo(aVozidla.get(i).remove());
+			mm.setLinka(i);
+			mm.setZastavka(0);
+			mm.setCode(Mc.finish);
+			hold(0, message);
+		}
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -49,8 +70,11 @@ public class SchedulerVozidiel extends Scheduler
 	//meta! tag="end"
 
 	private void processFinished(MessageForm message) {
-		MyMessage mm = (MyMessage) message;
-		mm.setVozidlo(new Vozidlo(((MySimulation)mySim()).getVozidlaTypy().get(0)));
+		MyMessage mm = (MyMessage) message.createCopy();
 		assistantFinished(mm);
+		if (aVozidla.get(mm.getLinka()).size() > 0) {
+			((MyMessage)message).setVozidlo(aVozidla.get(mm.getLinka()).remove());
+			hold(5*60, message);
+		}
 	}
 }

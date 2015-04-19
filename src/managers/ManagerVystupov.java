@@ -17,11 +17,14 @@ public class ManagerVystupov extends Manager
 	//meta! sender="AgentPrepravy", id="68", type="request"
 	public void processVylozZakaznikov(MessageForm message)
 	{
+		message.setAddressee(myAgent().findAssistant(Id.processVystupu));
+		startContinualAssistant(message);
 	}
 
 	//meta! sender="ProcessVystupu", id="39"
 	public void processFinish(MessageForm message)
 	{
+		response(message);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"

@@ -23,4 +23,51 @@ public class Vozidlo {
 		this.aId = aCounter++;
 	}
 
+	public int getId() {
+		return aId;
+	}
+
+	public TypVozidlo getTypVozidlo() {
+		return aTypVozidlo;
+	}
+
+	public int getAktObsadenost() {
+		return aAktObsadenost;
+	}
+
+	public int getAktObsadenostDveri() {
+		return aAktObsadenostDveri;
+	}
+
+	public Vozidlo pridajPasaziera() {
+		aAktObsadenost++;
+		return this;
+	}
+	
+	public Vozidlo obsadDvere() {
+		aAktObsadenostDveri++;
+		return this;
+	}
+	
+	public Vozidlo uvoliDvere() {
+		aAktObsadenostDveri--;
+		return this;
+	}
+	
+	public boolean maMiesto() {
+		return aAktObsadenost < aTypVozidlo.getKapacita();
+	}
+	
+	public boolean maVolneDvere() {
+		return aAktObsadenostDveri < aTypVozidlo.getPocDveri();
+	}
+	
+	public boolean nastupujuLudia() {
+		return aAktObsadenostDveri != 0;
+	}
+
+	public void vyprazdniVozidlo() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+	
 }

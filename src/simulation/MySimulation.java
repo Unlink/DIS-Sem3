@@ -4,7 +4,10 @@ import OSPABA.*;
 import agents.*;
 import entity.Linka;
 import entity.TypVozidlo;
+import entity.Vozidlo;
 import entity.Zastavka;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import tools.ImportTools;
 
@@ -12,11 +15,26 @@ public class MySimulation extends Simulation
 {
 	
 	private ImportTools aIt;
+	private List<List<Vozidlo>> aVozidla;
 	
 	public MySimulation()
 	{
 		init();
 		aIt = ImportTools.importData();
+		aVozidla = new ArrayList<>(3);
+		aVozidla.add(new LinkedList<>());
+		aVozidla.add(new LinkedList<>());
+		aVozidla.add(new LinkedList<>());
+		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(0)));
+		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(0)));
+		aVozidla.get(0).add(new Vozidlo(aIt.getVozidla().get(2)));
+		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
+		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(1)));
+		aVozidla.get(1).add(new Vozidlo(aIt.getVozidla().get(2)));
+		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(0)));
+		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(1)));
+		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(2)));
+		aVozidla.get(2).add(new Vozidlo(aIt.getVozidla().get(2)));
 	}
 	
 	public List<Zastavka> getZastavky() {
@@ -27,8 +45,8 @@ public class MySimulation extends Simulation
 		return aIt.getLinky();
 	}
 	
-	public List<TypVozidlo> getVozidlaTypy() {
-		return aIt.getVozidla();
+	public List<List<Vozidlo>> getVozidla() {
+		return aVozidla;
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

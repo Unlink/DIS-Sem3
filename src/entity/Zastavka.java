@@ -14,7 +14,7 @@ public class Zastavka {
 	
 	private String aMeno;
 	private int aPocLudi;
-	private HashSet<Vozidlo> aVozidla;
+	private HashSet<TypVozidlo> aVozidla;
 	private SimQueue<Pasazier> aPasazieri;
 	private double aVzdialenost;
 
@@ -34,7 +34,7 @@ public class Zastavka {
 		return aPocLudi;
 	}
 
-	public HashSet<Vozidlo> getVozidla() {
+	public HashSet<TypVozidlo> getVozidla() {
 		return aVozidla;
 	}
 

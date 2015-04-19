@@ -8,15 +8,27 @@ package entity;
  * @author Unlink
  */
 public class Linka {
-	
-	private char aId;
-	private Zastavka[] aZastavky;
-	private double[] aPresuny;
 
-	public Linka(char paId, Zastavka[] paZastavky, double[] paPresuny) {
+	private final String aId;
+	private final Zastavka[] aZastavky;
+	private final double[] aPresuny;
+
+	public Linka(String paId, Zastavka[] paZastavky, double[] paPresuny) {
 		this.aId = paId;
 		this.aZastavky = paZastavky;
 		this.aPresuny = paPresuny;
 	}
 	
+	public int dajDalsiuZastavku(int paAkt) {
+		return (paAkt+1) % aZastavky.length;
+	}
+	
+	public Zastavka dajZastavku(int paAkt) {
+		return aZastavky[paAkt];
+	}
+	
+	public double dajCasKDalsej(int paAkt) {
+		return aPresuny[paAkt];
+	}
+
 }

@@ -3,11 +3,13 @@
  */
 package tools;
 
+import OSPRNG.ExponentialRNG;
 import OSPRNG.RNG;
 import OSPRNG.TriangularRNG;
 import OSPRNG.UniformContinuousRNG;
+import entity.IGeneratorFactory;
 import entity.Linka;
-import entity.Vozidlo;
+import entity.TypVozidlo;
 import entity.Zastavka;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,21 +29,23 @@ import rng.ConstantRNG;
  */
 public class ImportTools {
 
-	private HashMap<String, Vozidlo> aVozidla;
+	private HashMap<String, TypVozidlo> aVozidla;
 	private HashMap<String, Zastavka> aZastavky;
-	private HashMap<Character, Linka> aLinky;
-	private ArrayList<RNG> aGeneratory;
-	private HashMap<Character, List[]> aPom;
-	private HashMap<String, RNG[]> aGeneratoryVozidla;
+	private HashMap<String, Linka> aLinky;
+	private ArrayList<IGeneratorFactory> aGeneratory;
+	private HashMap<String, List[]> aPom;
 	private HashMap<String, Double> aCakania;
 
-	public ImportTools() {
+	public static ImportTools importData() {
+		return new ImportTools();
+	}
+
+	private ImportTools() {
 		aVozidla = new HashMap<>();
 		aZastavky = new HashMap<>();
 		aLinky = new HashMap<>();
 		aGeneratory = new ArrayList<>();
 		aPom = new HashMap<>();
-		aGeneratoryVozidla = new HashMap<>();
 		aCakania = new HashMap<>();
 		String[] subory = new String[]{"zastavky", "linky", "generatory", "dopravneProstriedky"};
 		for (String subor : subory) {
@@ -74,14 +78,18 @@ public class ImportTools {
 				throw new RuntimeException("Nepodarilo sa načítať konfiguráciu", ex);
 			}
 		}
-		for (Map.Entry<Character, List[]> entrySet : aPom.entrySet()) {
+		spocitajLinky();
+	}
+
+	private void spocitajLinky() {
+		for (Map.Entry<String, List[]> entrySet : aPom.entrySet()) {
 			double[] d = new double[entrySet.getValue()[1].size()];
 			Zastavka[] z = new Zastavka[d.length];
 			double summator = 0;
-			for (int i = d.length-1; i >= 0; i--) {
+			for (int i = d.length - 1; i >= 0; i--) {
 				d[i] = (double) entrySet.getValue()[1].get(i);
 				z[i] = (Zastavka) entrySet.getValue()[0].get(i);
-				if (i < d.length-1) {
+				if (i < d.length - 1) {
 					summator += d[i];
 					z[i].setVzdialenost(summator);
 				}
@@ -97,32 +105,34 @@ public class ImportTools {
 
 	private void insertLinka(String[] paSplit) {
 		Zastavka z = aZastavky.get(paSplit[1]);
-		if (!aPom.containsKey(paSplit[0].charAt(0))) {
-			aPom.put(paSplit[0].charAt(0), new List[]{new LinkedList<>(), new LinkedList<>()});
+		String linkaId = paSplit[0];
+		if (!aPom.containsKey(linkaId)) {
+			aPom.put(linkaId, new List[]{new LinkedList<>(), new LinkedList<>()});
 		}
-		List[] l = aPom.get(paSplit[0].charAt(0));
+		List[] l = aPom.get(linkaId);
 		l[0].add(z);
 		l[1].add(parseDouble(paSplit[2]));
 	}
 
 	private void insertGenerator(String[] paSplit) {
+		int id = parseInt(paSplit[0]);
 		switch (paSplit[1]) {
 			case "tria":
-				aGeneratory.add(parseInt(paSplit[0]), new TriangularRNG(parseDouble(paSplit[2]), parseDouble(paSplit[4]), parseDouble(paSplit[3])));
+				aGeneratory.add(id, (IGeneratorFactory) () -> new TriangularRNG(parseDouble(paSplit[2]), parseDouble(paSplit[4]), parseDouble(paSplit[3])));
 				break;
 			case "unif":
-				aGeneratory.add(parseInt(paSplit[0]), new UniformContinuousRNG(parseDouble(paSplit[2]), parseDouble(paSplit[3])));
+				aGeneratory.add(id, (IGeneratorFactory) () ->  new UniformContinuousRNG(parseDouble(paSplit[2]), parseDouble(paSplit[3])));
 				break;
-			case "const":
-				aGeneratory.add(parseInt(paSplit[0]), new ConstantRNG(parseDouble(paSplit[2])));
+			case "exp":
+				aGeneratory.add(id, (IGeneratorFactory) () -> new ExponentialRNG(parseDouble(paSplit[2])));
 				break;
 		}
 	}
 
 	private void insertVozidlo(String[] paSplit) {
-		aVozidla.put(paSplit[0], new Vozidlo(paSplit[0], parseInt(paSplit[1]), parseInt(paSplit[2])));
-		aCakania.put(paSplit[0], parseDouble(paSplit[3]));
-		aGeneratoryVozidla.put(paSplit[0], new RNG[]{aGeneratory.get(parseInt(paSplit[4])), aGeneratory.get(parseInt(paSplit[5]))});
+		String name = paSplit[0];
+		aVozidla.put(name, new TypVozidlo(name, parseInt(paSplit[1]), parseInt(paSplit[2]), aGeneratory.get(parseInt(paSplit[4])), aGeneratory.get(parseInt(paSplit[5]))));
+		aCakania.put(name, parseDouble(paSplit[3]));
 	}
 
 }

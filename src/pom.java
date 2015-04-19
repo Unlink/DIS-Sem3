@@ -11,7 +11,7 @@ import tools.ImportTools;
  */
 public class pom {
 	public static void main(String[] args) {
-		ImportTools it = new ImportTools();
+		ImportTools it = ImportTools.importData();
 		System.out.println("done");
 	}
 }

@@ -8,27 +8,19 @@ package entity;
  * @author Unlink
  */
 public class Vozidlo {
-	
-	private final String aMeno;
-	private final int aKapacita;
+
+	private static int aCounter = 1;
+
+	private final int aId;
+	private final TypVozidlo aTypVozidlo;
 	private int aAktObsadenost;
-	private final int aPocDveri;
 	private int aAktObsadenostDveri;
 
-	public Vozidlo(String paMeno, int paKapacita, int paPocDveri) {
-		this.aMeno = paMeno;
-		this.aKapacita = paKapacita;
-		this.aPocDveri = paPocDveri;
+	public Vozidlo(TypVozidlo paTypVozidlo) {
+		this.aTypVozidlo = paTypVozidlo;
 		this.aAktObsadenost = 0;
 		this.aAktObsadenostDveri = 0;
+		this.aId = aCounter++;
 	}
-	
-	public Vozidlo(Vozidlo paVozidlo) {
-		aMeno = paVozidlo.aMeno;
-		aKapacita = paVozidlo.aKapacita;
-		aPocDveri = paVozidlo.aPocDveri;
-		aAktObsadenost = 0;
-		aAktObsadenostDveri = 0;
-	}
-	
+
 }

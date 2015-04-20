@@ -7,6 +7,7 @@ import OSPABA.ISimDelegate;
 import OSPABA.SimState;
 import OSPABA.Simulation;
 import container.ContainerBulider;
+import container.SimContainer;
 import entity.Vozidlo;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -404,7 +405,9 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 	}
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-		ms = new MySimulation(it, getVozidlaConf());
+		((NastaveniaVozidielTableModel)jTable3.getModel()).setData(cb);
+		SimContainer build = cb.build();
+		ms = new MySimulation(build);
 		MyMessage msg = new MyMessage(ms);
 		msg.setAddressee(ms.agentModelu());
 		msg.setCode(Mc.init);
@@ -414,11 +417,9 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 		if (jToggleButton1.isSelected()) {
 			setSpeed();
 		}
-		LinkedList<Vozidlo> vsetkyVozidla = new LinkedList<>();
-		ms.getVozidla().stream().forEach((l) -> l.stream().forEach((v) -> vsetkyVozidla.add(v)));
-		jTable1.setModel(new VozidlaTableModel(vsetkyVozidla));
-		jTable2.setModel(new ZastavkyTableModel(it.getZastavky()));
-		new Thread(() -> ms.simulate(60 * 60 * 50d)).start();
+		jTable1.setModel(new VozidlaTableModel(build.getVozidla()));
+		jTable2.setModel(new ZastavkyTableModel(build.getZastavky()));
+		new Thread(() -> ms.simulate(60 * 60 * 30d)).start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

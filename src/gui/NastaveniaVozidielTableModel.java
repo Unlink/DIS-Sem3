@@ -45,7 +45,7 @@ public class NastaveniaVozidielTableModel implements TableModel {
 			return "Linka";
 		}
 		else {
-			return aVozidla[paColumnIndex + 1];
+			return aVozidla[paColumnIndex - 1];
 		}
 	}
 
@@ -70,7 +70,7 @@ public class NastaveniaVozidielTableModel implements TableModel {
 			return aLinky[paRowIndex];
 		}
 		else {
-			return aData[paRowIndex][paColumnIndex + 1];
+			return aData[paRowIndex][paColumnIndex - 1];
 		}
 	}
 

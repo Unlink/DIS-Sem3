@@ -45,7 +45,7 @@ public class VozidlaTableModel implements TableModel {
 		POZICIA {
 			@Override
 			public String getValue(Vozidlo paZ) {
-				return paZ.getPozicia();
+				return "";//paZ.getPozicia();
 			}
 		},
 		STAV {

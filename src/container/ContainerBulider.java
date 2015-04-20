@@ -46,24 +46,26 @@ public class ContainerBulider {
 	}
 	
 	public String[] getZoznamLiniek() {
-		return (String[]) aIt.getLinky().stream().map(Linka::getId).toArray();
+		Object[] toArray = aIt.getLinky().stream().map(Linka::getId).toArray();
+		return Arrays.copyOf(toArray, toArray.length, String[].class);
 	}
 	
 	public String[] getZoznamVozidiel() {
-		return (String[]) aIt.getVozidla().stream().map(TypVozidlo::getMeno).toArray();
+		Object[] toArray = aIt.getVozidla().stream().map(TypVozidlo::getMeno).toArray();
+		return Arrays.copyOf(toArray, toArray.length, String[].class);
 	}
 	
 	public SimContainer build() {
-		List<List<Vozidlo>> vozidla = new ArrayList<>();
+		List<Vozidlo> vozidla = new ArrayList<>();
 		int counter = 0;
 		for (int i = 0; i < aPoctyVozidiel.length; i++) {
-			ArrayList<Vozidlo> v = new ArrayList<>();
+			double cas = 0;
 			for (int j = 0; j < aPoctyVozidiel[i].length; j++) {
 				for (int k = 0; k < aPoctyVozidiel[i][j]; k++) {
-					v.add(new Vozidlo(aIt.getVozidla().get(j), counter++));
+					vozidla.add(new Vozidlo(aIt.getVozidla().get(j), counter++, aIt.getLinky().get(i), cas));
+					cas += 5*60;
 				}
 			}
-			vozidla.add(v);
 		}
 		
 		SimContainer simContainer = new SimContainer(aIt.getZastavky(), aIt.getLinky(), vozidla, aVarinata);
@@ -86,19 +88,19 @@ public class ContainerBulider {
 		return g;
 	}
 
-	private List<RNG<Double>> createGeneratoryNastupov(List<List<Vozidlo>> paVozidla) {
+	private List<RNG<Double>> createGeneratoryNastupov(List<Vozidlo> paVozidla) {
 		List<RNG<Double>> g = new ArrayList<>();
-		paVozidla.stream().forEach((l) -> l.stream().forEach((v) -> {
+		paVozidla.stream().forEach((v) -> {
 			g.add(v.getId(), v.getTypVozidlo().createGeneratorNastupu());
-		}));
+		});
 		return g;
 	}
 
-	private List<RNG<Double>> createGeneratoryVystupov(List<List<Vozidlo>> paVozidla) {
+	private List<RNG<Double>> createGeneratoryVystupov(List<Vozidlo> paVozidla) {
 		List<RNG<Double>> g = new ArrayList<>();
-		paVozidla.stream().forEach((l) -> l.stream().forEach((v) -> {
+		paVozidla.stream().forEach((v) -> {
 			g.add(v.getId(), v.getTypVozidlo().createGeneratorVystupu());
-		}));
+		});
 		return g;
 	}
 	

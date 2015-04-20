@@ -32,13 +32,13 @@ public class ZastavkyTableModel implements TableModel {
 		POCET_LUDI {
 			@Override
 			public String getValue(Zastavka paZ) {
-				return ""+paZ.getSxhgd();
+				return "";//+paZ.getSxhgd();
 			}
 		}, 
 		VOZIDLA {
 			@Override
 			public String getValue(Zastavka paZ) {
-				return paZ.getDsadas();
+				return "";//paZ.getDsadas();
 			}
 		};
 		

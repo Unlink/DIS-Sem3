@@ -8,65 +8,46 @@ import entity.Vozidlo;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 //meta! id="54"
-public class SchedulerVozidiel extends Scheduler
-{
-	private final List<Queue<Vozidlo>> aVozidla;
-	
-	public SchedulerVozidiel(int id, Simulation mySim, CommonAgent myAgent)
-	{
+public class SchedulerVozidiel extends Scheduler {
+	private final Queue<Vozidlo> aVozidla;
+
+	public SchedulerVozidiel(int id, Simulation mySim, CommonAgent myAgent) {
 		super(id, mySim, myAgent);
-		aVozidla = new ArrayList<>();
+		aVozidla = new PriorityQueue<>((v1, v2) -> Double.compare(v1.getCasPrichodu(), v2.getCasPrichodu()));
 	}
 
 	//meta! sender="AgentDepa", id="55"
-	public void processStart(MessageForm message)
-	{
-		for (List<Vozidlo> vList: context().getVozidla()) {
-			Queue<Vozidlo> q = new LinkedList<>();
-			for (Vozidlo v : vList) {
-				q.add(v);
-			}
-			aVozidla.add(q);
-		}
-		
-		for (int i = 0; i < aVozidla.size(); i++) {
-			MyMessage mm = (MyMessage) message.createCopy();
-			mm.setVozidlo(aVozidla.get(i).remove());
-			mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
-			mm.setLinka(i);
-			mm.setPomNum(0);
-			mm.setCode(Mc.finish);
-			processFinished(mm);
-		}
+	public void processStart(MessageForm message) {
+		aVozidla.addAll(context().getVozidla());
+
+		MyMessage mm = (MyMessage) message.createCopy();
+		planujVozidlo(mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
-	public void processOther(MessageForm message)
-	{
-		switch (message.code())
-		{
+	public void processOther(MessageForm message) {
+		switch (message.code()) {
 			case Mc.finish:
 				processFinished(message);
-			break;
+				break;
 		}
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.start:
-			processStart(message);
-		break;
+	public void processMessage(MessageForm message) {
+		switch (message.code()) {
+			case Mc.start:
+				processStart(message);
+				break;
 
-		default:
-			processOther(message);
-		break;
+			default:
+				processOther(message);
+				break;
 		}
 	}
 	//meta! tag="end"
@@ -74,12 +55,25 @@ public class SchedulerVozidiel extends Scheduler
 	private void processFinished(MessageForm message) {
 		MyMessage mm = (MyMessage) message.createCopy();
 		assistantFinished(mm);
-		if (aVozidla.get(mm.getLinka()).size() > 0) {
-			((MyMessage)message).setVozidlo(aVozidla.get(mm.getLinka()).remove());
-			hold(5*60, message);
+		if (aVozidla.size() > 0) {
+			MyMessage mm2 = (MyMessage) message;
+			planujVozidlo(mm2);
 		}
 	}
-	
+
+	private void planujVozidlo(MyMessage mm) {
+		mm.setVozidlo(aVozidla.remove());
+		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
+		mm.setLinka(mm.getVozidlo().getLinka());
+		mm.setCode(Mc.finish);
+		if (mm.getVozidlo().getCasPrichodu() <= mySim().currentTime()) {
+			processFinished(mm);
+		}
+		else {
+			hold(mm.getVozidlo().getCasPrichodu() - mySim().currentTime(), mm);
+		}
+	}
+
 	public SimContainer context() {
 		return ((MySimulation) mySim()).getContext();
 	}

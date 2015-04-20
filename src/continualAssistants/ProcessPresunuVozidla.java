@@ -20,7 +20,7 @@ public class ProcessPresunuVozidla extends Process
 	{
 		MyMessage mm = (MyMessage) message;
 		mm.setCode(Mc.finish);
-		hold(getLinka(message).dajCasKDalsej(mm.getPomNum()), mm);
+		hold(mm.getVozidlo().getLinka().dajCasKDalsej(((AgentPresunov)myAgent()).getPoziciuPre(mm.getVozidlo())), mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -50,16 +50,13 @@ public class ProcessPresunuVozidla extends Process
 		}
 	}
 	//meta! tag="end"
-	
-	public Linka getLinka(MessageForm mm) {
-		return context().getLinky().get(((MyMessage)mm).getLinka());
-	}
 
 	private void processFinished(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
-		mm.setPomNum(getLinka(message).dajDalsiuZastavku(mm.getPomNum()));
-		mm.setZastavka(getLinka(message).getZastavkaId(mm.getPomNum()));
-		assistantFinished(message);
+		AgentPresunov agent = (AgentPresunov) myAgent();
+		agent.setPoziciuPre(mm.getVozidlo(), mm.getVozidlo().getLinka().dajDalsiuZastavku(agent.getPoziciuPre(mm.getVozidlo())));
+		mm.setZastavka(mm.getVozidlo().getLinka().getZastavkaId(agent.getPoziciuPre(mm.getVozidlo())));
+		assistantFinished(mm);
 	}
 	
 	public SimContainer context() {

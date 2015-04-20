@@ -18,7 +18,7 @@ public class SimContainer {
 	
 	private List<Zastavka> aZastavky;
 	private List<Linka> aLinky;
-	private List<List<Vozidlo>> aVozidla;
+	private List<Vozidlo> aVozidla;
 	private SimVariants aVarianta;
 	
 	private List<RNG<Double>> aGeneratoryPrichodov;
@@ -27,7 +27,7 @@ public class SimContainer {
 	private List<RNG<Double>> aGeneratoryVystupov;
 	
 
-	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<List<Vozidlo>> paVozidla, SimVariants paVarianta) {
+	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<Vozidlo> paVozidla, SimVariants paVarianta) {
 		this.aZastavky = paZastavky;
 		this.aLinky = paLinky;
 		this.aVozidla = paVozidla;
@@ -54,7 +54,7 @@ public class SimContainer {
 		return aLinky;
 	}
 
-	public List<List<Vozidlo>> getVozidla() {
+	public List<Vozidlo> getVozidla() {
 		return aVozidla;
 	}
 	

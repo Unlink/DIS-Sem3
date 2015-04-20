@@ -24,12 +24,18 @@ public class Vozidlo {
 
 	private VozidloState aStav;
 
-	public Vozidlo(TypVozidlo paTypVozidlo, int paId) {
+	private double aCasPrichodu;
+
+	private Linka aLinka;
+
+	public Vozidlo(TypVozidlo paTypVozidlo, int paId, Linka paLinka, double paCasPrichodu) {
 		this.aTypVozidlo = paTypVozidlo;
 		this.aAktObsadenost = 0;
 		this.aAktObsadenostDveri = 0;
 		this.aId = paId;
 		this.aStav = VozidloState.NotCreated;
+		this.aLinka = paLinka;
+		this.aCasPrichodu = paCasPrichodu;
 	}
 
 	public int getId() {
@@ -86,6 +92,20 @@ public class Vozidlo {
 
 	public void setStav(VozidloState paStav) {
 		this.aStav = paStav;
+	}
+
+	public double getCasPrichodu() {
+		return aCasPrichodu;
+	}
+
+	public Linka getLinka() {
+		return aLinka;
+	}
+
+	public void reset() {
+		aStav = VozidloState.NotCreated;
+		aAktObsadenost = 0;
+		aAktObsadenostDveri = 0;
 	}
 
 	@Override

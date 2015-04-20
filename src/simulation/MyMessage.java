@@ -1,6 +1,7 @@
 package simulation;
 
 import OSPABA.*;
+import entity.Linka;
 import entity.Pasazier;
 import entity.Vozidlo;
 
@@ -12,9 +13,7 @@ public class MyMessage extends MessageForm
 	
 	private int aZastavka;
 	
-	private int aLinka;
-	
-	private int aPomNum;
+	private Linka aLinka;
 	
 	public MyMessage(MyMessage original)
 	{
@@ -56,20 +55,12 @@ public class MyMessage extends MessageForm
 		this.aZastavka = paZastavka;
 	}
 
-	public int getLinka() {
+	public Linka getLinka() {
 		return aLinka;
 	}
 
-	public void setLinka(int paLinka) {
+	public void setLinka(Linka paLinka) {
 		this.aLinka = paLinka;
-	}
-
-	public int getPomNum() {
-		return aPomNum;
-	}
-
-	public void setPomNum(int paPomNum) {
-		this.aPomNum = paPomNum;
 	}
 
 	@Override
@@ -82,7 +73,6 @@ public class MyMessage extends MessageForm
 		aPasazier = original.aPasazier;
 		aVozidlo = original.aVozidlo;
 		aZastavka = original.aZastavka;
-		aPomNum = original.aPomNum;
 	}
 	
 	

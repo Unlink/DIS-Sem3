@@ -36,7 +36,7 @@ public class ManagerPresunov extends Manager
 		MyMessage mm = (MyMessage) message;
 		mm.setCode(Mc.vybavVozidlo);
 		mm.setAddressee(((MySimulation)mySim()).agentPrepravy());
-		mm.setZastavka(((ProcessPresunuVozidla)myAgent().findAssistant(Id.processPresunuVozidla)).getLinka(message).getZastavkaId(mm.getPomNum()));
+		mm.setZastavka(mm.getVozidlo().getLinka().getZastavkaId(0));
 		request(message);
 	}
 

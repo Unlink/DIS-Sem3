@@ -37,6 +37,7 @@ public class ManagerPresunov extends Manager
 		mm.setCode(Mc.vybavVozidlo);
 		mm.setAddressee(((MySimulation)mySim()).agentPrepravy());
 		mm.setZastavka(mm.getVozidlo().getLinka().getZastavkaId(0));
+		System.out.println(mm.getZastavka());
 		request(message);
 	}
 

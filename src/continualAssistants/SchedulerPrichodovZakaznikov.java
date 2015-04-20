@@ -27,7 +27,7 @@ public class SchedulerPrichodovZakaznikov extends Scheduler {
 		super(paId, paMySim, paMyAgent);
 		remainingGenerations = maxGenerated;
 		this.startTime = maxTime;
-		aGenerator = new ExponentialRNG(maxGenerated / 65d);
+		aGenerator = new ExponentialRNG((65*60d)/maxGenerated);
 	}
 
 	@Override

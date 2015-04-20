@@ -3,6 +3,8 @@
  */
 package gui;
 
+import container.SimContainer;
+import entity.Linka;
 import entity.Vozidlo;
 import entity.Zastavka;
 import java.util.List;
@@ -15,13 +17,21 @@ import javax.swing.table.TableModel;
  */
 public class VozidlaTableModel implements TableModel {
 
-	private final List<Vozidlo> aVozidla;
+	private SimContainer aContext;
+	private List<Vozidlo> aVozidla;
+	private int[] aPozicie; 
 	
 	private enum Columns {
 		ID {
 			@Override
 			public String getValue(Vozidlo paZ) {
 				return ""+paZ.getId();
+			}
+		}, 
+		LINKA {
+			@Override
+			public String getValue(Vozidlo paZ) {
+				return ""+paZ.getLinka().getId();
 			}
 		}, 
 		NAME {
@@ -45,7 +55,18 @@ public class VozidlaTableModel implements TableModel {
 		POZICIA {
 			@Override
 			public String getValue(Vozidlo paZ) {
-				return "";//paZ.getPozicia();
+				if (paZ.getStav() == Vozidlo.VozidloState.NotCreated) {
+					return "v depe";
+				}
+				else if (paZ.getStav() == Vozidlo.VozidloState.InRide) {
+					Linka l = paZ.getLinka();
+					return ((l.getZastavkaId(pozicie[paZ.getId()]) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(pozicie[paZ.getId()])).getMeno())+" -> "+
+						((l.getZastavkaId(l.dajDalsiuZastavku(pozicie[paZ.getId()])) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(l.dajDalsiuZastavku(pozicie[paZ.getId()]))).getMeno());
+				}
+				else {
+					Linka l = paZ.getLinka();
+					return ((l.getZastavkaId(pozicie[paZ.getId()]) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(pozicie[paZ.getId()])).getMeno());
+				}
 			}
 		},
 		STAV {
@@ -67,12 +88,33 @@ public class VozidlaTableModel implements TableModel {
 		};
 		
 		
+		public static SimContainer context;
+		public static int[] pozicie;
+		
 		public abstract String getValue(Vozidlo v);
 		
 	}
 
-	public VozidlaTableModel(List<Vozidlo> paVozidla) {
+	public VozidlaTableModel(SimContainer paContext, List<Vozidlo> paVozidla, int[] paPozicie) {
+		this.aContext = paContext;
 		this.aVozidla = paVozidla;
+		this.aPozicie = paPozicie;
+		Columns.context = aContext;
+		Columns.pozicie = aPozicie;
+	}
+
+	public SimContainer getContext() {
+		return aContext;
+	}
+
+	public int[] getPozicie() {
+		return aPozicie;
+	}
+	
+	
+	public void updateDatasets(int[] paPos) {
+		aPozicie = paPos;
+		Columns.pozicie = aPozicie;
 	}
 	
 	@Override
@@ -116,5 +158,7 @@ public class VozidlaTableModel implements TableModel {
 	@Override
 	public void removeTableModelListener(TableModelListener paL) {
 	}
+	
+	
 	
 }

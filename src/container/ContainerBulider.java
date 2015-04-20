@@ -56,10 +56,11 @@ public class ContainerBulider {
 	}
 	
 	public SimContainer build() {
+		double startZapasu = aIt.getZastavky().stream().map(x -> x.getVzdialenost()).max((d1,d2) -> Double.compare(d1, d2)).get();
 		List<Vozidlo> vozidla = new ArrayList<>();
 		int counter = 0;
 		for (int i = 0; i < aPoctyVozidiel.length; i++) {
-			double cas = 0;
+			double cas = startZapasu - aIt.getZastavky().get(aIt.getLinky().get(i).getZastavkaId(0)).getVzdialenost();
 			for (int j = 0; j < aPoctyVozidiel[i].length; j++) {
 				for (int k = 0; k < aPoctyVozidiel[i][j]; k++) {
 					vozidla.add(new Vozidlo(aIt.getVozidla().get(j), counter++, aIt.getLinky().get(i), cas));
@@ -68,7 +69,7 @@ public class ContainerBulider {
 			}
 		}
 		
-		SimContainer simContainer = new SimContainer(aIt.getZastavky(), aIt.getLinky(), vozidla, aVarinata);
+		SimContainer simContainer = new SimContainer(aIt.getZastavky(), aIt.getLinky(), vozidla, aVarinata, startZapasu);
 		simContainer.injectGeneratoryPrichodov(createGeneratoryPrichodov());
 		simContainer.injectGeneratoryNastupov(createGeneratoryNastupov(vozidla));
 		simContainer.injectGeneratoryVystupov(createGeneratoryVystupov(vozidla));

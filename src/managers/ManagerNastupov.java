@@ -3,6 +3,7 @@ package managers;
 import OSPABA.*;
 import simulation.*;
 import agents.*;
+import container.SimContainer;
 import continualAssistants.*;
 import entity.Pasazier;
 import entity.Vozidlo;
@@ -140,7 +141,7 @@ public class ManagerNastupov extends Manager {
 		}
 		//ak už nikoho som nenaložil tak
 		if (!mm.getVozidlo().nastupujuLudia()) {
-			if (mm.getVozidlo().getTypVozidlo().getCaka() > 0 && mm.getVozidlo().getStav() == Vozidlo.VozidloState.NotWaiting) {
+			if (mm.getVozidlo().getTypVozidlo().getCaka()*context().getVariant().getNasobic() > 0 && mm.getVozidlo().getStav() == Vozidlo.VozidloState.NotWaiting) {
 				mm.setAddressee(myAgent().findAssistant(Id.schedulerCakania));
 				startContinualAssistant(mm);
 				mm.getVozidlo().setStav(Vozidlo.VozidloState.Waiting);
@@ -149,5 +150,9 @@ public class ManagerNastupov extends Manager {
 				ukonciObsluhuVozidla(mm);
 			}
 		}
+	}
+	
+	public SimContainer context() {
+		return ((MySimulation) mySim()).getContext();
 	}
 }

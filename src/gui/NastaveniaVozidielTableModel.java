@@ -3,15 +3,18 @@
  */
 package gui;
 
+import agents.AgentNastupov;
 import container.ContainerBulider;
+import container.SimContainer;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 /**
  *
  * @author Unlink
  */
-public class NastaveniaVozidielTableModel implements TableModel {
+public class NastaveniaVozidielTableModel extends AbstractTableModel {
 
 	private String[] aVozidla;
 	private String[] aLinky;
@@ -24,7 +27,7 @@ public class NastaveniaVozidielTableModel implements TableModel {
 		for (int i = 0; i < aLinky.length; i++) {
 			aData[i] = new int[aVozidla.length];
 			for (int j = 0; j < aVozidla.length; j++) {
-				aData[i][j] = 1;
+				aData[i][j] = (j==0) ? 3 : 0;
 			}
 		}
 	}
@@ -55,7 +58,7 @@ public class NastaveniaVozidielTableModel implements TableModel {
 			return String.class;
 		}
 		else {
-			return int.class;
+			return String.class;
 		}
 	}
 
@@ -76,15 +79,8 @@ public class NastaveniaVozidielTableModel implements TableModel {
 
 	@Override
 	public void setValueAt(Object paaValue, int paRowIndex, int paColumnIndex) {
-		aData[paRowIndex][paColumnIndex + 1] = Integer.parseInt(paaValue + "");
-	}
-
-	@Override
-	public void addTableModelListener(TableModelListener paL) {
-	}
-
-	@Override
-	public void removeTableModelListener(TableModelListener paL) {
+		aData[paRowIndex][paColumnIndex - 1] = Integer.parseInt(paaValue + "");
+		fireTableCellUpdated(paRowIndex, paColumnIndex);
 	}
 
 	public void setData(ContainerBulider cb) {

@@ -37,6 +37,10 @@ public class AgentPresunov extends Agent
 		aPozicie[paVozidlo.getId()] = paPos;
 	}
 
+	public int[] getPozicieVozidiel() {
+		return aPozicie;
+	}
+
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	private void init()
 	{

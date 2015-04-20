@@ -14,7 +14,8 @@ public class Vozidlo {
 		InRide,
 		NotWaiting,
 		Waiting,
-		WaitingEnded;
+		WaitingEnded,
+		Vystup;
 	}
 
 	private final int aId;

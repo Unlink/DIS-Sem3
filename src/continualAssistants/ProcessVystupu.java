@@ -5,6 +5,7 @@ import simulation.*;
 import agents.*;
 import OSPABA.Process;
 import container.SimContainer;
+import entity.Vozidlo;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -22,6 +23,7 @@ public class ProcessVystupu extends Process
 	{
 		MyMessage mm = (MyMessage) message;
 		PriorityQueue<Double> counter = new PriorityQueue<>();
+		mm.getVozidlo().setStav(Vozidlo.VozidloState.Vystup);
 		for (int i = 0; i < mm.getVozidlo().getTypVozidlo().getPocDveri(); i++) {
 			counter.add(0d);
 		}
@@ -68,6 +70,7 @@ public class ProcessVystupu extends Process
 	private void provessFinish(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
 		mm.getVozidlo().vyprazdniVozidlo();
+		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
 		assistantFinished(message);
 	}
 	

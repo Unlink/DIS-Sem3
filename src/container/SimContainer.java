@@ -26,12 +26,15 @@ public class SimContainer {
 	private List<RNG<Double>> aGeneratoryNastupov;
 	private List<RNG<Double>> aGeneratoryVystupov;
 	
+	private double aStartZapasu;
+	
 
-	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<Vozidlo> paVozidla, SimVariants paVarianta) {
+	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<Vozidlo> paVozidla, SimVariants paVarianta, double paStartZapasu) {
 		this.aZastavky = paZastavky;
 		this.aLinky = paLinky;
 		this.aVozidla = paVozidla;
 		this.aVarianta = paVarianta;
+		this.aStartZapasu = paStartZapasu;
 	}
 
 	public void injectGeneratoryPrichodov(List<RNG<Double>> paGeneratoryPrichodov) {
@@ -72,6 +75,10 @@ public class SimContainer {
 	
 	public RNG<Double> getGeneratorNastupov(Vozidlo paVozidlo) {
 		return getGeneratorNastupov(paVozidlo.getId());
+	}
+	
+	public SimVariants getVariant() {
+		return aVarianta;
 	}
 	
 }

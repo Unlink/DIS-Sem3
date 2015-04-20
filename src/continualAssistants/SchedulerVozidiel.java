@@ -54,6 +54,7 @@ public class SchedulerVozidiel extends Scheduler {
 
 	private void processFinished(MessageForm message) {
 		MyMessage mm = (MyMessage) message.createCopy();
+		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
 		assistantFinished(mm);
 		if (aVozidla.size() > 0) {
 			MyMessage mm2 = (MyMessage) message;
@@ -63,7 +64,6 @@ public class SchedulerVozidiel extends Scheduler {
 
 	private void planujVozidlo(MyMessage mm) {
 		mm.setVozidlo(aVozidla.remove());
-		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
 		mm.setLinka(mm.getVozidlo().getLinka());
 		mm.setCode(Mc.finish);
 		if (mm.getVozidlo().getCasPrichodu() <= mySim().currentTime()) {

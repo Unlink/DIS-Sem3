@@ -20,6 +20,7 @@ public class AgentVystupov extends Agent {
 	public AgentVystupov(int id, Simulation mySim, Agent parent) {
 		super(id, mySim, parent);
 		init();
+		aPocitadlo = new SimCounter();
 	}
 
 	public SimCounter getPocitadlo() {

@@ -6,6 +6,7 @@ package gui;
 import OSPABA.ISimDelegate;
 import OSPABA.SimState;
 import OSPABA.Simulation;
+import container.ContainerBulider;
 import entity.Vozidlo;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -25,33 +26,15 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 
 	private MySimulation ms;
 	
-	private ImportTools it;
+	private ContainerBulider cb;
 
 	/**
 	 * Creates new form Main
 	 */
 	public Main() {
 		initComponents();
-		it = ImportTools.importData();
-	}
-	
-	public List<List<Vozidlo>> getVozidlaConf() {
-		List<List<Vozidlo>> aVozidla;
-		aVozidla = new ArrayList<>(3);
-		aVozidla.add(new LinkedList<>());
-		aVozidla.add(new LinkedList<>());
-		aVozidla.add(new LinkedList<>());
-		aVozidla.get(0).add(new Vozidlo(it.getVozidla().get(1)));
-		aVozidla.get(0).add(new Vozidlo(it.getVozidla().get(1)));
-		aVozidla.get(0).add(new Vozidlo(it.getVozidla().get(0)));
-		aVozidla.get(1).add(new Vozidlo(it.getVozidla().get(1)));
-		aVozidla.get(1).add(new Vozidlo(it.getVozidla().get(1)));
-		aVozidla.get(1).add(new Vozidlo(it.getVozidla().get(0)));
-		aVozidla.get(2).add(new Vozidlo(it.getVozidla().get(1)));
-		aVozidla.get(2).add(new Vozidlo(it.getVozidla().get(1)));
-		aVozidla.get(2).add(new Vozidlo(it.getVozidla().get(2)));
-		aVozidla.get(2).add(new Vozidlo(it.getVozidla().get(1)));
-		return aVozidla;
+		cb = new ContainerBulider(ImportTools.importData());
+		jTable3.setModel(new NastaveniaVozidielTableModel(cb.getZoznamVozidiel(), cb.getZoznamLiniek()));
 	}
 
 	@Override

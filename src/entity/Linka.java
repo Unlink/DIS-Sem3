@@ -31,4 +31,8 @@ public class Linka {
 		return aPresuny[paAkt];
 	}
 
+	public String getId() {
+		return aId;
+	}
+
 }

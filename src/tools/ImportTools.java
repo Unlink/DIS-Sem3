@@ -43,7 +43,6 @@ public class ImportTools {
 	}
 
 	private ImportTools() {
-		Vozidlo.resetCounter();
 		aVozidla = new ArrayList<>();
 		aZastavky = new ArrayList<>();
 		aMappingZastavok = new HashMap<>();

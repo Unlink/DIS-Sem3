@@ -17,9 +17,6 @@ public class Vozidlo {
 		WaitingEnded;
 	}
 
-
-	private static int aCounter = 1;
-
 	private final int aId;
 	private final TypVozidlo aTypVozidlo;
 	private int aAktObsadenost;
@@ -29,17 +26,13 @@ public class Vozidlo {
 	
 	private String aPozicia;
 
-	public Vozidlo(TypVozidlo paTypVozidlo) {
+	public Vozidlo(TypVozidlo paTypVozidlo, int paId) {
 		this.aTypVozidlo = paTypVozidlo;
 		this.aAktObsadenost = 0;
 		this.aAktObsadenostDveri = 0;
-		this.aId = aCounter++;
+		this.aId = paId;
 		this.aStav = VozidloState.NotCreated;
 		this.aPozicia = "depo";
-	}
-
-	public static void resetCounter() {
-		aCounter = 1;
 	}
 	
 	public int getId() {

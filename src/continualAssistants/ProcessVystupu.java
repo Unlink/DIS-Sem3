@@ -4,6 +4,7 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import OSPABA.Process;
+import container.SimContainer;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -27,7 +28,7 @@ public class ProcessVystupu extends Process
 		
 		for (int i = 0; i < mm.getVozidlo().getAktObsadenost(); i++) {
 			Double min = counter.poll();
-			min+=((AgentVystupov)myAgent()).getRNG(mm.getVozidlo().getId()-1).sample();
+			min+=context().getGeneratorVystupov(mm.getVozidlo()).sample();
 			counter.add(min);
 		}
 		
@@ -68,5 +69,9 @@ public class ProcessVystupu extends Process
 		MyMessage mm = (MyMessage) message;
 		mm.getVozidlo().vyprazdniVozidlo();
 		assistantFinished(message);
+	}
+	
+	public SimContainer context() {
+		return ((MySimulation) mySim()).getContext();
 	}
 }

@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 
 //meta! id="14"
 public class ManagerNastupov extends Manager {
+
 	public ManagerNastupov(int id, Simulation mySim, Agent myAgent) {
 		super(id, mySim, myAgent);
 	}

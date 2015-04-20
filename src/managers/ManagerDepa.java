@@ -10,6 +10,7 @@ import java.util.List;
 
 //meta! id="20"
 public class ManagerDepa extends Manager {
+
 	public ManagerDepa(int id, Simulation mySim, Agent myAgent) {
 		super(id, mySim, myAgent);
 	}
@@ -29,25 +30,25 @@ public class ManagerDepa extends Manager {
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.init:
-			processInit(message);
-		break;
+	public void processMessage(MessageForm message) {
+		switch (message.code()) {
+			case Mc.init:
+				processInit(message);
+				break;
 
-		case Mc.finish:
-			processFinish(message);
-		break;
+			case Mc.finish:
+				processFinish(message);
+				break;
 
-		default:
-			processOther(message);
-		break;
+			default:
+				processOther(message);
+				break;
 		}
 	}
+
 	//meta! tag="end"
 	//meta! sender="AgentPrepravy", id="73", type="notice"
+
 	public void processInit(MessageForm message) {
 		message.setAddressee(myAgent().findAssistant(Id.schedulerVozidiel));
 		startContinualAssistant(message);

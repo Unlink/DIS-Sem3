@@ -4,6 +4,7 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import OSPABA.Process;
+import container.SimContainer;
 
 //meta! id="43"
 public class ProcessNastupu extends Process
@@ -17,9 +18,8 @@ public class ProcessNastupu extends Process
 	public void processStart(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		Double sample = ((AgentNastupov)myAgent()).getRNG(mm.getVozidlo().getId()-1).sample();
 		mm.setCode(Mc.finish);
-		hold(sample, mm);
+		hold(context().getGeneratorNastupov(mm.getVozidlo()).sample(), mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -52,5 +52,9 @@ public class ProcessNastupu extends Process
 
 	private void procesFinnished(MessageForm message) {
 		assistantFinished(message);
+	}
+	
+	public SimContainer context() {
+		return ((MySimulation) mySim()).getContext();
 	}
 }

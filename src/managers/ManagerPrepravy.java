@@ -18,7 +18,6 @@ public class ManagerPrepravy extends Manager
 	public void processVylozZakaznikov(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		mm.getVozidlo().setPozicia("Stadion -->");
 		message.setCode(Mc.vybavVozidlo);
 		response(message);
 	}
@@ -27,7 +26,6 @@ public class ManagerPrepravy extends Manager
 	public void processNalozZakaznikov(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		mm.getVozidlo().setPozicia(((MySimulation)mySim()).getZastavky().get(mm.getZastavka()).getMeno()+"-->");
 		message.setCode(Mc.vybavVozidlo);
 		response(message);
 	}
@@ -39,12 +37,10 @@ public class ManagerPrepravy extends Manager
 		if (mm.getZastavka() < 0) {
 			mm.setAddressee(((MySimulation)mySim()).agentVystupov());
 			mm.setCode(Mc.vylozZakaznikov);
-			mm.getVozidlo().setPozicia("Stadion");
 		}
 		else {
 			mm.setAddressee(((MySimulation)mySim()).agentNastupov());
 			mm.setCode(Mc.nalozZakaznikov);
-			mm.getVozidlo().setPozicia(((MySimulation)mySim()).getZastavky().get(mm.getZastavka()).getMeno());
 		}
 		request(mm);
 	}
@@ -53,7 +49,6 @@ public class ManagerPrepravy extends Manager
 	public void processNoveVozidlo(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		System.out.println(mm.toString()+" Nové vozidlo:" + mm.getVozidlo().getId());
 		message.setAddressee(((MySimulation)mySim()).agentPresunov());
 		notice(message);
 	}
@@ -62,7 +57,6 @@ public class ManagerPrepravy extends Manager
 	public void processNovyZakaznik(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		System.out.println(mm.toString()+" Novy zakaznik");
 		message.setAddressee(((MySimulation)mySim()).agentNastupov());
 		notice(message);
 	}

@@ -2,6 +2,7 @@ package simulation;
 
 import OSPABA.*;
 import agents.*;
+import container.SimContainer;
 import entity.Linka;
 import entity.TypVozidlo;
 import entity.Vozidlo;
@@ -13,26 +14,15 @@ import tools.ImportTools;
 
 public class MySimulation extends Simulation
 {
+	private SimContainer aKontajner;
 	
-	private ImportTools aIt;
-	private List<List<Vozidlo>> aVozidla;
-
-	public MySimulation(ImportTools paIt, List<List<Vozidlo>> paVozidla) {
-		this.aIt = paIt;
-		this.aVozidla = paVozidla;
+	public MySimulation(SimContainer kontajner) {
+		aKontajner = kontajner;
 		init();
 	}
 	
-	public List<Zastavka> getZastavky() {
-		return aIt.getZastavky();
-	}
-	
-	public List<Linka> getLinky() {
-		return aIt.getLinky();
-	}
-	
-	public List<List<Vozidlo>> getVozidla() {
-		return aVozidla;
+	public SimContainer getContext() {
+		return aKontajner;
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

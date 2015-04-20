@@ -3,6 +3,7 @@ package continualAssistants;
 import OSPABA.*;
 import simulation.*;
 import agents.*;
+import container.SimContainer;
 import entity.Vozidlo;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,7 +24,7 @@ public class SchedulerVozidiel extends Scheduler
 	//meta! sender="AgentDepa", id="55"
 	public void processStart(MessageForm message)
 	{
-		for (List<Vozidlo> vList: ((MySimulation) mySim()).getVozidla()) {
+		for (List<Vozidlo> vList: context().getVozidla()) {
 			Queue<Vozidlo> q = new LinkedList<>();
 			for (Vozidlo v : vList) {
 				q.add(v);
@@ -77,5 +78,9 @@ public class SchedulerVozidiel extends Scheduler
 			((MyMessage)message).setVozidlo(aVozidla.get(mm.getLinka()).remove());
 			hold(5*60, message);
 		}
+	}
+	
+	public SimContainer context() {
+		return ((MySimulation) mySim()).getContext();
 	}
 }

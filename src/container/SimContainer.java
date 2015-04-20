@@ -3,6 +3,7 @@
  */
 package container;
 
+import simulation.SimCounter;
 import OSPRNG.RNG;
 import entity.Linka;
 import entity.Vozidlo;
@@ -44,8 +45,33 @@ public class SimContainer {
 	public void injectGeneratoryVystupov(List<RNG<Double>> paGeneratoryVystupov) {
 		this.aGeneratoryVystupov = paGeneratoryVystupov;
 	}
+
+	public List<Zastavka> getZastavky() {
+		return aZastavky;
+	}
+
+	public List<Linka> getLinky() {
+		return aLinky;
+	}
+
+	public List<List<Vozidlo>> getVozidla() {
+		return aVozidla;
+	}
 	
+	public RNG<Double> getGeneratorVystupov(int paId) {
+		return aGeneratoryVystupov.get(paId);
+	}
 	
+	public RNG<Double> getGeneratorVystupov(Vozidlo paVozidlo) {
+		return getGeneratorVystupov(paVozidlo.getId());
+	}
 	
+	public RNG<Double> getGeneratorNastupov(int paId) {
+		return aGeneratoryNastupov.get(paId);
+	}
+	
+	public RNG<Double> getGeneratorNastupov(Vozidlo paVozidlo) {
+		return getGeneratorNastupov(paVozidlo.getId());
+	}
 	
 }

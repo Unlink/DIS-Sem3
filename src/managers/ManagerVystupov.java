@@ -18,7 +18,7 @@ public class ManagerVystupov extends Manager
 	public void processVylozZakaznikov(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		((AgentVystupov)myAgent()).incVylozenych(mm.getVozidlo().getAktObsadenost());
+		((AgentVystupov)myAgent()).getPocitadlo().inc(mm.getVozidlo().getAktObsadenost());
 		mm.setAddressee(myAgent().findAssistant(Id.processVystupu));
 		startContinualAssistant(mm);
 	}

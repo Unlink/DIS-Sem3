@@ -4,6 +4,7 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import OSPABA.Process;
+import container.SimContainer;
 import entity.Linka;
 
 //meta! id="61"
@@ -51,7 +52,7 @@ public class ProcessPresunuVozidla extends Process
 	//meta! tag="end"
 	
 	public Linka getLinka(MessageForm mm) {
-		return ((MySimulation)mySim()).getLinky().get(((MyMessage)mm).getLinka());
+		return context().getLinky().get(((MyMessage)mm).getLinka());
 	}
 
 	private void processFinished(MessageForm message) {
@@ -59,5 +60,9 @@ public class ProcessPresunuVozidla extends Process
 		mm.setPomNum(getLinka(message).dajDalsiuZastavku(mm.getPomNum()));
 		mm.setZastavka(getLinka(message).getZastavkaId(mm.getPomNum()));
 		assistantFinished(message);
+	}
+	
+	public SimContainer context() {
+		return ((MySimulation) mySim()).getContext();
 	}
 }

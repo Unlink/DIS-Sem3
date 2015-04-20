@@ -8,12 +8,12 @@ package entity;
  * @author Unlink
  */
 public class Vozidlo {
-	
+
 	public static enum VozidloState {
 		NotCreated,
 		InRide,
 		NotWaiting,
-		Waiting, 
+		Waiting,
 		WaitingEnded;
 	}
 
@@ -21,10 +21,8 @@ public class Vozidlo {
 	private final TypVozidlo aTypVozidlo;
 	private int aAktObsadenost;
 	private int aAktObsadenostDveri;
-	
+
 	private VozidloState aStav;
-	
-	private String aPozicia;
 
 	public Vozidlo(TypVozidlo paTypVozidlo, int paId) {
 		this.aTypVozidlo = paTypVozidlo;
@@ -32,9 +30,8 @@ public class Vozidlo {
 		this.aAktObsadenostDveri = 0;
 		this.aId = paId;
 		this.aStav = VozidloState.NotCreated;
-		this.aPozicia = "depo";
 	}
-	
+
 	public int getId() {
 		return aId;
 	}
@@ -82,21 +79,13 @@ public class Vozidlo {
 		aAktObsadenost = 0;
 		aAktObsadenostDveri = 0;
 	}
-	
+
 	public VozidloState getStav() {
 		return aStav;
 	}
 
 	public void setStav(VozidloState paStav) {
 		this.aStav = paStav;
-	}
-
-	public String getPozicia() {
-		return aPozicia;
-	}
-
-	public void setPozicia(String paPozicia) {
-		this.aPozicia = paPozicia;
 	}
 
 	@Override
@@ -118,7 +107,5 @@ public class Vozidlo {
 		}
 		return true;
 	}
-	
-	
 
 }

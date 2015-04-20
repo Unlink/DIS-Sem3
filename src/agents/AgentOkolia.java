@@ -12,21 +12,17 @@ import instantAssistants.*;
 //meta! id="2"
 public class AgentOkolia extends Agent {
 
-	private int aVygenerovanych;
-
+	private SimCounter aPocitadlo;
+	
 	public AgentOkolia(int id, Simulation mySim, Agent parent) {
 		super(id, mySim, parent);
+		aPocitadlo = new SimCounter();
 		init();
 		addOwnMessage(Mc.novyZakaznik);
-		aVygenerovanych = 0;
 	}
 
-	public int getVygenerovanych() {
-		return aVygenerovanych;
-	}
-
-	public void incVygenerovanych() {
-		this.aVygenerovanych++;
+	public SimCounter getPocitadlo() {
+		return aPocitadlo;
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

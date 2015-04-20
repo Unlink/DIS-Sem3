@@ -3,6 +3,7 @@ package agents;
 import OSPABA.*;
 import OSPDataStruct.SimQueue;
 import OSPRNG.RNG;
+import container.SimContainer;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
@@ -16,59 +17,34 @@ import java.util.LinkedList;
 import java.util.List;
 
 //meta! id="14"
-public class AgentNastupov extends Agent
-{
-	
-	private final RNG<Double>[] aGeneratoryNastupov;
+public class AgentNastupov extends Agent {
+
 	private final SimQueue<Pasazier>[] aFronta;
 	private final HashMap<Vozidlo, MyMessage>[] aVozidla;
-	
-	public AgentNastupov(int id, Simulation mySim, Agent parent)
-	{
+
+	public AgentNastupov(int id, Simulation mySim, Agent parent) {
 		super(id, mySim, parent);
 		init();
-		
-		LinkedList<Vozidlo> vsetkyVozidla = new LinkedList<>();
-		((MySimulation)mySim).getVozidla().stream().forEach((l) -> l.stream().forEach((v) -> vsetkyVozidla.add(v)));
-		aGeneratoryNastupov = new RNG[vsetkyVozidla.size()];
-		for (Vozidlo v : vsetkyVozidla) {
-			aGeneratoryNastupov[v.getId()-1] = v.getTypVozidlo().createGeneratorNastupu();
-		}
-		List<Zastavka> zastavky = ((MySimulation)mySim).getZastavky();
+
+		List<Zastavka> zastavky = context().getZastavky();
 		aFronta = new SimQueue[zastavky.size()];
 		aVozidla = new HashMap[zastavky.size()];
-		for (Zastavka z: ((MySimulation)mySim).getZastavky()) {
+		for (Zastavka z : zastavky) {
 			aFronta[z.getId()] = new SimQueue<>();
 			aVozidla[z.getId()] = new HashMap<>();
-			z.setDfxysfds(() -> {
-				StringBuilder sb = new StringBuilder();
-				for (Vozidlo v : aVozidla[z.getId()].keySet()) {
-					sb.append(v.getId()).append(" (").append(v.getTypVozidlo().getMeno()).append("), ");
-				}
-				if (sb.length() > 0) {
-					sb.delete(sb.length()-2, sb.length());
-				}
-				return sb.toString();
-			});
-			z.setGdhfhg(() -> aFronta[z.getId()].size());
 		}
 	}
-	
+
 	public SimQueue<Pasazier> getFronta(int paZastavka) {
 		return aFronta[paZastavka];
 	}
-	
+
 	public HashMap<Vozidlo, MyMessage> getVozidla(int paZastavka) {
 		return aVozidla[paZastavka];
 	}
-	
-	public RNG<Double> getRNG(int id) {
-		return aGeneratoryNastupov[id];
-	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init()
-	{
+	private void init() {
 		new ManagerNastupov(Id.managerNastupov, mySim(), this);
 		new SchedulerCakania(Id.schedulerCakania, mySim(), this);
 		new ProcessNastupu(Id.processNastupu, mySim(), this);
@@ -76,4 +52,8 @@ public class AgentNastupov extends Agent
 		addOwnMessage(Mc.novyZakaznik);
 	}
 	//meta! tag="end"
+
+	public SimContainer context() {
+		return ((MySimulation) mySim()).getContext();
+	}
 }

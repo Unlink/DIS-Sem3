@@ -10,15 +10,20 @@ import container.ContainerBulider;
 import container.SimContainer;
 import container.SimVariants;
 import entity.Vozidlo;
+import java.awt.Component;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.swing.SwingUtilities;
 import simulation.Mc;
 import simulation.MyMessage;
 import simulation.MySimulation;
 import tools.ImportTools;
+import tools.SettingsTools;
 
 /**
  *
@@ -27,16 +32,27 @@ import tools.ImportTools;
 public class Main extends javax.swing.JFrame implements ISimDelegate {
 
 	private MySimulation ms;
-	
+
 	private ContainerBulider cb;
+
+	private SettingsTools st;
+
+	private List<VozidlaPanel> aLinkyConfigurator;
 
 	/**
 	 * Creates new form Main
 	 */
 	public Main() {
 		initComponents();
-		cb = new ContainerBulider(ImportTools.importData());
-		jTable3.setModel(new NastaveniaVozidielTableModel(cb.getZoznamVozidiel(), cb.getZoznamLiniek()));
+		setLocationRelativeTo(null);
+		aLinkyConfigurator = new ArrayList<>();
+		cb = new ContainerBulider(ImportTools.importData(), aLinkyConfigurator);
+		st = new SettingsTools(jTabbedPane2);
+		for (String linka : cb.getZoznamLiniek()) {
+			VozidlaPanel vozidlaPanel = new VozidlaPanel(cb.getTypyVozidiel());
+			aLinkyConfigurator.add(vozidlaPanel);
+			jTabbedPane2.addTab("Linka " + linka, vozidlaPanel);
+		}
 	}
 
 	@Override
@@ -49,7 +65,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 				jButton1.setEnabled(true);
 				jButton2.setEnabled(false);
 				jButton3.setEnabled(false);
-				jTextArea1.setText("Vygenerovanych: "+ms.agentOkolia().getPocitadlo().val()+"\nDovezenych: "+ms.agentVystupov().getPocitadlo().val());
+				jTextArea1.setText("Vygenerovanych: " + ms.agentPrepravy().getVygenerovanych().val() + "\nDovezenych: " + ms.agentPrepravy().getObsluzenych().val());
 				break;
 
 		}
@@ -94,9 +110,9 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
         jLabel5 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        jLabel6 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -108,6 +124,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
         jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Simulácia dopravy");
 
         jButton1.setText("Start");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -243,24 +260,19 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
             }
         });
 
-        jLabel6.setText("Vozidla:");
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        jButton4.setText("Open");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
             }
-        ));
+        });
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jButton1, org.jdesktop.beansbinding.ELProperty.create("!${enabled}"), jTable3, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane4.setViewportView(jTable3);
+        jButton5.setText("Save");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -269,37 +281,39 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4)
+                    .addComponent(jTabbedPane2)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton2))
-                            .addComponent(jLabel6))
-                        .addGap(0, 642, Short.MAX_VALUE)))
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 520, Short.MAX_VALUE)
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(jRadioButton1)
+                        .addComponent(jRadioButton2))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton5)
+                        .addComponent(jButton4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Nastavenia", jPanel3);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jToggleButton1, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jPanel4, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jToggleButton1, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jPanel4, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -323,7 +337,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Stav autobusov", jPanel4);
@@ -352,7 +366,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Stav zastavok", jPanel5);
@@ -370,7 +384,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Output", jPanel6);
@@ -409,12 +423,11 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 
 	private void setSpeed() {
 		if (ms != null) {
-			ms.setSimSpeed(jSlider1.getValue()*0.1, jSlider2.getValue()*0.05);
+			ms.setSimSpeed(jSlider1.getValue() * 0.1, jSlider2.getValue() * 0.05);
 		}
 	}
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-		((NastaveniaVozidielTableModel)jTable3.getModel()).setData(cb);
 		SimContainer build = cb.build();
 		ms = new MySimulation(build);
 		MyMessage msg = new MyMessage(ms);
@@ -431,17 +444,17 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 		}
 		jTable1.setModel(new VozidlaTableModel(build, build.getVozidla(), ms.agentPresunov().getPozicieVozidiel()));
 		jTable2.setModel(new ZastavkyTableModel(build.getZastavky(), build, ms.agentNastupov()));
-		new Thread(() -> ms.simulate(60 * 60 * 30d)).start();
+		new Thread(() -> ms.simulate()).start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (ms != null && (ms.isRunning() || ms.isPaused())) {
+		if (ms != null && (ms.isRunning() || ms.isPaused())) {
 			ms.stopSimulation();
 		}
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (ms != null && ms.isPaused()) {
+		if (ms != null && ms.isPaused()) {
 			ms.resumeSimulation();
 			jButton3.setText("Pause");
 		}
@@ -452,20 +465,29 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
-        setSpeed();
+		setSpeed();
     }//GEN-LAST:event_jSlider1StateChanged
 
     private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider2StateChanged
-        setSpeed();
+		setSpeed();
     }//GEN-LAST:event_jSlider2StateChanged
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        cb.setVarinata(SimVariants.A);
+		cb.setVarinata(SimVariants.A);
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        cb.setVarinata(SimVariants.B);
+		cb.setVarinata(SimVariants.B);
     }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+		st.save(aLinkyConfigurator);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+		st.open(aLinkyConfigurator, cb.getTypyVozidiel());
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -497,21 +519,22 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 			}
 		});
 	}
-	
-	public static String formatTime(double time)
-	{
-		if (time == 0) return "0";
-		
+
+	public static String formatTime(double time) {
+		if (time == 0) {
+			return "0";
+		}
+
 		DecimalFormat df_mh = new DecimalFormat("00");
 		DecimalFormat df_s = new DecimalFormat("00.00");
-		
-		double h = (int)time / 3600;
-		double m = ((int)time / 60) % 60;
-		double s = ((int)time) % 60 + time - (int)time;
-		
-		return ((int)h == 0 ? "" : df_mh.format(h) + ":")
-				+ ((int)h == 0 && (int)m == 0 ? "" : df_mh.format(m) + ":")
-				+ df_s.format(s);
+
+		double h = (int) time / 3600;
+		double m = ((int) time / 60) % 60;
+		double s = ((int) time) % 60 + time - (int) time;
+
+		return ((int) h == 0 ? "" : df_mh.format(h) + ":")
+			+ ((int) h == 0 && (int) m == 0 ? "" : df_mh.format(m) + ":")
+			+ df_s.format(s);
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -519,12 +542,13 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -536,13 +560,12 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JToggleButton jToggleButton1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

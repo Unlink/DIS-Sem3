@@ -17,18 +17,32 @@ public class ManagerVystupov extends Manager
 	//meta! sender="AgentPrepravy", id="68", type="request"
 	public void processVylozZakaznikov(MessageForm message)
 	{
-		MyMessage mm = (MyMessage) message;
-		((AgentVystupov)myAgent()).getPocitadlo().inc(mm.getVozidlo().getAktObsadenost());
-		mm.setAddressee(myAgent().findAssistant(Id.processVystupu));
-		startContinualAssistant(mm);
+		vystupLudi(message);
+	}
+
+	private void vystupLudi(MessageForm paMessage) {
+		MyMessage mm = (MyMessage) paMessage;
+		while (mm.getVozidlo().getAktObsadenost() > 0 && mm.getVozidlo().maVolneDvere()) {
+			mm.getVozidlo().obsadDvere().odoberPasaziera();
+			MyMessage mm2 = (MyMessage) mm.createCopy();
+			mm2.setAddressee(myAgent().findAssistant(Id.processVystupu));
+			startContinualAssistant(mm2);
+		}
+		if (mm.getVozidlo().getAktObsadenost() == 0 && !mm.getVozidlo().nastupujuLudia()) {
+			mm.setCode(Mc.vylozZakaznikov);
+			response(mm);
+		}
 	}
 
 	//meta! sender="ProcessVystupu", id="39"
 	public void processFinish(MessageForm message)
 	{
-		MyMessage mm = (MyMessage) message;
-		mm.setCode(Mc.vylozZakaznikov);
-		response(mm);
+		MyMessage mm = (MyMessage) message.createCopy();
+		mm.getVozidlo().uvoliDvere();
+		mm.setAddressee(myAgent().parent());
+		mm.setCode(Mc.prepravenyZakaznik);
+		notice(mm);
+		vystupLudi(message);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"

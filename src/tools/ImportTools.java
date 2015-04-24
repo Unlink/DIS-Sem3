@@ -33,7 +33,6 @@ public class ImportTools {
 	private ArrayList<Linka> aLinky;
 	private ArrayList<IGeneratorFactory> aGeneratory;
 	private HashMap<String, List[]> aPom;
-	private double aZaciatokZapasu;
 
 	public static ImportTools importData() {
 		return new ImportTools();
@@ -46,7 +45,6 @@ public class ImportTools {
 		aLinky = new ArrayList<>();
 		aGeneratory = new ArrayList<>();
 		aPom = new HashMap<>();
-		aZaciatokZapasu = -1;
 		String[] subory = new String[]{"zastavky", "linky", "generatory", "dopravneProstriedky"};
 		for (String subor : subory) {
 			String f = "/data/" + subor + ".csv";
@@ -79,7 +77,6 @@ public class ImportTools {
 			}
 		}
 		spocitajLinky();
-		spocitajPrichodyAZacZapasu();
 	}
 
 	public ArrayList<TypVozidlo> getVozidla() {
@@ -109,14 +106,6 @@ public class ImportTools {
 				}
 			}
 			aLinky.add(new Linka(entrySet.getKey(), z, d));
-		}
-	}
-
-	private void spocitajPrichodyAZacZapasu() {
-		double maxD = aZastavky.stream().max((Zastavka z1, Zastavka z2) -> Double.compare(z1.getVzdialenost(), z2.getVzdialenost())).get().getVzdialenost();
-		aZaciatokZapasu = maxD + 75 * 60;
-		for (Zastavka z : aZastavky) {
-			z.setZacPrichodov(maxD - z.getVzdialenost());
 		}
 	}
 

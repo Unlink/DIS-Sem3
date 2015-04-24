@@ -29,7 +29,6 @@ public class ManagerOkolia extends Manager {
 			case Mc.finish:
 				message.setCode(Mc.novyZakaznik);
 				message.setAddressee(myAgent().parent());
-				((AgentOkolia) myAgent()).getPocitadlo().inc();
 				notice(message);
 				break;
 		}

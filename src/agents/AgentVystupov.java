@@ -15,16 +15,9 @@ import java.util.List;
 //meta! id="15"
 public class AgentVystupov extends Agent {
 
-	private SimCounter aPocitadlo;
-
 	public AgentVystupov(int id, Simulation mySim, Agent parent) {
 		super(id, mySim, parent);
 		init();
-		aPocitadlo = new SimCounter();
-	}
-
-	public SimCounter getPocitadlo() {
-		return aPocitadlo;
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

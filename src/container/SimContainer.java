@@ -3,7 +3,6 @@
  */
 package container;
 
-import simulation.SimCounter;
 import OSPRNG.RNG;
 import entity.Linka;
 import entity.Vozidlo;
@@ -28,13 +27,17 @@ public class SimContainer {
 	
 	private double aStartZapasu;
 	
+	private double aOffset;
+	
 
-	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<Vozidlo> paVozidla, SimVariants paVarianta, double paStartZapasu) {
+	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<Vozidlo> paVozidla, 
+		SimVariants paVarianta, double paStartZapasu, double paOffset) {
 		this.aZastavky = paZastavky;
 		this.aLinky = paLinky;
 		this.aVozidla = paVozidla;
 		this.aVarianta = paVarianta;
 		this.aStartZapasu = paStartZapasu;
+		this.aOffset = paOffset;
 	}
 
 	public void injectGeneratoryPrichodov(List<RNG<Double>> paGeneratoryPrichodov) {
@@ -79,6 +82,14 @@ public class SimContainer {
 	
 	public SimVariants getVariant() {
 		return aVarianta;
+	}
+	
+	public double getOffset() {
+		return aOffset;
+	}
+
+	public double getStartZapasu() {
+		return aStartZapasu;
 	}
 	
 }

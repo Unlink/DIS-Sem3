@@ -22,10 +22,15 @@ public class ManagerNastupov extends Manager {
 	//meta! sender="AgentPrepravy", id="67", type="request"
 	public void processNalozZakaznikov(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
-		mm.getVozidlo().setStav(Vozidlo.VozidloState.NotWaiting);
-		int zastavka = mm.getZastavka();
-		myAgent().getVozidla(zastavka).put(mm.getVozidlo(), mm);
-		nakladajLudi(mm);
+		if (!mm.getVozidlo().maMiesto()) {
+			response(mm);
+		}
+		else {
+			mm.getVozidlo().setStav(Vozidlo.VozidloState.NotWaiting);
+			int zastavka = mm.getZastavka();
+			myAgent().getVozidla(zastavka).put(mm.getVozidlo(), mm);
+			nakladajLudi(mm);
+		}
 	}
 
 	//meta! sender="ProcessNastupu", id="44"

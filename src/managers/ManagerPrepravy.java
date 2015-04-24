@@ -3,6 +3,7 @@ package managers;
 import OSPABA.*;
 import simulation.*;
 import agents.*;
+import container.SimContainer;
 import continualAssistants.*;
 import instantAssistants.*;
 
@@ -56,6 +57,7 @@ public class ManagerPrepravy extends Manager
 	//meta! sender="AgentModelu", id="25", type="notice"
 	public void processNovyZakaznik(MessageForm message)
 	{
+		((AgentPrepravy)myAgent()).getVygenerovanych().inc();
 		MyMessage mm = (MyMessage) message;
 		message.setAddressee(((MySimulation)mySim()).agentNastupov());
 		notice(message);
@@ -119,6 +121,16 @@ public class ManagerPrepravy extends Manager
 	//meta! sender="AgentVystupov", id="74", type="notice"
 	public void processPrepravenyZakaznik(MessageForm message)
 	{
+		((AgentPrepravy)myAgent()).getObsluzenych().inc();
+		if (mySim().currentTime() >= context().getStartZapasu()) {
+			if (((AgentPrepravy)myAgent()).getObsluzenych().val() == ((AgentPrepravy)myAgent()).getVygenerovanych().val()) {
+				mySim().stopSimulation();
+			}
+		}
+	}
+	
+	public SimContainer context() {
+		return ((MySimulation) mySim()).getContext();
 	}
 
 }

@@ -22,21 +22,8 @@ public class ProcessVystupu extends Process
 	public void processStart(MessageForm message)
 	{
 		MyMessage mm = (MyMessage) message;
-		PriorityQueue<Double> counter = new PriorityQueue<>();
-		mm.getVozidlo().setStav(Vozidlo.VozidloState.Vystup);
-		for (int i = 0; i < mm.getVozidlo().getTypVozidlo().getPocDveri(); i++) {
-			counter.add(0d);
-		}
-		
-		for (int i = 0; i < mm.getVozidlo().getAktObsadenost(); i++) {
-			Double min = counter.poll();
-			min+=context().getGeneratorVystupov(mm.getVozidlo()).sample();
-			counter.add(min);
-		}
-		
-		double trvanie = counter.stream().max((Double d1, Double d2) -> Double.compare(d1, d2)).get();
-		message.setCode(Mc.finish);
-		hold(trvanie, message);
+		mm.setCode(Mc.finish);
+		hold(context().getGeneratorVystupov(mm.getVozidlo()).sample(), mm);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -69,9 +56,7 @@ public class ProcessVystupu extends Process
 
 	private void provessFinish(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
-		mm.getVozidlo().vyprazdniVozidlo();
-		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
-		assistantFinished(message);
+		assistantFinished(mm);
 	}
 	
 	public SimContainer context() {

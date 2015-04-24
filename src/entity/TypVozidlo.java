@@ -62,5 +62,10 @@ public class TypVozidlo {
 	public double getMinCasZakaznika() {
 		return aMinCasZakaznika;
 	}
+
+	@Override
+	public String toString() {
+		return aMeno;
+	}
 	
 }

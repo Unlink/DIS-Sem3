@@ -49,8 +49,8 @@ public class AgentNastupov extends Agent {
 		new ManagerNastupov(Id.managerNastupov, mySim(), this);
 		new SchedulerCakania(Id.schedulerCakania, mySim(), this);
 		new ProcessNastupu(Id.processNastupu, mySim(), this);
-		addOwnMessage(Mc.novyZakaznik);
 		addOwnMessage(Mc.nalozZakaznikov);
+		addOwnMessage(Mc.novyZakaznik);
 	}
 	//meta! tag="end"
 

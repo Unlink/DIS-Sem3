@@ -19,8 +19,8 @@ public class Id extends IdList
 	public static final int managerPresunov = 104;
 	public static final int managerNastupov = 106;
 	public static final int managerVystupov = 107;
-	public static final int processVystupu = 1001;
 	public static final int schedulerVozidiel = 1007;
+	public static final int processVystupu = 1001;
 	public static final int schedulerCakania = 1009;
 	public static final int processNastupu = 1003;
 	public static final int processPresunuVozidla = 1010;

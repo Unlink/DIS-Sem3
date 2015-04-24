@@ -34,12 +34,12 @@ public class ManagerDepa extends Manager {
 	{
 		switch (message.code())
 		{
-		case Mc.init:
-			processInit(message);
-		break;
-
 		case Mc.finish:
 			processFinish(message);
+		break;
+
+		case Mc.init:
+			processInit(message);
 		break;
 
 		default:
@@ -48,7 +48,6 @@ public class ManagerDepa extends Manager {
 		}
 	}
 	//meta! tag="end"
-	//meta! sender="AgentPrepravy", id="73", type="notice"
 	//meta! sender="AgentPrepravy", id="73", type="notice"
 	public void processInit(MessageForm message) {
 		message.setAddressee(myAgent().findAssistant(Id.schedulerVozidiel));

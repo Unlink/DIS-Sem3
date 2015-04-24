@@ -59,12 +59,12 @@ public class ManagerPresunov extends Manager
 			processNoveVozidlo(message);
 		break;
 
-		case Mc.vybavVozidlo:
-			processVybavVozidlo(message);
-		break;
-
 		case Mc.finish:
 			processFinish(message);
+		break;
+
+		case Mc.vybavVozidlo:
+			processVybavVozidlo(message);
 		break;
 
 		default:

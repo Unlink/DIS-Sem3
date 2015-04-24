@@ -101,22 +101,22 @@ public class ManagerNastupov extends Manager {
 		case Mc.finish:
 			switch (message.sender().id())
 			{
-			case Id.processNastupu:
-				processFinishProcessNastupu(message);
-			break;
-
 			case Id.schedulerCakania:
 				processFinishSchedulerCakania(message);
+			break;
+
+			case Id.processNastupu:
+				processFinishProcessNastupu(message);
 			break;
 			}
 		break;
 
-		case Mc.novyZakaznik:
-			processNovyZakaznik(message);
-		break;
-
 		case Mc.nalozZakaznikov:
 			processNalozZakaznikov(message);
+		break;
+
+		case Mc.novyZakaznik:
+			processNovyZakaznik(message);
 		break;
 
 		default:

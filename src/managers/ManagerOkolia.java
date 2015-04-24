@@ -37,18 +37,19 @@ public class ManagerOkolia extends Manager {
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message) {
-		switch (message.code()) {
-			case Mc.init:
-				processInit(message);
-				break;
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.init:
+			processInit(message);
+		break;
 
-			default:
-				processOther(message);
-				break;
+		default:
+			processOther(message);
+		break;
 		}
 	}
-
 	//meta! tag="end"
 	//meta! sender="AgentModelu", id="69", type="notice"
 	public void processInit(MessageForm message) {

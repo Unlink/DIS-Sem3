@@ -44,12 +44,13 @@ public class AgentNastupov extends Agent {
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init() {
+	private void init()
+	{
 		new ManagerNastupov(Id.managerNastupov, mySim(), this);
 		new SchedulerCakania(Id.schedulerCakania, mySim(), this);
 		new ProcessNastupu(Id.processNastupu, mySim(), this);
-		addOwnMessage(Mc.nalozZakaznikov);
 		addOwnMessage(Mc.novyZakaznik);
+		addOwnMessage(Mc.nalozZakaznikov);
 	}
 	//meta! tag="end"
 

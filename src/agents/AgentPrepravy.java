@@ -19,12 +19,13 @@ public class AgentPrepravy extends Agent
 	private void init()
 	{
 		new ManagerPrepravy(Id.managerPrepravy, mySim(), this);
-		addOwnMessage(Mc.init);
 		addOwnMessage(Mc.noveVozidlo);
 		addOwnMessage(Mc.vybavVozidlo);
+		addOwnMessage(Mc.prepravenyZakaznik);
+		addOwnMessage(Mc.nalozZakaznikov);
+		addOwnMessage(Mc.init);
 		addOwnMessage(Mc.novyZakaznik);
 		addOwnMessage(Mc.vylozZakaznikov);
-		addOwnMessage(Mc.nalozZakaznikov);
 	}
 	//meta! tag="end"
 }

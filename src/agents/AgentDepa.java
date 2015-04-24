@@ -18,7 +18,8 @@ public class AgentDepa extends Agent {
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init() {
+	private void init()
+	{
 		new ManagerDepa(Id.managerDepa, mySim(), this);
 		new SchedulerVozidiel(Id.schedulerVozidiel, mySim(), this);
 		addOwnMessage(Mc.init);

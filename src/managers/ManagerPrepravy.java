@@ -75,10 +75,6 @@ public class ManagerPrepravy extends Manager
 	{
 		switch (message.code())
 		{
-		case Mc.init:
-			processInit(message);
-		break;
-
 		case Mc.noveVozidlo:
 			processNoveVozidlo(message);
 		break;
@@ -87,16 +83,24 @@ public class ManagerPrepravy extends Manager
 			processVybavVozidlo(message);
 		break;
 
+		case Mc.prepravenyZakaznik:
+			processPrepravenyZakaznik(message);
+		break;
+
+		case Mc.nalozZakaznikov:
+			processNalozZakaznikov(message);
+		break;
+
+		case Mc.init:
+			processInit(message);
+		break;
+
 		case Mc.novyZakaznik:
 			processNovyZakaznik(message);
 		break;
 
 		case Mc.vylozZakaznikov:
 			processVylozZakaznikov(message);
-		break;
-
-		case Mc.nalozZakaznikov:
-			processNalozZakaznikov(message);
 		break;
 
 		default:
@@ -110,6 +114,11 @@ public class ManagerPrepravy extends Manager
 	{
 		message.setAddressee(((MySimulation)mySim()).agentDepa());
 		notice(message);
+	}
+
+	//meta! sender="AgentVystupov", id="74", type="notice"
+	public void processPrepravenyZakaznik(MessageForm message)
+	{
 	}
 
 }

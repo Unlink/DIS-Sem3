@@ -43,6 +43,10 @@ public class ManagerModelu extends Manager
 	{
 		switch (message.code())
 		{
+		case Mc.prepravenyZakaznik:
+			processPrepravenyZakaznik(message);
+		break;
+
 		case Mc.novyZakaznik:
 			processNovyZakaznik(message);
 		break;
@@ -53,4 +57,9 @@ public class ManagerModelu extends Manager
 		}
 	}
 	//meta! tag="end"
+	//meta! sender="AgentPrepravy", id="75", type="notice"
+	public void processPrepravenyZakaznik(MessageForm message)
+	{
+	}
+
 }

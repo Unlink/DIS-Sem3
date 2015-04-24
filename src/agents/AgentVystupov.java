@@ -28,7 +28,8 @@ public class AgentVystupov extends Agent {
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init() {
+	private void init()
+	{
 		new ManagerVystupov(Id.managerVystupov, mySim(), this);
 		new ProcessVystupu(Id.processVystupu, mySim(), this);
 		addOwnMessage(Mc.vylozZakaznikov);

@@ -39,15 +39,17 @@ public class SchedulerVozidiel extends Scheduler {
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message) {
-		switch (message.code()) {
-			case Mc.start:
-				processStart(message);
-				break;
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.start:
+			processStart(message);
+		break;
 
-			default:
-				processOther(message);
-				break;
+		default:
+			processOther(message);
+		break;
 		}
 	}
 	//meta! tag="end"

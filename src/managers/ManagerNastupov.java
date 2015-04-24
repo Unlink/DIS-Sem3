@@ -89,31 +89,34 @@ public class ManagerNastupov extends Manager {
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message) {
-		switch (message.code()) {
-			case Mc.nalozZakaznikov:
-				processNalozZakaznikov(message);
-				break;
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.finish:
+			switch (message.sender().id())
+			{
+			case Id.processNastupu:
+				processFinishProcessNastupu(message);
+			break;
 
-			case Mc.finish:
-				switch (message.sender().id()) {
-					case Id.schedulerCakania:
-						processFinishSchedulerCakania(message);
-						break;
+			case Id.schedulerCakania:
+				processFinishSchedulerCakania(message);
+			break;
+			}
+		break;
 
-					case Id.processNastupu:
-						processFinishProcessNastupu(message);
-						break;
-				}
-				break;
+		case Mc.novyZakaznik:
+			processNovyZakaznik(message);
+		break;
 
-			case Mc.novyZakaznik:
-				processNovyZakaznik(message);
-				break;
+		case Mc.nalozZakaznikov:
+			processNalozZakaznikov(message);
+		break;
 
-			default:
-				processOther(message);
-				break;
+		default:
+			processOther(message);
+		break;
 		}
 	}
 	//meta! tag="end"

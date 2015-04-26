@@ -76,10 +76,12 @@ public class ManagerNastupov extends Manager {
 		if (myAgent().getFronta(zastavka).size() == 1) {
 			Optional<Vozidlo> findFirst = myAgent().getVozidla(zastavka).keySet().stream().filter((Vozidlo v) -> v.getTypVozidlo().getMinCasZakaznika() == 0 && v.maMiesto()).findFirst();
 			if (findFirst.isPresent()) {
-				mm.setPasazier(myAgent().getFronta(zastavka).dequeue());
 				mm = (MyMessage) myAgent().getVozidla(zastavka).get(findFirst.get()).createCopy();
+				mm.setPasazier(myAgent().getFronta(zastavka).dequeue());
 				mm.getVozidlo().obsadDvere().pridajPasaziera();
 				mm.setAddressee(myAgent().findAssistant(Id.processNastupu));
+				((AgentNastupov) myAgent()).getDobaCakania().addSample(mm.getPasazier().timeInSystem());
+				((AgentNastupov) myAgent()).getDobaCakaniaNaLinke().get(mm.getVozidlo().getLinka()).addSample(mm.getPasazier().timeInSystem());
 				startContinualAssistant(mm);
 			}
 		}

@@ -483,7 +483,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 
 	private void setSpeed() {
 		if (jToggleButton1.isSelected()) {
-			rpl.setSimSpeed(jSlider1.getValue() * 0.2, jSlider2.getValue() * 0.01);
+			rpl.setSimSpeed(jSlider1.getValue() * 0.15, jSlider2.getValue() * 0.02);
 		}
 		else {
 			rpl.setSimSpeed(0, 0);
@@ -492,7 +492,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 		SimContainer build = cb.build();
-		timeOffset = build.getStartZapasu();
+		timeOffset = build.getOffset();
 		jButton1.setEnabled(false);
 		jButton2.setEnabled(true);
 		jButton3.setEnabled(true);

@@ -6,6 +6,7 @@ import simulation.*;
 import agents.*;
 import continualAssistants.*;
 import entity.Linka;
+import entity.Vozidlo;
 import instantAssistants.*;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ public class ManagerVystupov extends Manager {
 	//meta! sender="AgentPrepravy", id="68", type="request"
 	public void processVylozZakaznikov(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
+		mm.getVozidlo().setStav(Vozidlo.VozidloState.Vystup);
 		((AgentVystupov)myAgent()).insertVytazenostSample(mm.getVozidlo().getLinka(), mm.getVozidlo().getAktObsadenost()/(double)mm.getVozidlo().getTypVozidlo().getKapacita());
 		((AgentVystupov)myAgent()).insertVytazenost(mm.getVozidlo().getTypVozidlo().getId(), mm.getVozidlo().getAktObsadenost());
 		vystupLudi(message);
@@ -35,6 +37,7 @@ public class ManagerVystupov extends Manager {
 		}
 		if (mm.getVozidlo().getAktObsadenost() == 0 && !mm.getVozidlo().nastupujuLudia()) {
 			mm.setCode(Mc.vylozZakaznikov);
+			mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
 			response(mm);
 		}
 	}

@@ -59,10 +59,12 @@ public class ManagerNastupov extends Manager {
 	}
 
 	private void ukonciObsluhuVozidla(MyMessage mm) {
-		myAgent().getVozidla(mm.getZastavka()).remove(mm.getVozidlo());
-		mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
-		mm.setCode(Mc.nalozZakaznikov);
-		response(mm);
+		if (myAgent().getVozidla(mm.getZastavka()).containsKey(mm.getVozidlo())) {
+			myAgent().getVozidla(mm.getZastavka()).remove(mm.getVozidlo());
+			mm.getVozidlo().setStav(Vozidlo.VozidloState.InRide);
+			mm.setCode(Mc.nalozZakaznikov);
+			response(mm);
+		}
 	}
 
 	//meta! sender="AgentPrepravy", id="66", type="notice"
@@ -155,6 +157,10 @@ public class ManagerNastupov extends Manager {
 		}
 		//ak už nikoho som nenaložil tak
 		if (!mm.getVozidlo().nastupujuLudia()) {
+			if (!mm.getVozidlo().maMiesto()) {
+				ukonciObsluhuVozidla(mm);
+			}
+
 			if (mm.getVozidlo().getTypVozidlo().getCaka() * aVarianta.getNasobic() > 0 && mm.getVozidlo().getStav() == Vozidlo.VozidloState.NotWaiting) {
 				mm.setAddressee(myAgent().findAssistant(Id.schedulerCakania));
 				startContinualAssistant(mm);

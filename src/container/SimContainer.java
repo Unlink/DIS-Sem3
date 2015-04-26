@@ -14,30 +14,32 @@ import java.util.List;
  * @author Unlink
  */
 public class SimContainer {
-	
+
 	private List<Zastavka> aZastavky;
 	private List<Linka> aLinky;
 	private List<Vozidlo> aVozidla;
 	private SimVariants aVarianta;
-	
+
 	private List<RNG<Double>> aGeneratoryPrichodov;
-	
+
 	private List<RNG<Double>> aGeneratoryNastupov;
 	private List<RNG<Double>> aGeneratoryVystupov;
-	
-	private double aStartZapasu;
-	
-	private double aOffset;
-	
 
-	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<Vozidlo> paVozidla, 
-		SimVariants paVarianta, double paStartZapasu, double paOffset) {
+	private double aStartZapasu;
+
+	private double aOffset;
+
+	private double aTrvaniePrichodov;
+
+	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<Vozidlo> paVozidla,
+		SimVariants paVarianta, double paStartZapasu, double paOffset, double paTrvaniePrichodov) {
 		this.aZastavky = paZastavky;
 		this.aLinky = paLinky;
 		this.aVozidla = paVozidla;
 		this.aVarianta = paVarianta;
 		this.aStartZapasu = paStartZapasu;
 		this.aOffset = paOffset;
+		this.aTrvaniePrichodov = paTrvaniePrichodov;
 	}
 
 	public void injectGeneratoryPrichodov(List<RNG<Double>> paGeneratoryPrichodov) {
@@ -63,27 +65,11 @@ public class SimContainer {
 	public List<Vozidlo> getVozidla() {
 		return aVozidla;
 	}
-	
-	public RNG<Double> getGeneratorVystupov(int paId) {
-		return aGeneratoryVystupov.get(paId);
-	}
-	
-	public RNG<Double> getGeneratorVystupov(Vozidlo paVozidlo) {
-		return getGeneratorVystupov(paVozidlo.getId());
-	}
-	
-	public RNG<Double> getGeneratorNastupov(int paId) {
-		return aGeneratoryNastupov.get(paId);
-	}
-	
-	public RNG<Double> getGeneratorNastupov(Vozidlo paVozidlo) {
-		return getGeneratorNastupov(paVozidlo.getId());
-	}
-	
+
 	public SimVariants getVariant() {
 		return aVarianta;
 	}
-	
+
 	public double getOffset() {
 		return aOffset;
 	}
@@ -91,5 +77,20 @@ public class SimContainer {
 	public double getStartZapasu() {
 		return aStartZapasu;
 	}
-	
+
+	public List<RNG<Double>> getGeneratoryNastupov() {
+		return aGeneratoryNastupov;
+	}
+
+	public List<RNG<Double>> getGeneratoryVystupov() {
+		return aGeneratoryVystupov;
+	}
+
+	public double getTrvaniePrichodov() {
+		return aTrvaniePrichodov;
+	}
+
+	public List<RNG<Double>> getGeneratoryPrichodov() {
+		return aGeneratoryPrichodov;
+	}
 }

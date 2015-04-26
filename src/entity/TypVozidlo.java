@@ -11,7 +11,7 @@ import java.util.Random;
  * @author Unlink
  */
 public class TypVozidlo {
-	
+
 	private final int aId;
 	private final String aMeno;
 	private final int aKapacita;
@@ -35,7 +35,7 @@ public class TypVozidlo {
 	public int getId() {
 		return aId;
 	}
-	
+
 	public String getMeno() {
 		return aMeno;
 	}
@@ -47,15 +47,15 @@ public class TypVozidlo {
 	public int getPocDveri() {
 		return aPocDveri;
 	}
-	
+
 	public double getCaka() {
 		return aCaka;
 	}
-	
+
 	public RNG createGeneratorNastupu(Random paSeedGenerator) {
 		return aGenNastupu.create(paSeedGenerator);
 	}
-	
+
 	public RNG createGeneratorVystupu(Random paSeedGenerator) {
 		return aGenVystupu.create(paSeedGenerator);
 	}
@@ -68,5 +68,5 @@ public class TypVozidlo {
 	public String toString() {
 		return aMeno;
 	}
-	
+
 }

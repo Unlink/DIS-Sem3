@@ -59,7 +59,7 @@ public class Vozidlo {
 		aAktObsadenost++;
 		return this;
 	}
-	
+
 	public Vozidlo odoberPasaziera() {
 		aAktObsadenost--;
 		return this;

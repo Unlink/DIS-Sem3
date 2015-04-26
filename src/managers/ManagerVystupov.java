@@ -7,16 +7,13 @@ import continualAssistants.*;
 import instantAssistants.*;
 
 //meta! id="15"
-public class ManagerVystupov extends Manager
-{
-	public ManagerVystupov(int id, Simulation mySim, Agent myAgent)
-	{
+public class ManagerVystupov extends Manager {
+	public ManagerVystupov(int id, Simulation mySim, Agent myAgent) {
 		super(id, mySim, myAgent);
 	}
 
 	//meta! sender="AgentPrepravy", id="68", type="request"
-	public void processVylozZakaznikov(MessageForm message)
-	{
+	public void processVylozZakaznikov(MessageForm message) {
 		vystupLudi(message);
 	}
 
@@ -35,8 +32,7 @@ public class ManagerVystupov extends Manager
 	}
 
 	//meta! sender="ProcessVystupu", id="39"
-	public void processFinish(MessageForm message)
-	{
+	public void processFinish(MessageForm message) {
 		MyMessage mm = (MyMessage) message.createCopy();
 		mm.getVozidlo().uvoliDvere();
 		mm.setAddressee(myAgent().parent());
@@ -46,30 +42,26 @@ public class ManagerVystupov extends Manager
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
-	public void processOther(MessageForm message)
-	{
-		switch (message.code())
-		{
+	public void processOther(MessageForm message) {
+		switch (message.code()) {
 		}
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.vylozZakaznikov:
-			processVylozZakaznikov(message);
-		break;
+	public void processMessage(MessageForm message) {
+		switch (message.code()) {
+			case Mc.vylozZakaznikov:
+				processVylozZakaznikov(message);
+				break;
 
-		case Mc.finish:
-			processFinish(message);
-		break;
+			case Mc.finish:
+				processFinish(message);
+				break;
 
-		default:
-			processOther(message);
-		break;
+			default:
+				processOther(message);
+				break;
 		}
 	}
 	//meta! tag="end"

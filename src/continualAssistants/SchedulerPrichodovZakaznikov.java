@@ -8,6 +8,7 @@ import OSPABA.MessageForm;
 import OSPABA.Scheduler;
 import OSPABA.Simulation;
 import OSPRNG.ExponentialRNG;
+import OSPRNG.RNG;
 import agents.AgentOkolia;
 import entity.Pasazier;
 import simulation.Mc;
@@ -21,13 +22,15 @@ public class SchedulerPrichodovZakaznikov extends Scheduler {
 
 	private int remainingGenerations;
 	private double startTime;
-	private ExponentialRNG aGenerator;
+	private double maxTime;
+	private RNG<Double> aGenerator;
 
-	public SchedulerPrichodovZakaznikov(int paId, Simulation paMySim, CommonAgent paMyAgent, int maxGenerated, double maxTime) {
+	public SchedulerPrichodovZakaznikov(int paId, Simulation paMySim, CommonAgent paMyAgent, int maxGenerated, double genStart, double maxTime, RNG<Double> paGenerator) {
 		super(paId, paMySim, paMyAgent);
 		remainingGenerations = maxGenerated;
-		this.startTime = maxTime;
-		aGenerator = new ExponentialRNG((65*60d)/maxGenerated);
+		this.startTime = genStart;
+		this.maxTime = maxTime;
+		aGenerator = paGenerator;
 	}
 
 	@Override
@@ -59,7 +62,7 @@ public class SchedulerPrichodovZakaznikov extends Scheduler {
 		//Planovanie ďalšieho
 		remainingGenerations--;
 		double next = aGenerator.sample();
-		if (remainingGenerations > 0 && (startTime + 65 * 60) > (mySim().currentTime() + next)) {
+		if (remainingGenerations > 0 && maxTime > (mySim().currentTime() + next)) {
 			hold(next, paMessage);
 		}
 

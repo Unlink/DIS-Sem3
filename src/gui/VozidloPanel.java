@@ -15,8 +15,9 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class VozidloPanel extends javax.swing.JPanel {
 
-	private DeleteCallback aCallback = (VozidloPanel paNel) -> {};
-	
+	private DeleteCallback aCallback = (VozidloPanel paNel) -> {
+	};
+
 	/**
 	 * Creates new form VozidloPanel
 	 */
@@ -32,7 +33,7 @@ public class VozidloPanel extends javax.swing.JPanel {
 	public VozidloPanel(List<TypVozidlo> paVozidla) {
 		this(paVozidla, null, 0d);
 	}
-	
+
 	public void onDelete(DeleteCallback paCallback) {
 		aCallback = paCallback;
 	}
@@ -124,7 +125,7 @@ public class VozidloPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        aCallback.onDelete(this);
+		aCallback.onDelete(this);
     }//GEN-LAST:event_jButton1ActionPerformed
 
 	public interface DeleteCallback {

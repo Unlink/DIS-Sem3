@@ -8,5 +8,5 @@ package instantAssistants;
  * @author Unlink
  */
 public class Dummy {
-	
+
 }

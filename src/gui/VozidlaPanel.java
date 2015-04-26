@@ -18,11 +18,12 @@ import java.util.stream.Collectors;
 public class VozidlaPanel extends javax.swing.JPanel {
 
 	private final List<TypVozidlo> aVozidla;
-	
+
 	private final Linka aLinka;
-	
+
 	/**
 	 * Creates new form VozidlaPanel
+	 *
 	 * @param paVozidla
 	 * @param paLinka
 	 */
@@ -94,17 +95,17 @@ public class VozidlaPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        insertVozidlo(aVozidla.get(0), 0);
+		insertVozidlo(aVozidla.get(0), 0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (jPanel1.getComponents().length > 1) {
+		if (jPanel1.getComponents().length > 1) {
 			VozidloPanel vp = (VozidloPanel) jPanel1.getComponent(0);
 			double min = vp.getTime();
 			double step = aLinka.getLength(true) / (jPanel1.getComponents().length);
 			for (int i = 1; i < jPanel1.getComponents().length; i++) {
 				VozidloPanel p = (VozidloPanel) jPanel1.getComponent(i);
-				p.setTime(min+step*i);
+				p.setTime(min + step * i);
 			}
 		}
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -120,16 +121,14 @@ public class VozidlaPanel extends javax.swing.JPanel {
 		jPanel1.validate();
 		jScrollPane1.validate();
 	}
-	
+
 	public void forEach(Command l) {
 		for (Component component : jPanel1.getComponents()) {
 			VozidloPanel p = (VozidloPanel) component;
 			l.process(p.getTyp(), p.getTime());
 		}
 	}
-	
-	
-	
+
 	public List<VozidloPanel> getVozidla() {
 		return Arrays.asList(jPanel1.getComponents()).stream().map((Component x) -> (VozidloPanel) x).collect(Collectors.toList());
 	}
@@ -139,9 +138,6 @@ public class VozidlaPanel extends javax.swing.JPanel {
 		jPanel1.removeAll();
 		jPanel1.validate();
 	}
-	
-	
-	
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

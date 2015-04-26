@@ -13,6 +13,7 @@ import java.util.Queue;
 
 //meta! id="54"
 public class SchedulerVozidiel extends Scheduler {
+
 	private final Queue<Vozidlo> aVozidla;
 
 	public SchedulerVozidiel(int id, Simulation mySim, CommonAgent myAgent) {
@@ -20,9 +21,12 @@ public class SchedulerVozidiel extends Scheduler {
 		aVozidla = new PriorityQueue<>((v1, v2) -> Double.compare(v1.getCasPrichodu(), v2.getCasPrichodu()));
 	}
 
+	public void inject(List<Vozidlo> paVozidla) {
+		aVozidla.addAll(paVozidla);
+	}
+
 	//meta! sender="AgentDepa", id="55"
 	public void processStart(MessageForm message) {
-		aVozidla.addAll(context().getVozidla());
 		if (aVozidla.size() > 0) {
 			MyMessage mm = (MyMessage) message.createCopy();
 			planujVozidlo(mm);
@@ -40,17 +44,15 @@ public class SchedulerVozidiel extends Scheduler {
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.start:
-			processStart(message);
-		break;
+	public void processMessage(MessageForm message) {
+		switch (message.code()) {
+			case Mc.start:
+				processStart(message);
+				break;
 
-		default:
-			processOther(message);
-		break;
+			default:
+				processOther(message);
+				break;
 		}
 	}
 	//meta! tag="end"
@@ -75,9 +77,5 @@ public class SchedulerVozidiel extends Scheduler {
 		else {
 			hold(mm.getVozidlo().getCasPrichodu() - mySim().currentTime(), mm);
 		}
-	}
-
-	public SimContainer context() {
-		return ((MySimulation) mySim()).getContext();
 	}
 }

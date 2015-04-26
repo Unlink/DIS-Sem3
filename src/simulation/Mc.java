@@ -2,8 +2,7 @@ package simulation;
 
 import OSPABA.*;
 
-public class Mc extends IdList
-{
+public class Mc extends IdList {
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	public static final int init = 1013;
 	public static final int novyZakaznik = 1003;

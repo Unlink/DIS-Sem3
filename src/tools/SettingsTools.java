@@ -41,7 +41,7 @@ public class SettingsTools {
 		if (aJfc.showSaveDialog(aParent) == JFileChooser.APPROVE_OPTION) {
 			aFile = aJfc.getSelectedFile();
 			if (!aFile.getName().endsWith(".csv")) {
-				aFile = new File(aFile.getAbsolutePath()+".csv");
+				aFile = new File(aFile.getAbsolutePath() + ".csv");
 			}
 			int i = 0;
 			try (
@@ -59,7 +59,7 @@ public class SettingsTools {
 			}
 		}
 	}
-	
+
 	public void open(List<VozidlaPanel> paLinky, List<TypVozidlo> paVozidla) {
 		if (aJfc.showOpenDialog(aParent) == JFileChooser.APPROVE_OPTION) {
 			aFile = aJfc.getSelectedFile();

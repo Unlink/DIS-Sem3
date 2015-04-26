@@ -4,6 +4,7 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import container.SimContainer;
+import container.SimVariants;
 import continualAssistants.*;
 import entity.Pasazier;
 import entity.Vozidlo;
@@ -15,8 +16,14 @@ import java.util.function.Predicate;
 //meta! id="14"
 public class ManagerNastupov extends Manager {
 
+	private SimVariants aVarianta;
+
 	public ManagerNastupov(int id, Simulation mySim, Agent myAgent) {
 		super(id, mySim, myAgent);
+	}
+
+	public void inject(SimVariants paVarianta) {
+		aVarianta = paVarianta;
 	}
 
 	//meta! sender="AgentPrepravy", id="67", type="request"
@@ -94,34 +101,31 @@ public class ManagerNastupov extends Manager {
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.finish:
-			switch (message.sender().id())
-			{
-			case Id.schedulerCakania:
-				processFinishSchedulerCakania(message);
-			break;
+	public void processMessage(MessageForm message) {
+		switch (message.code()) {
+			case Mc.finish:
+				switch (message.sender().id()) {
+					case Id.schedulerCakania:
+						processFinishSchedulerCakania(message);
+						break;
 
-			case Id.processNastupu:
-				processFinishProcessNastupu(message);
-			break;
-			}
-		break;
+					case Id.processNastupu:
+						processFinishProcessNastupu(message);
+						break;
+				}
+				break;
 
-		case Mc.nalozZakaznikov:
-			processNalozZakaznikov(message);
-		break;
+			case Mc.nalozZakaznikov:
+				processNalozZakaznikov(message);
+				break;
 
-		case Mc.novyZakaznik:
-			processNovyZakaznik(message);
-		break;
+			case Mc.novyZakaznik:
+				processNovyZakaznik(message);
+				break;
 
-		default:
-			processOther(message);
-		break;
+			default:
+				processOther(message);
+				break;
 		}
 	}
 	//meta! tag="end"
@@ -149,7 +153,7 @@ public class ManagerNastupov extends Manager {
 		}
 		//ak už nikoho som nenaložil tak
 		if (!mm.getVozidlo().nastupujuLudia()) {
-			if (mm.getVozidlo().getTypVozidlo().getCaka()*context().getVariant().getNasobic() > 0 && mm.getVozidlo().getStav() == Vozidlo.VozidloState.NotWaiting) {
+			if (mm.getVozidlo().getTypVozidlo().getCaka() * aVarianta.getNasobic() > 0 && mm.getVozidlo().getStav() == Vozidlo.VozidloState.NotWaiting) {
 				mm.setAddressee(myAgent().findAssistant(Id.schedulerCakania));
 				startContinualAssistant(mm);
 				mm.getVozidlo().setStav(Vozidlo.VozidloState.Waiting);
@@ -158,9 +162,5 @@ public class ManagerNastupov extends Manager {
 				ukonciObsluhuVozidla(mm);
 			}
 		}
-	}
-	
-	public SimContainer context() {
-		return ((MySimulation) mySim()).getContext();
 	}
 }

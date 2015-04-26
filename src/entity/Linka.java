@@ -20,15 +20,15 @@ public class Linka {
 		this.aZastavky = paZastavky;
 		this.aPresuny = paPresuny;
 	}
-	
+
 	public int dajDalsiuZastavku(int paAkt) {
-		return (paAkt+1) % aZastavky.length;
+		return (paAkt + 1) % aZastavky.length;
 	}
-	
+
 	public int getZastavkaId(int paAkt) {
 		return aZastavky[paAkt];
 	}
-	
+
 	public double dajCasKDalsej(int paAkt) {
 		return aPresuny[paAkt];
 	}
@@ -36,9 +36,9 @@ public class Linka {
 	public String getId() {
 		return aId;
 	}
-	
+
 	public double getLength(boolean paBack) {
-		return Arrays.stream(aPresuny).sum() - ((paBack)? 0 : aPresuny[aPresuny.length-1]);
+		return Arrays.stream(aPresuny).sum() - ((paBack) ? 0 : aPresuny[aPresuny.length - 1]);
 	}
 
 }

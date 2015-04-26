@@ -8,67 +8,58 @@ import entity.Linka;
 import instantAssistants.*;
 
 //meta! id="8"
-public class ManagerPresunov extends Manager
-{
-	public ManagerPresunov(int id, Simulation mySim, Agent myAgent)
-	{
+public class ManagerPresunov extends Manager {
+	public ManagerPresunov(int id, Simulation mySim, Agent myAgent) {
 		super(id, mySim, myAgent);
 	}
 
 	//meta! sender="ProcessPresunuVozidla", id="62"
-	public void processFinish(MessageForm message)
-	{
+	public void processFinish(MessageForm message) {
 		message.setCode(Mc.vybavVozidlo);
-		message.setAddressee(((MySimulation)mySim()).agentPrepravy());
+		message.setAddressee(((MySimulation) mySim()).agentPrepravy());
 		request(message);
 	}
 
 	//meta! sender="AgentPrepravy", id="32", type="response"
-	public void processVybavVozidlo(MessageForm message)
-	{
+	public void processVybavVozidlo(MessageForm message) {
 		message.setAddressee(myAgent().findAssistant(Id.processPresunuVozidla));
 		startContinualAssistant(message);
 	}
 
 	//meta! sender="AgentPrepravy", id="31", type="notice"
-	public void processNoveVozidlo(MessageForm message)
-	{
+	public void processNoveVozidlo(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
 		mm.setCode(Mc.vybavVozidlo);
-		mm.setAddressee(((MySimulation)mySim()).agentPrepravy());
+		mm.setAddressee(((MySimulation) mySim()).agentPrepravy());
 		mm.setZastavka(mm.getVozidlo().getLinka().getZastavkaId(0));
 		request(message);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
-	public void processOther(MessageForm message)
-	{
-		switch (message.code())
-		{
+	public void processOther(MessageForm message) {
+		switch (message.code()) {
 		}
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.noveVozidlo:
-			processNoveVozidlo(message);
-		break;
+	public void processMessage(MessageForm message) {
+		switch (message.code()) {
+			case Mc.noveVozidlo:
+				processNoveVozidlo(message);
+				break;
 
-		case Mc.finish:
-			processFinish(message);
-		break;
+			case Mc.finish:
+				processFinish(message);
+				break;
 
-		case Mc.vybavVozidlo:
-			processVybavVozidlo(message);
-		break;
+			case Mc.vybavVozidlo:
+				processVybavVozidlo(message);
+				break;
 
-		default:
-			processOther(message);
-		break;
+			default:
+				processOther(message);
+				break;
 		}
 	}
 	//meta! tag="end"

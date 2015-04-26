@@ -5,18 +5,16 @@ import entity.Linka;
 import entity.Pasazier;
 import entity.Vozidlo;
 
-public class MyMessage extends MessageForm
-{
+public class MyMessage extends MessageForm {
 	private Pasazier aPasazier;
-	
+
 	private Vozidlo aVozidlo;
-	
+
 	private int aZastavka;
-	
+
 	private Linka aLinka;
-	
-	public MyMessage(MyMessage original)
-	{
+
+	public MyMessage(MyMessage original) {
 		super(original);
 		// copy() is called in superclass
 	}
@@ -26,8 +24,7 @@ public class MyMessage extends MessageForm
 	}
 
 	@Override
-	public MessageForm createCopy()
-	{
+	public MessageForm createCopy() {
 		return new MyMessage(this);
 	}
 
@@ -64,16 +61,14 @@ public class MyMessage extends MessageForm
 	}
 
 	@Override
-	protected void copy(MessageForm message)
-	{
+	protected void copy(MessageForm message) {
 		super.copy(message);
-		MyMessage original = (MyMessage)message;
+		MyMessage original = (MyMessage) message;
 		// Copy attributes
 		aLinka = original.aLinka;
 		aPasazier = original.aPasazier;
 		aVozidlo = original.aVozidlo;
 		aZastavka = original.aZastavka;
 	}
-	
-	
+
 }

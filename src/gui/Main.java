@@ -39,7 +39,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 	private SettingsTools st;
 
 	private List<VozidlaPanel> aLinkyConfigurator;
-	
+
 	private double timeOffset;
 
 	/**
@@ -78,7 +78,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 	@Override
 	public void refresh(Simulation paSim) {
 		SwingUtilities.invokeLater(() -> {
-			jLabel4.setText(formatTime(paSim.currentTime()-timeOffset));
+			jLabel4.setText(formatTime(paSim.currentTime() - timeOffset));
 			jTable1.invalidate();
 			jTable1.repaint();
 			jTable2.invalidate();
@@ -489,7 +489,6 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 		st.save(aLinkyConfigurator);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 		st.open(aLinkyConfigurator, cb.getTypyVozidiel());
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -529,11 +528,11 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 		if (time == 0) {
 			return "0";
 		}
-		
+
 		String minus = "";
 		if (time < 0) {
 			minus = "- ";
-			time*=-1;
+			time *= -1;
 		}
 
 		DecimalFormat df_mh = new DecimalFormat("00");
@@ -543,7 +542,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 		double m = ((int) time / 60) % 60;
 		double s = ((int) time) % 60 + time - (int) time;
 
-		return minus+((int) h == 0 ? "" : df_mh.format(h) + ":")
+		return minus + ((int) h == 0 ? "" : df_mh.format(h) + ":")
 			+ ((int) h == 0 && (int) m == 0 ? "" : df_mh.format(m) + ":")
 			+ df_s.format(s);
 	}

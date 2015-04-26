@@ -19,80 +19,79 @@ public class VozidlaTableModel implements TableModel {
 
 	private SimContainer aContext;
 	private List<Vozidlo> aVozidla;
-	private int[] aPozicie; 
-	
+	private int[] aPozicie;
+
 	private enum Columns {
 		ID {
-			@Override
-			public String getValue(Vozidlo paZ) {
-				return ""+paZ.getId();
-			}
-		}, 
+				@Override
+				public String getValue(Vozidlo paZ) {
+					return "" + paZ.getId();
+				}
+			},
 		LINKA {
-			@Override
-			public String getValue(Vozidlo paZ) {
-				return ""+paZ.getLinka().getId();
-			}
-		}, 
+				@Override
+				public String getValue(Vozidlo paZ) {
+					return "" + paZ.getLinka().getId();
+				}
+			},
 		NAME {
-			@Override
-			public String getValue(Vozidlo paZ) {
-				return ""+paZ.getTypVozidlo().getMeno();
-			}
-		}, 
+				@Override
+				public String getValue(Vozidlo paZ) {
+					return "" + paZ.getTypVozidlo().getMeno();
+				}
+			},
 		POCET_LUDI {
-			@Override
-			public String getValue(Vozidlo paZ) {
-				return ""+paZ.getAktObsadenost()+"/"+paZ.getTypVozidlo().getKapacita();
-			}
-		},
+				@Override
+				public String getValue(Vozidlo paZ) {
+					return "" + paZ.getAktObsadenost() + "/" + paZ.getTypVozidlo().getKapacita();
+				}
+			},
 		POCET_OBSADENYCH_DVERI {
-			@Override
-			public String getValue(Vozidlo paZ) {
-				return ""+paZ.getAktObsadenostDveri()+"/"+paZ.getTypVozidlo().getPocDveri();
-			}
-		},
+				@Override
+				public String getValue(Vozidlo paZ) {
+					return "" + paZ.getAktObsadenostDveri() + "/" + paZ.getTypVozidlo().getPocDveri();
+				}
+			},
 		POZICIA {
-			@Override
-			public String getValue(Vozidlo paZ) {
-				if (paZ.getStav() == Vozidlo.VozidloState.NotCreated) {
-					return "v depe";
+				@Override
+				public String getValue(Vozidlo paZ) {
+					if (paZ.getStav() == Vozidlo.VozidloState.NotCreated) {
+						return "v depe";
+					}
+					else if (paZ.getStav() == Vozidlo.VozidloState.InRide) {
+						Linka l = paZ.getLinka();
+						return ((l.getZastavkaId(pozicie[paZ.getId()]) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(pozicie[paZ.getId()])).getMeno()) + " -> "
+						+ ((l.getZastavkaId(l.dajDalsiuZastavku(pozicie[paZ.getId()])) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(l.dajDalsiuZastavku(pozicie[paZ.getId()]))).getMeno());
+					}
+					else {
+						Linka l = paZ.getLinka();
+						return ((l.getZastavkaId(pozicie[paZ.getId()]) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(pozicie[paZ.getId()])).getMeno());
+					}
 				}
-				else if (paZ.getStav() == Vozidlo.VozidloState.InRide) {
-					Linka l = paZ.getLinka();
-					return ((l.getZastavkaId(pozicie[paZ.getId()]) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(pozicie[paZ.getId()])).getMeno())+" -> "+
-						((l.getZastavkaId(l.dajDalsiuZastavku(pozicie[paZ.getId()])) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(l.dajDalsiuZastavku(pozicie[paZ.getId()]))).getMeno());
-				}
-				else {
-					Linka l = paZ.getLinka();
-					return ((l.getZastavkaId(pozicie[paZ.getId()]) == -1) ? "Stadion" : context.getZastavky().get(l.getZastavkaId(pozicie[paZ.getId()])).getMeno());
-				}
-			}
-		},
+			},
 		STAV {
-			@Override
-			public String getValue(Vozidlo paZ) {
-				if (paZ.getStav() == Vozidlo.VozidloState.InRide) {
-					return "v pohybe";
+				@Override
+				public String getValue(Vozidlo paZ) {
+					if (paZ.getStav() == Vozidlo.VozidloState.InRide) {
+						return "v pohybe";
+					}
+					else if (paZ.getStav() == Vozidlo.VozidloState.NotCreated) {
+						return "v depe";
+					}
+					else if (paZ.nastupujuLudia()) {
+						return "nastup/vystup";
+					}
+					else {
+						return "caka";
+					}
 				}
-				else if (paZ.getStav() == Vozidlo.VozidloState.NotCreated) {
-					return "v depe";
-				}
-				else if (paZ.nastupujuLudia()) {
-					return "nastup/vystup";
-				}
-				else {
-					return "caka";
-				}
-			}
-		};
-		
-		
+			};
+
 		public static SimContainer context;
 		public static int[] pozicie;
-		
+
 		public abstract String getValue(Vozidlo v);
-		
+
 	}
 
 	public VozidlaTableModel(SimContainer paContext, List<Vozidlo> paVozidla, int[] paPozicie) {
@@ -110,13 +109,12 @@ public class VozidlaTableModel implements TableModel {
 	public int[] getPozicie() {
 		return aPozicie;
 	}
-	
-	
+
 	public void updateDatasets(int[] paPos) {
 		aPozicie = paPos;
 		Columns.pozicie = aPozicie;
 	}
-	
+
 	@Override
 	public int getRowCount() {
 		return aVozidla.size();
@@ -158,7 +156,5 @@ public class VozidlaTableModel implements TableModel {
 	@Override
 	public void removeTableModelListener(TableModelListener paL) {
 	}
-	
-	
-	
+
 }

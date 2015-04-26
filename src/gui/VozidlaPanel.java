@@ -3,6 +3,7 @@
  */
 package gui;
 
+import entity.Linka;
 import entity.TypVozidlo;
 import java.awt.Component;
 import java.util.Arrays;
@@ -18,13 +19,21 @@ public class VozidlaPanel extends javax.swing.JPanel {
 
 	private final List<TypVozidlo> aVozidla;
 	
+	private final Linka aLinka;
+	
 	/**
 	 * Creates new form VozidlaPanel
 	 * @param paVozidla
+	 * @param paLinka
 	 */
-	public VozidlaPanel(List<TypVozidlo> paVozidla) {
+	public VozidlaPanel(List<TypVozidlo> paVozidla, Linka paLinka) {
 		this.aVozidla = paVozidla;
+		aLinka = paLinka;
 		initComponents();
+	}
+
+	public Linka getLinka() {
+		return aLinka;
 	}
 
 	/**
@@ -39,6 +48,7 @@ public class VozidlaPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
 
         jButton1.setBackground(new java.awt.Color(0, 153, 0));
         jButton1.setText("Pridaj Vozidlo");
@@ -51,6 +61,14 @@ public class VozidlaPanel extends javax.swing.JPanel {
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane1.setViewportView(jPanel1);
 
+        jButton2.setBackground(new java.awt.Color(255, 102, 0));
+        jButton2.setText("Rovnomerne časy");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -58,14 +76,18 @@ public class VozidlaPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
-                .addContainerGap(295, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap(170, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE))
         );
@@ -74,6 +96,18 @@ public class VozidlaPanel extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         insertVozidlo(aVozidla.get(0), 0);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (jPanel1.getComponents().length > 1) {
+			VozidloPanel vp = (VozidloPanel) jPanel1.getComponent(0);
+			double min = vp.getTime();
+			double step = aLinka.getLength(true) / (jPanel1.getComponents().length);
+			for (int i = 1; i < jPanel1.getComponents().length; i++) {
+				VozidloPanel p = (VozidloPanel) jPanel1.getComponent(i);
+				p.setTime(min+step*i);
+			}
+		}
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 	public void insertVozidlo(TypVozidlo paTyp, double paTime) {
 		VozidloPanel panel = new VozidloPanel(aVozidla, paTyp, paTime);
@@ -94,6 +128,8 @@ public class VozidlaPanel extends javax.swing.JPanel {
 		}
 	}
 	
+	
+	
 	public List<VozidloPanel> getVozidla() {
 		return Arrays.asList(jPanel1.getComponents()).stream().map((Component x) -> (VozidloPanel) x).collect(Collectors.toList());
 	}
@@ -109,6 +145,7 @@ public class VozidlaPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

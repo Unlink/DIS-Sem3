@@ -9,6 +9,7 @@ import OSPABA.Simulation;
 import container.ContainerBulider;
 import container.SimContainer;
 import container.SimVariants;
+import entity.Linka;
 import entity.Vozidlo;
 import java.awt.Component;
 import java.text.DecimalFormat;
@@ -38,6 +39,8 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 	private SettingsTools st;
 
 	private List<VozidlaPanel> aLinkyConfigurator;
+	
+	private double timeOffset;
 
 	/**
 	 * Creates new form Main
@@ -48,10 +51,11 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 		aLinkyConfigurator = new ArrayList<>();
 		cb = new ContainerBulider(ImportTools.importData(), aLinkyConfigurator);
 		st = new SettingsTools(jTabbedPane2);
-		for (String linka : cb.getZoznamLiniek()) {
-			VozidlaPanel vozidlaPanel = new VozidlaPanel(cb.getTypyVozidiel());
+		timeOffset = 0;
+		for (Linka linka : cb.getLinky()) {
+			VozidlaPanel vozidlaPanel = new VozidlaPanel(cb.getTypyVozidiel(), linka);
 			aLinkyConfigurator.add(vozidlaPanel);
-			jTabbedPane2.addTab("Linka " + linka, vozidlaPanel);
+			jTabbedPane2.addTab("Linka " + linka.getId(), vozidlaPanel);
 		}
 	}
 
@@ -74,7 +78,7 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 	@Override
 	public void refresh(Simulation paSim) {
 		SwingUtilities.invokeLater(() -> {
-			jLabel4.setText(formatTime(paSim.currentTime()));
+			jLabel4.setText(formatTime(paSim.currentTime()-timeOffset));
 			jTable1.invalidate();
 			jTable1.repaint();
 			jTable2.invalidate();
@@ -423,12 +427,13 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 
 	private void setSpeed() {
 		if (ms != null) {
-			ms.setSimSpeed(jSlider1.getValue() * 0.1, jSlider2.getValue() * 0.05);
+			ms.setSimSpeed(jSlider1.getValue() * 0.2, jSlider2.getValue() * 0.01);
 		}
 	}
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 		SimContainer build = cb.build();
+		timeOffset = build.getStartZapasu();
 		ms = new MySimulation(build);
 		MyMessage msg = new MyMessage(ms);
 		msg.setAddressee(ms.agentModelu());
@@ -524,15 +529,21 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 		if (time == 0) {
 			return "0";
 		}
+		
+		String minus = "";
+		if (time < 0) {
+			minus = "- ";
+			time*=-1;
+		}
 
 		DecimalFormat df_mh = new DecimalFormat("00");
-		DecimalFormat df_s = new DecimalFormat("00.00");
+		DecimalFormat df_s = new DecimalFormat("00");
 
 		double h = (int) time / 3600;
 		double m = ((int) time / 60) % 60;
 		double s = ((int) time) % 60 + time - (int) time;
 
-		return ((int) h == 0 ? "" : df_mh.format(h) + ":")
+		return minus+((int) h == 0 ? "" : df_mh.format(h) + ":")
 			+ ((int) h == 0 && (int) m == 0 ? "" : df_mh.format(m) + ":")
 			+ df_s.format(s);
 	}

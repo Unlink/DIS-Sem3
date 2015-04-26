@@ -3,6 +3,8 @@
  */
 package entity;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Unlink
@@ -33,6 +35,10 @@ public class Linka {
 
 	public String getId() {
 		return aId;
+	}
+	
+	public double getLength(boolean paBack) {
+		return Arrays.stream(aPresuny).sum() - ((paBack)? 0 : aPresuny[aPresuny.length-1]);
 	}
 
 }

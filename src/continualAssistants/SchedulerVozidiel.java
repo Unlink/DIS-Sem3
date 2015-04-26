@@ -23,9 +23,10 @@ public class SchedulerVozidiel extends Scheduler {
 	//meta! sender="AgentDepa", id="55"
 	public void processStart(MessageForm message) {
 		aVozidla.addAll(context().getVozidla());
-
-		MyMessage mm = (MyMessage) message.createCopy();
-		planujVozidlo(mm);
+		if (aVozidla.size() > 0) {
+			MyMessage mm = (MyMessage) message.createCopy();
+			planujVozidlo(mm);
+		}
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"

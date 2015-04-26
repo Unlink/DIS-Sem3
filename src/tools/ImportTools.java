@@ -3,7 +3,9 @@
  */
 package tools;
 
+import OSPRNG.DeterministicRNG;
 import OSPRNG.ExponentialRNG;
+import OSPRNG.NormalGNG;
 import OSPRNG.TriangularRNG;
 import OSPRNG.UniformContinuousRNG;
 import entity.IGeneratorFactory;
@@ -20,6 +22,7 @@ import static java.lang.Integer.parseInt;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -130,13 +133,19 @@ public class ImportTools {
 		int id = parseInt(paSplit[0]);
 		switch (paSplit[1]) {
 			case "tria":
-				aGeneratory.add(id, (IGeneratorFactory) () -> new TriangularRNG(parseDouble(paSplit[2]), parseDouble(paSplit[4]), parseDouble(paSplit[3])));
+				aGeneratory.add(id, (IGeneratorFactory) (paSeedGenerator) -> new TriangularRNG(parseDouble(paSplit[2]), parseDouble(paSplit[4]), parseDouble(paSplit[3]), paSeedGenerator));
 				break;
 			case "unif":
-				aGeneratory.add(id, (IGeneratorFactory) () -> new UniformContinuousRNG(parseDouble(paSplit[2]), parseDouble(paSplit[3])));
+				aGeneratory.add(id, (IGeneratorFactory) (paSeedGenerator) -> new UniformContinuousRNG(parseDouble(paSplit[2]), parseDouble(paSplit[3]), paSeedGenerator));
 				break;
 			case "exp":
-				aGeneratory.add(id, (IGeneratorFactory) () -> new ExponentialRNG(parseDouble(paSplit[2])));
+				aGeneratory.add(id, (IGeneratorFactory) (paSeedGenerator) -> new ExponentialRNG(parseDouble(paSplit[2]), paSeedGenerator));
+				break;
+			case "norm":
+				aGeneratory.add(id, (IGeneratorFactory) (paSeedGenerator) -> new NormalGNG(parseDouble(paSplit[2]), parseDouble(paSplit[3]), paSeedGenerator));
+				break;
+			case "det":
+				aGeneratory.add(id, (IGeneratorFactory) (paSeedGenerator) -> new DeterministicRNG(parseDouble(paSplit[2])));
 				break;
 		}
 	}

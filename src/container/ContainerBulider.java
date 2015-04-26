@@ -14,6 +14,7 @@ import gui.VozidloPanel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -32,11 +33,14 @@ public class ContainerBulider {
 	private SimVariants aVarinata;
 	
 	private int aCounter;
+
+	private Random aGenNasad;
 	
-	private static final int PRICHOD_MIN = 10;
-	private static final int PRICHOD_MAX = 75;
+	private static final int PRICHOD_MIN = 10*60;
+	private static final int PRICHOD_MAX = 75*60;
 
 	public ContainerBulider(ImportTools paIt, List<VozidlaPanel> paZoznamLiniek) {
+		aGenNasad = new Random();
 		this.aIt = paIt;
 		aZoznamLiniek = paZoznamLiniek;
 		aVarinata = SimVariants.A;
@@ -56,23 +60,27 @@ public class ContainerBulider {
 		return Arrays.copyOf(toArray, toArray.length, String[].class);
 	}
 	
+	public List<Linka> getLinky() {
+		return aIt.getLinky();
+	}
+	
 	private int getIdForWehicle() {
 		return aCounter++;
 	}
 	
 	public SimContainer build() {
 		aCounter = 0;
+		double maxD = aIt.getZastavky().stream().map(x -> x.getVzdialenost()).max((d1, d2) -> Double.compare(d1, d2)).get();
 		double offset = 0;
 		for (VozidlaPanel a : aZoznamLiniek) {
 			for (VozidloPanel v : a.getVozidla()) {
-				offset = Math.min(offset, v.getTime());
+				offset = Math.min(offset, v.getTime()+maxD-a.getLinka().getLength(false));
 			}
 		}
 		offset = offset*(-1);
-		double maxD = aIt.getZastavky().stream().map(x -> x.getVzdialenost()).max((d1, d2) -> Double.compare(d1, d2)).get();
 		double startZapasu = maxD + PRICHOD_MAX + offset;
 		for (Zastavka z : aIt.getZastavky()) {
-			z.setZacPrichodov(startZapasu - PRICHOD_MIN - z.getVzdialenost());
+			z.setZacPrichodov(startZapasu - PRICHOD_MAX - z.getVzdialenost());
 		}
 		
 		List<Vozidlo> vozidla = new ArrayList<>();
@@ -80,9 +88,9 @@ public class ContainerBulider {
 		for (VozidlaPanel p : aZoznamLiniek) {
 			int jx = j;
 			p.forEach((TypVozidlo paVozidlo, double paTime) -> {
-				Linka l = aIt.getLinky().get(jx);
+				Linka l = p.getLinka();
 				Zastavka z = aIt.getZastavky().get(l.getZastavkaId(0));
-				vozidla.add(new Vozidlo(paVozidlo, getIdForWehicle(), l, startZapasu - PRICHOD_MIN - z.getVzdialenost() + paTime));
+				vozidla.add(new Vozidlo(paVozidlo, getIdForWehicle(), l, startZapasu - PRICHOD_MAX - z.getVzdialenost() + paTime));
 			});
 			j++;
 		}
@@ -102,7 +110,7 @@ public class ContainerBulider {
 	private List<RNG<Double>> createGeneratoryPrichodov() {
 		List<RNG<Double>> g = new ArrayList<>(aIt.getZastavky().size());
 		for (Zastavka z : aIt.getZastavky()) {
-			g.add(z.getId(), new ExponentialRNG(65 / (double) z.getPocLudi()));
+			g.add(z.getId(), new ExponentialRNG((PRICHOD_MAX - PRICHOD_MIN) / (double) z.getPocLudi(), aGenNasad));
 		}
 		return g;
 	}
@@ -110,7 +118,7 @@ public class ContainerBulider {
 	private List<RNG<Double>> createGeneratoryNastupov(List<Vozidlo> paVozidla) {
 		List<RNG<Double>> g = new ArrayList<>();
 		paVozidla.stream().forEach((v) -> {
-			g.add(v.getId(), v.getTypVozidlo().createGeneratorNastupu());
+			g.add(v.getId(), v.getTypVozidlo().createGeneratorNastupu(aGenNasad));
 		});
 		return g;
 	}
@@ -118,7 +126,7 @@ public class ContainerBulider {
 	private List<RNG<Double>> createGeneratoryVystupov(List<Vozidlo> paVozidla) {
 		List<RNG<Double>> g = new ArrayList<>();
 		paVozidla.stream().forEach((v) -> {
-			g.add(v.getId(), v.getTypVozidlo().createGeneratorVystupu());
+			g.add(v.getId(), v.getTypVozidlo().createGeneratorVystupu(aGenNasad));
 		});
 		return g;
 	}

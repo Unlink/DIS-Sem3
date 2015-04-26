@@ -4,6 +4,7 @@
 package entity;
 
 import OSPRNG.RNG;
+import java.util.Random;
 
 /**
  *
@@ -51,12 +52,12 @@ public class TypVozidlo {
 		return aCaka;
 	}
 	
-	public RNG createGeneratorNastupu() {
-		return aGenNastupu.create();
+	public RNG createGeneratorNastupu(Random paSeedGenerator) {
+		return aGenNastupu.create(paSeedGenerator);
 	}
 	
-	public RNG createGeneratorVystupu() {
-		return aGenVystupu.create();
+	public RNG createGeneratorVystupu(Random paSeedGenerator) {
+		return aGenVystupu.create(paSeedGenerator);
 	}
 
 	public double getMinCasZakaznika() {

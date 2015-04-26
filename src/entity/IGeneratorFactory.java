@@ -4,6 +4,7 @@
 package entity;
 
 import OSPRNG.RNG;
+import java.util.Random;
 
 /**
  *
@@ -12,6 +13,6 @@ import OSPRNG.RNG;
  */
 public interface IGeneratorFactory<T extends Number> {
 
-	public RNG<T> create();
+	public RNG<T> create(Random paSeedGenerator);
 
 }

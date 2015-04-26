@@ -117,9 +117,12 @@ public class ManagerPrepravy extends Manager {
 
 	//meta! sender="AgentVystupov", id="74", type="notice"
 	public void processPrepravenyZakaznik(MessageForm message) {
+		MyMessage mm = (MyMessage) message;
 		((AgentPrepravy) myAgent()).getObsluzenych().inc();
+		((AgentPrepravy) myAgent()).getNeskoroNaLinke().get(mm.getVozidlo().getLinka())[0].inc();
 		if (mySim().currentTime() >= aStartZapasu) {
 			((AgentPrepravy) myAgent()).getObsluzenychNeskoro().inc();
+			((AgentPrepravy) myAgent()).getNeskoroNaLinke().get(mm.getVozidlo().getLinka())[1].inc();
 		}
 		//@WTF
 		if (mySim().currentTime() >= aStartZapasu-10*360) {

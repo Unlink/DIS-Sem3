@@ -17,4 +17,6 @@ public interface IReplicationListener {
 	
 	public void onReplicationBegin(MySimulation simulation);
 	
+	public void onRefresh(MySimulation simulation);
+	
 }

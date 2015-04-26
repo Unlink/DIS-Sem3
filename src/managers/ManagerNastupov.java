@@ -142,6 +142,8 @@ public class ManagerNastupov extends Manager {
 					mm2.setPasazier(myAgent().getFronta(zastavka).dequeue());
 					mm2.getVozidlo().obsadDvere().pridajPasaziera();
 					startContinualAssistant(mm2);
+					((AgentNastupov) myAgent()).getDobaCakania().addSample(mm2.getPasazier().timeInSystem());
+					((AgentNastupov) myAgent()).getDobaCakaniaNaLinke().get(mm2.getVozidlo().getLinka()).addSample(mm2.getPasazier().timeInSystem());
 				}
 				else {
 					break;

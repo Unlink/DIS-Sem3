@@ -100,4 +100,14 @@ public class SimContainer {
 	public int getPocetTypovVozidiel() {
 		return aTypyVozidiel.size();
 	}
+
+	public SimVariants getVarianta() {
+		return aVarianta;
+	}
+
+	public List<TypVozidlo> getTypyVozidiel() {
+		return aTypyVozidiel;
+	}
+	
+	
 }

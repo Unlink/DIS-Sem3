@@ -24,9 +24,9 @@ public class MySimulation extends Simulation {
 	private void init() {
 		setAgentModelu(new AgentModelu(Id.agentModelu, this, null));
 		setAgentOkolia(new AgentOkolia(Id.agentOkolia, this, agentModelu(), aKontajner.getZastavky(), aKontajner.getTrvaniePrichodov(), aKontajner.getGeneratoryPrichodov()));
-		setAgentPrepravy(new AgentPrepravy(Id.agentPrepravy, this, agentModelu(), aKontajner.getStartZapasu()));
+		setAgentPrepravy(new AgentPrepravy(Id.agentPrepravy, this, agentModelu(), aKontajner.getStartZapasu(), aKontajner.getLinky()));
 		setAgentPresunov(new AgentPresunov(Id.agentPresunov, this, agentPrepravy(), aKontajner.getVozidla().size()));
-		setAgentNastupov(new AgentNastupov(Id.agentNastupov, this, agentPrepravy(), aKontajner.getZastavky(), aKontajner.getVariant(), aKontajner.getGeneratoryNastupov()));
+		setAgentNastupov(new AgentNastupov(Id.agentNastupov, this, agentPrepravy(), aKontajner.getZastavky(), aKontajner.getVariant(), aKontajner.getGeneratoryNastupov(), aKontajner.getLinky()));
 		setAgentVystupov(new AgentVystupov(Id.agentVystupov, this, agentPrepravy(), aKontajner.getGeneratoryVystupov(), aKontajner.getLinky(), aKontajner.getPocetTypovVozidiel()));
 		setAgentDepa(new AgentDepa(Id.agentDepa, this, agentPrepravy(), aKontajner.getVozidla()));
 	}

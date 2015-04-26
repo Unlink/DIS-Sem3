@@ -1,19 +1,27 @@
 package managers;
 
 import OSPABA.*;
+import OSPStat.Stat;
 import simulation.*;
 import agents.*;
 import continualAssistants.*;
+import entity.Linka;
 import instantAssistants.*;
+import java.util.HashMap;
+import java.util.List;
 
 //meta! id="15"
 public class ManagerVystupov extends Manager {
+		
 	public ManagerVystupov(int id, Simulation mySim, Agent myAgent) {
 		super(id, mySim, myAgent);
 	}
 
 	//meta! sender="AgentPrepravy", id="68", type="request"
 	public void processVylozZakaznikov(MessageForm message) {
+		MyMessage mm = (MyMessage) message;
+		((AgentVystupov)myAgent()).insertVytazenostSample(mm.getVozidlo().getLinka(), mm.getVozidlo().getAktObsadenost()/(double)mm.getVozidlo().getTypVozidlo().getKapacita());
+		((AgentVystupov)myAgent()).insertVytazenost(mm.getVozidlo().getTypVozidlo().getId(), mm.getVozidlo().getAktObsadenost());
 		vystupLudi(message);
 	}
 

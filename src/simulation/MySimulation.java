@@ -27,7 +27,7 @@ public class MySimulation extends Simulation {
 		setAgentPrepravy(new AgentPrepravy(Id.agentPrepravy, this, agentModelu(), aKontajner.getStartZapasu()));
 		setAgentPresunov(new AgentPresunov(Id.agentPresunov, this, agentPrepravy(), aKontajner.getVozidla().size()));
 		setAgentNastupov(new AgentNastupov(Id.agentNastupov, this, agentPrepravy(), aKontajner.getZastavky(), aKontajner.getVariant(), aKontajner.getGeneratoryNastupov()));
-		setAgentVystupov(new AgentVystupov(Id.agentVystupov, this, agentPrepravy(), aKontajner.getGeneratoryVystupov()));
+		setAgentVystupov(new AgentVystupov(Id.agentVystupov, this, agentPrepravy(), aKontajner.getGeneratoryVystupov(), aKontajner.getLinky(), aKontajner.getPocetTypovVozidiel()));
 		setAgentDepa(new AgentDepa(Id.agentDepa, this, agentPrepravy(), aKontajner.getVozidla()));
 	}
 

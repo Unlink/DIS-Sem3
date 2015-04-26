@@ -11,12 +11,14 @@ public class AgentPrepravy extends Agent {
 
 	private SimCounter aVygenerovanych;
 	private SimCounter aObsluzenych;
+	private SimCounter aObsluzenychNeskoro;
 
 	public AgentPrepravy(int id, Simulation mySim, Agent parent, double paStartZapasu) {
 		super(id, mySim, parent);
 		init();
 		aVygenerovanych = new SimCounter();
 		aObsluzenych = new SimCounter();
+		aObsluzenychNeskoro = new SimCounter();
 		((ManagerPrepravy) manager()).inject(paStartZapasu);
 
 	}
@@ -27,6 +29,10 @@ public class AgentPrepravy extends Agent {
 
 	public SimCounter getObsluzenych() {
 		return aObsluzenych;
+	}
+	
+	public SimCounter getObsluzenychNeskoro() {
+		return aObsluzenychNeskoro;
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"

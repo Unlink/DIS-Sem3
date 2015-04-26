@@ -119,6 +119,10 @@ public class ManagerPrepravy extends Manager {
 	public void processPrepravenyZakaznik(MessageForm message) {
 		((AgentPrepravy) myAgent()).getObsluzenych().inc();
 		if (mySim().currentTime() >= aStartZapasu) {
+			((AgentPrepravy) myAgent()).getObsluzenychNeskoro().inc();
+		}
+		//@WTF
+		if (mySim().currentTime() >= aStartZapasu-10*360) {
 			if (((AgentPrepravy) myAgent()).getObsluzenych().val() == ((AgentPrepravy) myAgent()).getVygenerovanych().val()) {
 				mySim().stopSimulation();
 			}

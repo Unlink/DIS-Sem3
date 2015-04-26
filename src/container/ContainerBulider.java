@@ -95,7 +95,7 @@ public class ContainerBulider {
 			j++;
 		}
 
-		SimContainer simContainer = new SimContainer(aIt.getZastavky(), aIt.getLinky(), vozidla, aVarinata, startZapasu, offset, PRICHOD_MAX - PRICHOD_MIN);
+		SimContainer simContainer = new SimContainer(aIt.getZastavky(), aIt.getLinky(), aIt.getVozidla(), vozidla, aVarinata, startZapasu, offset, PRICHOD_MAX - PRICHOD_MIN);
 		simContainer.injectGeneratoryPrichodov(createGeneratoryPrichodov());
 		simContainer.injectGeneratoryNastupov(createGeneratoryNastupov(vozidla));
 		simContainer.injectGeneratoryVystupov(createGeneratoryVystupov(vozidla));

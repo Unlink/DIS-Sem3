@@ -6,6 +6,7 @@ package gui;
 import OSPABA.ISimDelegate;
 import OSPABA.SimState;
 import OSPABA.Simulation;
+import OSPStat.Stat;
 import container.ContainerBulider;
 import container.SimContainer;
 import container.SimVariants;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.swing.SwingUtilities;
@@ -69,7 +71,15 @@ public class Main extends javax.swing.JFrame implements ISimDelegate {
 				jButton1.setEnabled(true);
 				jButton2.setEnabled(false);
 				jButton3.setEnabled(false);
-				jTextArea1.setText("Vygenerovanych: " + ms.agentPrepravy().getVygenerovanych().val() + "\nDovezenych: " + ms.agentPrepravy().getObsluzenych().val());
+				String output = "Vygenerovanych: " + ms.agentPrepravy().getVygenerovanych().val() + "\nDovezenych: " + ms.agentPrepravy().getObsluzenych().val() + "\nDovezenych neskoro: " + ms.agentPrepravy().getObsluzenychNeskoro().val()+"\n";
+				for (Map.Entry<Linka, Stat> p : ms.agentVystupov().getVytazenieLiniek().entrySet()) {
+					output += "Vyťaženosť "+p.getKey().getId()+": "+p.getValue().mean()+"\n";
+				}
+				int i = 0;
+				for (int prepravenych : ms.agentVystupov().getPrepravenych()) {
+					output += "Preprevených pomocou "+cb.getTypyVozidiel().get(i++).getMeno()+": "+prepravenych+"\n";
+				}
+				jTextArea1.setText(output);
 				break;
 
 		}

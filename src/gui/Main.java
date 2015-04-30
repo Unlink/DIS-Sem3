@@ -8,6 +8,7 @@ import OSPABA.SimState;
 import OSPABA.Simulation;
 import OSPStat.Stat;
 import container.ContainerBulider;
+import container.IVozidlaConf;
 import container.SimContainer;
 import container.SimVariants;
 import entity.Linka;
@@ -45,7 +46,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 
 	private ReplicationManager rpl;
 
-	private List<VozidlaPanel> aLinkyConfigurator;
+	private List<IVozidlaConf> aLinkyConfigurator;
 
 	private double timeOffset;
 

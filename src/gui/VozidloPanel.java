@@ -3,6 +3,7 @@
  */
 package gui;
 
+import container.IVozidloConf;
 import entity.TypVozidlo;
 import entity.Zastavka;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author Unlink
  */
-public class VozidloPanel extends javax.swing.JPanel {
+public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
 
 	private DeleteCallback aCallback = (VozidloPanel paNel) -> {
 	};
@@ -38,14 +39,17 @@ public class VozidloPanel extends javax.swing.JPanel {
 		aCallback = paCallback;
 	}
 
+	@Override
 	public TypVozidlo getTyp() {
 		return (TypVozidlo) jComboBox1.getSelectedItem();
 	}
 
+	@Override
 	public double getTime() {
 		return Double.parseDouble(jTextField1.getText());
 	}
 
+	@Override
 	public void setTime(double paTime) {
 		jTextField1.setText(String.format("%.2f", paTime).replace(",", "."));
 	}

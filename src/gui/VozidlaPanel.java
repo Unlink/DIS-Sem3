@@ -3,6 +3,8 @@
  */
 package gui;
 
+import container.IVozidlaConf;
+import container.IVozidloConf;
 import entity.Linka;
 import entity.TypVozidlo;
 import java.awt.Component;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Unlink
  */
-public class VozidlaPanel extends javax.swing.JPanel {
+public class VozidlaPanel extends javax.swing.JPanel implements IVozidlaConf {
 
 	private final List<TypVozidlo> aVozidla;
 
@@ -33,6 +35,7 @@ public class VozidlaPanel extends javax.swing.JPanel {
 		initComponents();
 	}
 
+	@Override
 	public Linka getLinka() {
 		return aLinka;
 	}
@@ -110,6 +113,7 @@ public class VozidlaPanel extends javax.swing.JPanel {
 		}
     }//GEN-LAST:event_jButton2ActionPerformed
 
+	@Override
 	public void insertVozidlo(TypVozidlo paTyp, double paTime) {
 		VozidloPanel panel = new VozidloPanel(aVozidla, paTyp, paTime);
 		panel.onDelete((p) -> {
@@ -122,6 +126,7 @@ public class VozidlaPanel extends javax.swing.JPanel {
 		jScrollPane1.validate();
 	}
 
+	@Override
 	public void forEach(Command l) {
 		for (Component component : jPanel1.getComponents()) {
 			VozidloPanel p = (VozidloPanel) component;
@@ -129,8 +134,8 @@ public class VozidlaPanel extends javax.swing.JPanel {
 		}
 	}
 
-	public List<VozidloPanel> getVozidla() {
-		return Arrays.asList(jPanel1.getComponents()).stream().map((Component x) -> (VozidloPanel) x).collect(Collectors.toList());
+	public List<IVozidloConf> getVozidla() {
+		return Arrays.asList(jPanel1.getComponents()).stream().map((Component x) -> (IVozidloConf) x).collect(Collectors.toList());
 	}
 
 	@Override
@@ -145,9 +150,5 @@ public class VozidlaPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-
-	public interface Command {
-		public void process(TypVozidlo paVozidlo, double paTime);
-	}
 
 }

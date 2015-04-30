@@ -3,6 +3,7 @@
  */
 package tools;
 
+import container.IVozidlaConf;
 import entity.TypVozidlo;
 import gui.VozidlaPanel;
 import java.io.BufferedReader;
@@ -37,7 +38,7 @@ public class SettingsTools {
 		aJfc.setFileFilter(new FileNameExtensionFilter("CSV subory", "csv"));
 	}
 
-	public void save(List<VozidlaPanel> paLinky) {
+	public void save(List<IVozidlaConf> paLinky) {
 		if (aJfc.showSaveDialog(aParent) == JFileChooser.APPROVE_OPTION) {
 			aFile = aJfc.getSelectedFile();
 			if (!aFile.getName().endsWith(".csv")) {
@@ -46,7 +47,7 @@ public class SettingsTools {
 			int i = 0;
 			try (
 				PrintWriter pw = new PrintWriter(aFile);) {
-				for (VozidlaPanel p : paLinky) {
+				for (IVozidlaConf p : paLinky) {
 					int closure = i;
 					p.forEach((TypVozidlo paVozidlo, double paTime) -> {
 						pw.println(closure + "," + paVozidlo.getId() + "," + paTime);
@@ -60,10 +61,10 @@ public class SettingsTools {
 		}
 	}
 
-	public void open(List<VozidlaPanel> paLinky, List<TypVozidlo> paVozidla) {
+	public void open(List<IVozidlaConf> paLinky, List<TypVozidlo> paVozidla) {
 		if (aJfc.showOpenDialog(aParent) == JFileChooser.APPROVE_OPTION) {
 			aFile = aJfc.getSelectedFile();
-			paLinky.stream().forEach((VozidlaPanel p) -> p.removeAll());
+			paLinky.stream().forEach((IVozidlaConf p) -> p.removeAll());
 			try (BufferedReader br = new BufferedReader(new FileReader(aFile));) {
 				String line;
 				while ((line = br.readLine()) != null) {

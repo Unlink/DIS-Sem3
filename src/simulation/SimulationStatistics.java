@@ -94,4 +94,26 @@ public class SimulationStatistics {
 		}
 		return sb.toString();
 	}
+	
+	public double getCasCakania() {
+		return aDobaCakania.mean()/60;
+	}
+	
+	public double getPPPneskoro() {
+		return aPocetNeskoro.mean()*100;
+	}
+
+	public HashMap<Linka, Stat> getVytazenostLiniek() {
+		return aVytazenostLiniek;
+	}
+
+	public HashMap<Linka, Stat> getCakanieNaLinke() {
+		return aCakanieNaLinke;
+	}
+
+	public HashMap<Linka, Stat> getNeskoroNaLinke() {
+		return aNeskoroNaLinke;
+	}
+	
+	
 }

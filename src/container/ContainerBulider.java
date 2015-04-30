@@ -28,7 +28,7 @@ public class ContainerBulider {
 
 	private ImportTools aIt;
 
-	private List<VozidlaPanel> aZoznamLiniek;
+	private List<IVozidlaConf> aZoznamLiniek;
 
 	private SimVariants aVarinata;
 
@@ -39,7 +39,7 @@ public class ContainerBulider {
 	private static final int PRICHOD_MIN = 10 * 60;
 	private static final int PRICHOD_MAX = 75 * 60;
 
-	public ContainerBulider(ImportTools paIt, List<VozidlaPanel> paZoznamLiniek) {
+	public ContainerBulider(ImportTools paIt, List<IVozidlaConf> paZoznamLiniek) {
 		aGenNasad = new Random();
 		this.aIt = paIt;
 		aZoznamLiniek = paZoznamLiniek;
@@ -72,8 +72,8 @@ public class ContainerBulider {
 		aCounter = 0;
 		double maxD = aIt.getZastavky().stream().map(x -> x.getVzdialenost()).max((d1, d2) -> Double.compare(d1, d2)).get();
 		double offset = 0;
-		for (VozidlaPanel a : aZoznamLiniek) {
-			for (VozidloPanel v : a.getVozidla()) {
+		for (IVozidlaConf a : aZoznamLiniek) {
+			for (IVozidloConf v : a.getVozidla()) {
 				offset = Math.min(offset, v.getTime() + maxD - a.getLinka().getLength(false));
 			}
 		}
@@ -85,7 +85,7 @@ public class ContainerBulider {
 
 		List<Vozidlo> vozidla = new ArrayList<>();
 		int j = 0;
-		for (VozidlaPanel p : aZoznamLiniek) {
+		for (IVozidlaConf p : aZoznamLiniek) {
 			int jx = j;
 			p.forEach((TypVozidlo paVozidlo, double paTime) -> {
 				Linka l = p.getLinka();

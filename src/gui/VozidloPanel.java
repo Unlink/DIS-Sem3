@@ -21,17 +21,19 @@ public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
 	/**
 	 * Creates new form VozidloPanel
 	 */
-	public VozidloPanel(List<TypVozidlo> paVozidla, TypVozidlo paSelected, double paTime) {
+	public VozidloPanel(List<TypVozidlo> paVozidla, TypVozidlo paSelected, double paTime, int paId) {
 		initComponents();
 		jComboBox1.setModel(new DefaultComboBoxModel<TypVozidlo>(paVozidla.toArray(new TypVozidlo[paVozidla.size()])));
 		if (paSelected != null) {
 			jComboBox1.setSelectedItem(paSelected);
 		}
 		jTextField1.setText(String.format("%.2f", paTime).replace(",", "."));
+		setId(paId);
+		
 	}
 
-	public VozidloPanel(List<TypVozidlo> paVozidla) {
-		this(paVozidla, null, 0d);
+	public VozidloPanel(List<TypVozidlo> paVozidla, int paId) {
+		this(paVozidla, null, 0d, paId);
 	}
 
 	public void onDelete(DeleteCallback paCallback) {
@@ -47,10 +49,22 @@ public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
 	public double getTime() {
 		return Double.parseDouble(jTextField1.getText());
 	}
+	
+	public double getRozostup() {
+		return Double.parseDouble(jTextField2.getText());
+	}
 
 	@Override
 	public void setTime(double paTime) {
 		jTextField1.setText(String.format("%.2f", paTime).replace(",", "."));
+	}
+	
+	public void setRozostup(double paTime) {
+		jTextField2.setText(String.format("%.2f", paTime).replace(",", "."));
+	}
+	
+	public void setId(int paId) {
+		jLabel5.setText(paId+"");
 	}
 
 	/**
@@ -68,6 +82,10 @@ public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
         jTextField1 = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(32767, 45));
 
@@ -87,12 +105,25 @@ public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
             }
         });
 
+        jLabel3.setText("Rozostup:");
+
+        jTextField2.setText("0");
+
+        jLabel4.setText("ID:");
+
+        jLabel5.setText("jLabel5");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addGap(4, 4, 4)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -100,28 +131,37 @@ public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
                 .addComponent(jLabel2)
                 .addGap(4, 4, 4)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(jButton1))
-            .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel1))
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                        .addGap(12, 12, 12)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addGap(15, 15, 15)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1))
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1)
+                            .addComponent(jLabel3)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(6, 6, 6)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -140,7 +180,11 @@ public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

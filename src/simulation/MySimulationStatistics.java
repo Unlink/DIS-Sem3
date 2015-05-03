@@ -17,41 +17,42 @@ import java.util.Map.Entry;
  * @author Unlink
  */
 public class MySimulationStatistics implements ISimStats {
-	
+
 	private HashMap<Linka, Stat> aVytazenostLiniek;
-	
+
 	private List<TypVozidlo> aVozidlaTyp;
-	
+
 	private Stat[] aPrepravenych;
-	
+
 	private HashMap<Linka, Stat> aCakanieNaLinke;
-	
+
 	private HashMap<Linka, Stat> aNeskoroNaLinke;
-	
+
 	private Stat aDobaCakania;
-	
+
 	private Stat aPocetNeskoro;
-	
-	private Stat[] aVytazenostVozidla;
-	
+
+	private Stat[][] aVytazenostVozidla;
+
 	private List<Vozidlo> aVozidla;
-		
+
 	public MySimulationStatistics(List<Linka> paLinky, List<TypVozidlo> paVozidlaTyp, List<Vozidlo> paVozidla) {
 		this.aVozidlaTyp = paVozidlaTyp;
 		this.aPrepravenych = new Stat[aVozidlaTyp.size()];
 		for (int i = 0; i < aPrepravenych.length; i++) {
 			aPrepravenych[i] = new Stat();
 		}
-		
+
 		this.aDobaCakania = new Stat();
 		this.aPocetNeskoro = new Stat();
-		
+
 		this.aVozidla = paVozidla;
-		this.aVytazenostVozidla = new Stat[paVozidla.size()];
-		for (int i = 0; i < aVytazenostVozidla.length; i++) {
-			aVytazenostVozidla[i] = new Stat();
+		this.aVytazenostVozidla = new Stat[2][paVozidla.size()];
+		for (int i = 0; i < aVytazenostVozidla[0].length; i++) {
+			aVytazenostVozidla[0][i] = new Stat();
+			aVytazenostVozidla[1][i] = new Stat();
 		}
-		
+
 		this.aVytazenostLiniek = new HashMap();
 		this.aCakanieNaLinke = new HashMap<>();
 		this.aNeskoroNaLinke = new HashMap<>();
@@ -61,40 +62,49 @@ public class MySimulationStatistics implements ISimStats {
 			aNeskoroNaLinke.put(linka, new Stat());
 		}
 	}
-	
+
 	@Override
 	public void onReplicationDone(Simulation paSim) {
 		MySimulation ms = (MySimulation) paSim;
 		aDobaCakania.addSample(ms.agentNastupov().getDobaCakania().mean());
-		aPocetNeskoro.addSample((ms.agentPrepravy().getObsluzenychNeskoro().val() / (double)ms.agentPrepravy().getObsluzenych().val())*100);
-		
+		aPocetNeskoro.addSample((ms.agentPrepravy().getObsluzenychNeskoro().val() / (double) ms.agentPrepravy().getObsluzenych().val()) * 100);
+
 		for (Entry<Linka, Stat> s : ms.agentVystupov().getVytazenieLiniek().entrySet()) {
 			aVytazenostLiniek.get(s.getKey()).addSample(s.getValue().mean());
 		}
-		
+
 		for (Entry<Linka, Stat> s : ms.agentNastupov().getDobaCakaniaNaLinke().entrySet()) {
 			aCakanieNaLinke.get(s.getKey()).addSample(s.getValue().mean());
 		}
-		
+
 		for (Entry<Linka, SimCounter[]> s : ms.agentPrepravy().getNeskoroNaLinke().entrySet()) {
-			aNeskoroNaLinke.get(s.getKey()).addSample((s.getValue()[1].val()/(double)s.getValue()[0].val())*100);
+			aNeskoroNaLinke.get(s.getKey()).addSample((s.getValue()[1].val() / (double) s.getValue()[0].val()) * 100);
 		}
-		
+
 		for (int i = 0; i < aPrepravenych.length; i++) {
 			aPrepravenych[i].addSample(ms.agentVystupov().getPrepravenych()[i]);
 		}
-		
-		for (int i = 0; i < aVytazenostVozidla.length; i++) {
-			aVytazenostVozidla[i].addSample(ms.agentVystupov().getVytazenieVozidiel()[i]);
+
+		for (int i = 0; i < aVytazenostVozidla[0].length; i++) {
+			aVytazenostVozidla[0][i].addSample(ms.agentVystupov().getVytazenieVozidiel()[0][i]);
+			if (ms.agentVystupov().getVytazenieVozidiel()[1][i] >= 0) {
+				aVytazenostVozidla[1][i].addSample(ms.agentVystupov().getVytazenieVozidiel()[1][i]);
+			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Replikacia: ").append(aDobaCakania.sampleSize()).append("\n");
 		sb.append("Priemerná doba čakania: ").append(aDobaCakania).append("\n");
+		if (aDobaCakania.sampleSize() > 1) {
+			sb.append("90% interval: ").append(aDobaCakania.confidenceInterval_90()[0]).append(" - ").append(aDobaCakania.confidenceInterval_90()[1]).append("\n");
+		}
 		sb.append("Percent oneskorených: ").append(aPocetNeskoro).append("\n");
+		if (aPocetNeskoro.sampleSize() > 1) {
+			sb.append("90% interval: ").append(aPocetNeskoro.confidenceInterval_90()[0]).append(" - ").append(aPocetNeskoro.confidenceInterval_90()[1]).append("\n");
+		}
 		sb.append("\nVyťaženosť vozidiel na linke:\n");
 		aVytazenostLiniek.entrySet().stream().forEach((s) -> {
 			sb.append("Linka ").append(s.getKey().getId()).append(": ").append(s.getValue().toString()).append("\n");
@@ -113,15 +123,19 @@ public class MySimulationStatistics implements ISimStats {
 		}
 		sb.append("\nVytaženie vozidiel:\n");
 		for (Vozidlo v : aVozidla) {
-			sb.append("Linka: ").append(v.getLinka().getId()).append(" vozidlo - ").append(v.getId()).append(": ").append(aVytazenostVozidla[v.getId()].mean()).append("\n");
+			sb.append("Linka: ").append(v.getLinka().getId()).append(" vozidlo - ")
+				.append(v.getId()).append(": ")
+				.append(aVytazenostVozidla[0][v.getId()].mean()).append(" - ")
+				.append(aVytazenostVozidla[1][v.getId()].mean()).append(" (")
+				.append(aVytazenostVozidla[1][v.getId()].sampleSize()/aVytazenostVozidla[0][v.getId()].sampleSize()).append(")\n");
 		}
 		return sb.toString();
 	}
-	
+
 	public double getCasCakania() {
-		return aDobaCakania.mean()/60;
+		return aDobaCakania.mean();
 	}
-	
+
 	public double getPPPneskoro() {
 		return aPocetNeskoro.mean();
 	}

@@ -38,8 +38,10 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 	private List<IVozidlaConf> aLinkyConfigurator;
 
 	private double timeOffset;
-	
+
 	private XYLineChart aCharts[];
+
+	private double lastUpdate;
 
 	/**
 	 * Creates new form Main
@@ -58,7 +60,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 			jTabbedPane2.addTab("Linka " + linka.getId(), vozidlaPanel);
 		}
 		aCharts = new XYLineChart[]{
-			new XYLineChart("Priemerna doba čakania"), 
+			new XYLineChart("Priemerna doba čakania"),
 			new XYLineChart("Priemerne % prichodzích neskoto")
 		};
 		jPanel7.add(new ChartPanel(aCharts[0].getChart()));
@@ -82,8 +84,11 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 			jButton1.setEnabled(true);
 			jButton2.setEnabled(false);
 			jButton3.setEnabled(false);
+			String result = rpl.getStatis().toString();
+			jTextArea1.setText(result);
+			jTextArea1.setCaretPosition(0);
 		});
-		st.saveResults(((MySimulationStatistics)rpl.getStatis()));
+		st.saveResults(((MySimulationStatistics) rpl.getStatis()));
 	}
 
 	@Override
@@ -91,29 +96,27 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 		String result = rpl.getStatis().toString();
 
 		SwingUtilities.invokeLater(() -> {
-			jTextArea1.setText(result);
-			jTextArea1.setCaretPosition(0);
+			if (System.currentTimeMillis() - lastUpdate > 1000 ) {
+				jTextArea1.setText(result);
+				jTextArea1.setCaretPosition(0);
+				lastUpdate = System.currentTimeMillis();
+			}
 		});
-		
-		if (rpl.getActualRepl() > rpl.getReplCount()*0.15) {
-			aCharts[0].addPoint(rpl.getActualRepl(), ((MySimulationStatistics)rpl.getStatis()).getCasCakania());
-			aCharts[1].addPoint(rpl.getActualRepl(), ((MySimulationStatistics)rpl.getStatis()).getPPPneskoro());
+
+		if (rpl.getActualRepl() > rpl.getReplCount() * 0.15) {
+			aCharts[0].addPoint(rpl.getActualRepl(), ((MySimulationStatistics) rpl.getStatis()).getCasCakania());
+			aCharts[1].addPoint(rpl.getActualRepl(), ((MySimulationStatistics) rpl.getStatis()).getPPPneskoro());
 		}
 	}
 
 	@Override
 	public void onReplicationBegin(Simulation paSimulation) {
 		MySimulation ms = (MySimulation) paSimulation;
-		try {
-			SwingUtilities.invokeAndWait(() -> {
-				jTable1.setModel(new VozidlaTableModel(rpl.getContainer(), rpl.getContainer().getVozidla(), ms.agentPresunov().getPozicieVozidiel()));
-				jTable2.setModel(new ZastavkyTableModel(rpl.getContainer().getZastavky(), rpl.getContainer(), ms.agentNastupov()));
-				jLabel8.setText(rpl.getActualRepl() + " / " + rpl.getReplCount());
-			});
-		}
-		catch (InterruptedException | InvocationTargetException ex) {
-			ex.printStackTrace();
-		}
+		SwingUtilities.invokeLater(() -> {
+			jTable1.setModel(new VozidlaTableModel(rpl.getContainer(), rpl.getContainer().getVozidla(), ms.agentPresunov().getPozicieVozidiel()));
+			jTable2.setModel(new ZastavkyTableModel(rpl.getContainer().getZastavky(), rpl.getContainer(), ms.agentNastupov()));
+			jLabel8.setText(rpl.getActualRepl() + " / " + rpl.getReplCount());
+		});
 	}
 
 	@Override

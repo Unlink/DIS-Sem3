@@ -53,6 +53,7 @@ public class VozidlaPanel extends javax.swing.JPanel implements IVozidlaConf {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jButton1.setBackground(new java.awt.Color(0, 153, 0));
         jButton1.setText("Pridaj Vozidlo");
@@ -73,6 +74,14 @@ public class VozidlaPanel extends javax.swing.JPanel implements IVozidlaConf {
             }
         });
 
+        jButton3.setBackground(new java.awt.Color(0, 102, 255));
+        jButton3.setText("Podľa rozostupov");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,7 +91,9 @@ public class VozidlaPanel extends javax.swing.JPanel implements IVozidlaConf {
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(47, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
@@ -91,7 +102,8 @@ public class VozidlaPanel extends javax.swing.JPanel implements IVozidlaConf {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE))
         );
@@ -105,24 +117,44 @@ public class VozidlaPanel extends javax.swing.JPanel implements IVozidlaConf {
 		if (jPanel1.getComponents().length > 1) {
 			VozidloPanel vp = (VozidloPanel) jPanel1.getComponent(0);
 			double min = vp.getTime();
-			double step = aLinka.getLength(true) / (jPanel1.getComponents().length);
+			double step = (aLinka.getLength(true)-min) / (jPanel1.getComponents().length);
 			for (int i = 1; i < jPanel1.getComponents().length; i++) {
+				vp.setRozostup((min + step * i) - vp.getTime());
 				VozidloPanel p = (VozidloPanel) jPanel1.getComponent(i);
 				p.setTime(min + step * i);
+				vp = p;
 			}
 		}
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (jPanel1.getComponents().length > 1) {
+			VozidloPanel vp = (VozidloPanel) jPanel1.getComponent(0);
+			for (int i = 1; i < jPanel1.getComponents().length; i++) {
+				VozidloPanel p = (VozidloPanel) jPanel1.getComponent(i);
+				p.setTime(vp.getTime()+vp.getRozostup());
+				vp = p;
+			}
+		}
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 	@Override
 	public void insertVozidlo(TypVozidlo paTyp, double paTime) {
-		VozidloPanel panel = new VozidloPanel(aVozidla, paTyp, paTime);
+		VozidloPanel panel = new VozidloPanel(aVozidla, paTyp, paTime, jPanel1.getComponentCount()+1);
 		panel.onDelete((p) -> {
 			jPanel1.remove(p);
-			jPanel1.validate();
+			jPanel1.invalidate();
+			jPanel1.repaint();
 			jScrollPane1.validate();
+			recalculateIDs();
 		});
+		if (jPanel1.getComponentCount() > 0) {
+			VozidloPanel last = ((VozidloPanel)jPanel1.getComponents()[jPanel1.getComponents().length-1]);
+			last.setRozostup(paTime-last.getTime());
+		}
 		jPanel1.add(panel);
-		jPanel1.validate();
+		jPanel1.invalidate();
+		jPanel1.repaint();
 		jScrollPane1.validate();
 	}
 
@@ -143,10 +175,17 @@ public class VozidlaPanel extends javax.swing.JPanel implements IVozidlaConf {
 		jPanel1.removeAll();
 		jPanel1.validate();
 	}
+	
+	private void recalculateIDs() {
+		for (int i = 0; i < jPanel1.getComponentCount(); i++) {
+			((VozidloPanel)jPanel1.getComponent(i)).setId(i+1);
+		}
+	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

@@ -22,7 +22,7 @@ public class AgentVystupov extends Agent {
 
 	private int[] aPrepravenych;
 
-	private double[] aVytazenieVozidiel;
+	private double[][] aVytazenieVozidiel;
 
 	public AgentVystupov(int id, Simulation mySim, Agent parent, List<RNG<Double>> paGeneratoryVystupov, List<Linka> paLinky, int pocetTypovVozidiel, int pocVozidiel) {
 		super(id, mySim, parent);
@@ -34,7 +34,7 @@ public class AgentVystupov extends Agent {
 		}
 		aPrepravenych = new int[pocetTypovVozidiel];
 
-		aVytazenieVozidiel = new double[pocVozidiel];
+		aVytazenieVozidiel = new double[2][pocVozidiel];
 	}
 
 	public void insertVytazenostSample(Vozidlo vozidlo, double paValue) {
@@ -48,8 +48,15 @@ public class AgentVystupov extends Agent {
 
 	public void insertVytazenostVozidla(int id, double vytazenost) {
 		//Zaujima ma len prvá vytazenosť
-		if (aVytazenieVozidiel[id] == 0) {
-			aVytazenieVozidiel[id] = vytazenost;
+		if (aVytazenieVozidiel[0][id] == 0) {
+			aVytazenieVozidiel[0][id] = vytazenost;
+			aVytazenieVozidiel[1][id] = -1;
+		}
+		else if (aVytazenieVozidiel[1][id] >= 0) {
+			aVytazenieVozidiel[1][id] = (aVytazenieVozidiel[1][id]+vytazenost)/2;
+		}
+		else {
+			aVytazenieVozidiel[1][id] = (aVytazenieVozidiel[0][id]+vytazenost)/2;
 		}
 	}
 
@@ -61,7 +68,7 @@ public class AgentVystupov extends Agent {
 		return aPrepravenych;
 	}
 
-	public double[] getVytazenieVozidiel() {
+	public double[][] getVytazenieVozidiel() {
 		return aVytazenieVozidiel;
 	}
 

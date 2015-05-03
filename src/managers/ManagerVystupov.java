@@ -21,14 +21,14 @@ public class ManagerVystupov extends Manager {
 	//meta! sender="AgentPrepravy", id="68", type="request"
 	public void processVylozZakaznikov(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
+		((AgentVystupov) myAgent()).insertVytazenostSample(mm.getVozidlo(), mm.getVozidlo().getAktObsadenost() / (double) mm.getVozidlo().getTypVozidlo().getKapacita());
+			((AgentVystupov) myAgent()).insertVytazenost(mm.getVozidlo().getTypVozidlo().getId(), mm.getVozidlo().getAktObsadenost());
 		if (mm.getVozidlo().getAktObsadenost()== 0) {
 			mm.setCode(Mc.vylozZakaznikov);
 			response(mm);
 		}
 		else {
 			mm.getVozidlo().setStav(Vozidlo.VozidloState.Vystup);
-			((AgentVystupov) myAgent()).insertVytazenostSample(mm.getVozidlo(), mm.getVozidlo().getAktObsadenost() / (double) mm.getVozidlo().getTypVozidlo().getKapacita());
-			((AgentVystupov) myAgent()).insertVytazenost(mm.getVozidlo().getTypVozidlo().getId(), mm.getVozidlo().getAktObsadenost());
 			vystupLudi(message);
 		}
 	}

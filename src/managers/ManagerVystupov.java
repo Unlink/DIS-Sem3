@@ -13,7 +13,7 @@ import java.util.List;
 
 //meta! id="15"
 public class ManagerVystupov extends Manager {
-		
+
 	public ManagerVystupov(int id, Simulation mySim, Agent myAgent) {
 		super(id, mySim, myAgent);
 	}
@@ -21,10 +21,16 @@ public class ManagerVystupov extends Manager {
 	//meta! sender="AgentPrepravy", id="68", type="request"
 	public void processVylozZakaznikov(MessageForm message) {
 		MyMessage mm = (MyMessage) message;
-		mm.getVozidlo().setStav(Vozidlo.VozidloState.Vystup);
-		((AgentVystupov)myAgent()).insertVytazenostSample(mm.getVozidlo().getLinka(), mm.getVozidlo().getAktObsadenost()/(double)mm.getVozidlo().getTypVozidlo().getKapacita());
-		((AgentVystupov)myAgent()).insertVytazenost(mm.getVozidlo().getTypVozidlo().getId(), mm.getVozidlo().getAktObsadenost());
-		vystupLudi(message);
+		if (mm.getVozidlo().getAktObsadenost()== 0) {
+			mm.setCode(Mc.vylozZakaznikov);
+			response(mm);
+		}
+		else {
+			mm.getVozidlo().setStav(Vozidlo.VozidloState.Vystup);
+			((AgentVystupov) myAgent()).insertVytazenostSample(mm.getVozidlo().getLinka(), mm.getVozidlo().getAktObsadenost() / (double) mm.getVozidlo().getTypVozidlo().getKapacita());
+			((AgentVystupov) myAgent()).insertVytazenost(mm.getVozidlo().getTypVozidlo().getId(), mm.getVozidlo().getAktObsadenost());
+			vystupLudi(message);
+		}
 	}
 
 	private void vystupLudi(MessageForm paMessage) {

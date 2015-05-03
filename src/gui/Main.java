@@ -3,33 +3,22 @@
  */
 package gui;
 
-import OSPABA.ISimDelegate;
-import OSPABA.SimState;
 import OSPABA.Simulation;
-import OSPStat.Stat;
 import container.ContainerBulider;
 import container.IVozidlaConf;
 import container.SimContainer;
 import container.SimVariants;
 import entity.Linka;
-import entity.Vozidlo;
-import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.swing.SwingUtilities;
+import org.jfree.chart.ChartPanel;
 import simulation.IReplicationListener;
-import simulation.Mc;
-import simulation.MyMessage;
+import simulation.MyReplicationManager;
 import simulation.MySimulation;
+import simulation.MySimulationStatistics;
 import simulation.ReplicationManager;
 import tools.ImportTools;
 import tools.SettingsTools;
@@ -44,11 +33,13 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 
 	private SettingsTools st;
 
-	private ReplicationManager rpl;
+	private MyReplicationManager rpl;
 
 	private List<IVozidlaConf> aLinkyConfigurator;
 
 	private double timeOffset;
+	
+	private XYLineChart aCharts[];
 
 	/**
 	 * Creates new form Main
@@ -59,13 +50,20 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 		aLinkyConfigurator = new ArrayList<>();
 		cb = new ContainerBulider(ImportTools.importData(), aLinkyConfigurator);
 		st = new SettingsTools(jTabbedPane2);
-		rpl = new ReplicationManager(this);
+		rpl = new MyReplicationManager(this);
 		timeOffset = 0;
 		for (Linka linka : cb.getLinky()) {
 			VozidlaPanel vozidlaPanel = new VozidlaPanel(cb.getTypyVozidiel(), linka);
 			aLinkyConfigurator.add(vozidlaPanel);
 			jTabbedPane2.addTab("Linka " + linka.getId(), vozidlaPanel);
 		}
+		aCharts = new XYLineChart[]{
+			new XYLineChart("Priemerna doba čakania"), 
+			new XYLineChart("Priemerne % prichodzích neskoto")
+		};
+		jPanel7.add(new ChartPanel(aCharts[0].getChart()));
+		jPanel7.add(new ChartPanel(aCharts[1].getChart()));
+		jToggleButton1ActionPerformed(null);
 	}
 
 	@Override
@@ -85,21 +83,28 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 			jButton2.setEnabled(false);
 			jButton3.setEnabled(false);
 		});
+		st.saveResults(((MySimulationStatistics)rpl.getStatis()));
 	}
 
 	@Override
-	public void onReplicationDone(MySimulation paSimulation) {
+	public void onReplicationDone(Simulation paSimulation) {
 		String result = rpl.getStatis().toString();
 
 		SwingUtilities.invokeLater(() -> jTextArea1.setText(result));
+		
+		if (rpl.getActualRepl() > rpl.getReplCount()*0.15) {
+			aCharts[0].addPoint(rpl.getActualRepl(), ((MySimulationStatistics)rpl.getStatis()).getCasCakania());
+			aCharts[1].addPoint(rpl.getActualRepl(), ((MySimulationStatistics)rpl.getStatis()).getPPPneskoro());
+		}
 	}
 
 	@Override
-	public void onReplicationBegin(MySimulation paSimulation) {
+	public void onReplicationBegin(Simulation paSimulation) {
+		MySimulation ms = (MySimulation) paSimulation;
 		try {
 			SwingUtilities.invokeAndWait(() -> {
-				jTable1.setModel(new VozidlaTableModel(rpl.getContainer(), rpl.getContainer().getVozidla(), paSimulation.agentPresunov().getPozicieVozidiel()));
-				jTable2.setModel(new ZastavkyTableModel(rpl.getContainer().getZastavky(), rpl.getContainer(), paSimulation.agentNastupov()));
+				jTable1.setModel(new VozidlaTableModel(rpl.getContainer(), rpl.getContainer().getVozidla(), ms.agentPresunov().getPozicieVozidiel()));
+				jTable2.setModel(new ZastavkyTableModel(rpl.getContainer().getZastavky(), rpl.getContainer(), ms.agentNastupov()));
 				jLabel8.setText(rpl.getActualRepl() + " / " + rpl.getReplCount());
 			});
 		}
@@ -109,7 +114,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 	}
 
 	@Override
-	public void onRefresh(MySimulation paSimulation) {
+	public void onRefresh(Simulation paSimulation) {
 		SwingUtilities.invokeLater(() -> {
 			jLabel4.setText(formatTime(paSimulation.currentTime() - timeOffset));
 			jTable1.invalidate();
@@ -154,6 +159,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -163,6 +169,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simulácia dopravy");
@@ -309,6 +316,8 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
                 .addGap(7, 7, 7))
         );
 
+        jTabbedPane1.setEnabled(true);
+
         jLabel5.setText("Variant:");
 
         buttonGroup1.add(jRadioButton1);
@@ -342,6 +351,17 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
             }
         });
 
+        jCheckBox1.setText("Ukladanie experimentov");
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jButton1, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), jCheckBox1, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -356,7 +376,9 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
                         .addComponent(jRadioButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jRadioButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 592, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 449, Short.MAX_VALUE)
+                        .addComponent(jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5)))
@@ -373,7 +395,8 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
                         .addComponent(jRadioButton2))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton5)
-                        .addComponent(jButton4)))
+                        .addComponent(jButton4)
+                        .addComponent(jCheckBox1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
                 .addContainerGap())
@@ -381,7 +404,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 
         jTabbedPane1.addTab("Nastavenia", jPanel3);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jToggleButton1, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jPanel4, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jToggleButton1, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jPanel4, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -457,6 +480,12 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 
         jTabbedPane1.addTab("Output", jPanel6);
 
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jToggleButton1, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jPanel7, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        jPanel7.setLayout(new java.awt.GridLayout(0, 1));
+        jTabbedPane1.addTab("Grafy", jPanel7);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -480,6 +509,8 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
 		jPanel2.setEnabled(jToggleButton1.isSelected());
 		setSpeed();
+		jPanel4.getComponent(0).setVisible(jToggleButton1.isSelected());
+		jPanel5.getComponent(0).setVisible(jToggleButton1.isSelected());
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
 	private void setSpeed() {
@@ -493,6 +524,12 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 		SimContainer build = cb.build();
+		if (jCheckBox1.isSelected()) {
+			st.prepareSimulation(aLinkyConfigurator, build.getTypyVozidiel(), Integer.parseInt(jTextField1.getText()));
+		}
+		for (XYLineChart aChart : aCharts) {
+			aChart.clear();
+		}
 		timeOffset = build.getOffset();
 		jButton1.setEnabled(false);
 		jButton2.setEnabled(true);
@@ -532,6 +569,12 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 		st.open(aLinkyConfigurator, cb.getTypyVozidiel());
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+		if (jCheckBox1.isSelected()) {
+			st.choseDir();
+		}
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -594,6 +637,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -608,6 +652,7 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;

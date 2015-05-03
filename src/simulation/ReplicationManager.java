@@ -3,6 +3,8 @@
  */
 package simulation;
 
+import OSPABA.Simulation;
+import container.IContainer;
 import container.SimContainer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,13 +13,13 @@ import java.util.concurrent.Executors;
  *
  * @author Unlink
  */
-public class ReplicationManager {
+public abstract class ReplicationManager {
 
-	private SimContainer aContainer;
+	private IContainer aContainer;
 
 	private boolean aStopped;
 
-	private MySimulation aMs;
+	private Simulation aMs;
 
 	private ExecutorService aThreadPool;
 
@@ -31,7 +33,7 @@ public class ReplicationManager {
 
 	private int aActualRepl;
 
-	private SimulationStatistics aStatis;
+	private ISimStats aStatis;
 
 	public ReplicationManager(IReplicationListener paCallback) {
 		aCallback = paCallback;
@@ -40,13 +42,13 @@ public class ReplicationManager {
 		aThreadPool = Executors.newFixedThreadPool(1);
 	}
 
-	public void run(int paPocetReplikacii, SimContainer paContainer) {
+	public void run(int paPocetReplikacii, IContainer paContainer) {
 		if (aMs != null) {
 			return;
 		}
 		aContainer = paContainer;
 		aReplCount = paPocetReplikacii;
-		aStatis = new SimulationStatistics(paContainer.getLinky(), paContainer.getTypyVozidiel());
+		aStatis = paContainer.getSimStats();
 		synchronized (ReplicationManager.this) {
 			reset();
 		}
@@ -58,11 +60,7 @@ public class ReplicationManager {
 				}
 				aActualRepl = i + 1;
 				synchronized (ReplicationManager.this) {
-					aMs = new MySimulation(aContainer);
-					MyMessage msg = new MyMessage(aMs);
-					msg.setAddressee(aMs.agentModelu());
-					msg.setCode(Mc.init);
-					aMs.agentModelu().manager().notice(msg);
+					aMs = createSimulation(aContainer);
 					aMs.setSimSpeed(1, 1);
 					aMs.onRefreshUI((s) -> aCallback.onRefresh(aMs));
 					aCallback.onReplicationBegin(aMs);
@@ -78,6 +76,8 @@ public class ReplicationManager {
 		});
 	}
 
+	protected abstract Simulation createSimulation(IContainer paContainer);
+
 	public int getReplCount() {
 		return aReplCount;
 	}
@@ -86,11 +86,11 @@ public class ReplicationManager {
 		return aActualRepl;
 	}
 
-	public SimulationStatistics getStatis() {
+	public ISimStats getStatis() {
 		return aStatis;
 	}
 
-	public SimContainer getContainer() {
+	public IContainer getContainer() {
 		return aContainer;
 	}
 

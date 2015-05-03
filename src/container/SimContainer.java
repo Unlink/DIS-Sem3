@@ -9,12 +9,14 @@ import entity.TypVozidlo;
 import entity.Vozidlo;
 import entity.Zastavka;
 import java.util.List;
+import simulation.ISimStats;
+import simulation.MySimulationStatistics;
 
 /**
  *
  * @author Unlink
  */
-public class SimContainer {
+public class SimContainer implements IContainer {
 
 	private List<Zastavka> aZastavky;
 	private List<Linka> aLinky;
@@ -32,6 +34,8 @@ public class SimContainer {
 	private double aOffset;
 
 	private double aTrvaniePrichodov;
+	
+	private ISimStats aSimStats;
 
 	public SimContainer(List<Zastavka> paZastavky, List<Linka> paLinky, List<TypVozidlo> paTypyVozidiel, List<Vozidlo> paVozidla,
 		SimVariants paVarianta, double paStartZapasu, double paOffset, double paTrvaniePrichodov) {
@@ -43,6 +47,7 @@ public class SimContainer {
 		this.aStartZapasu = paStartZapasu;
 		this.aOffset = paOffset;
 		this.aTrvaniePrichodov = paTrvaniePrichodov;
+		aSimStats = new MySimulationStatistics(paLinky, paTypyVozidiel);
 	}
 
 	public void injectGeneratoryPrichodov(List<RNG<Double>> paGeneratoryPrichodov) {
@@ -107,6 +112,11 @@ public class SimContainer {
 
 	public List<TypVozidlo> getTypyVozidiel() {
 		return aTypyVozidiel;
+	}
+
+	@Override
+	public ISimStats getSimStats() {
+		return aSimStats;
 	}
 	
 	

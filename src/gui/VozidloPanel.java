@@ -16,8 +16,7 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class VozidloPanel extends javax.swing.JPanel implements IVozidloConf {
 
-	private DeleteCallback aCallback = (VozidloPanel paNel) -> {
-	};
+	private DeleteCallback aCallback = (VozidloPanel paNel) -> {};
 
 	/**
 	 * Creates new form VozidloPanel

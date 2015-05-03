@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import simulation.MySimulationStatistics;
 import simulation.ReplicationManager;
 import tools.ImportTools;
 
@@ -105,8 +106,8 @@ public abstract class Base {
 			for (int q : pocty) {
 				sb.append(q).append(",");
 			}
-			sb.append(rm.getStatis().getCasCakania()).append(",");
-			sb.append(rm.getStatis().getPPPneskoro());
+			sb.append(((MySimulationStatistics)rm.getStatis()).getCasCakania()).append(",");
+			sb.append(((MySimulationStatistics)rm.getStatis()).getPPPneskoro());
 			out.println(sb.toString());
 		}
 		catch (IOException e) {

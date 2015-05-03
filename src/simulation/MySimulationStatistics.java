@@ -3,6 +3,7 @@
  */
 package simulation;
 
+import OSPABA.Simulation;
 import OSPStat.Stat;
 import entity.Linka;
 import entity.TypVozidlo;
@@ -14,7 +15,7 @@ import java.util.Map.Entry;
  *
  * @author Unlink
  */
-public class SimulationStatistics {
+public class MySimulationStatistics implements ISimStats {
 	
 	private HashMap<Linka, Stat> aVytazenostLiniek;
 	
@@ -30,7 +31,7 @@ public class SimulationStatistics {
 	
 	private Stat aPocetNeskoro;
 
-	public SimulationStatistics(List<Linka> paLinky, List<TypVozidlo> paVozidla) {
+	public MySimulationStatistics(List<Linka> paLinky, List<TypVozidlo> paVozidla) {
 		this.aVozidla = paVozidla;
 		this.aPrepravenych = new Stat[aVozidla.size()];
 		for (int i = 0; i < aPrepravenych.length; i++) {
@@ -49,7 +50,9 @@ public class SimulationStatistics {
 		}
 	}
 	
-	public void onReplicationDone(MySimulation ms) {
+	@Override
+	public void onReplicationDone(Simulation paSim) {
+		MySimulation ms = (MySimulation) paSim;
 		aDobaCakania.addSample(ms.agentNastupov().getDobaCakania().mean());
 		aPocetNeskoro.addSample((ms.agentPrepravy().getObsluzenychNeskoro().val() / (double)ms.agentPrepravy().getObsluzenych().val())*100);
 		
@@ -100,7 +103,7 @@ public class SimulationStatistics {
 	}
 	
 	public double getPPPneskoro() {
-		return aPocetNeskoro.mean()*100;
+		return aPocetNeskoro.mean();
 	}
 
 	public HashMap<Linka, Stat> getVytazenostLiniek() {
@@ -114,6 +117,4 @@ public class SimulationStatistics {
 	public HashMap<Linka, Stat> getNeskoroNaLinke() {
 		return aNeskoroNaLinke;
 	}
-	
-	
 }

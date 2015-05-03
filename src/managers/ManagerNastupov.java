@@ -146,8 +146,8 @@ public class ManagerNastupov extends Manager {
 					mm2.setPasazier(myAgent().getFronta(zastavka).dequeue());
 					mm2.getVozidlo().obsadDvere().pridajPasaziera();
 					startContinualAssistant(mm2);
-					((AgentNastupov) myAgent()).getDobaCakania().addSample(mm2.getPasazier().timeInSystem());
-					((AgentNastupov) myAgent()).getDobaCakaniaNaLinke().get(mm2.getVozidlo().getLinka()).addSample(mm2.getPasazier().timeInSystem());
+					((AgentNastupov) myAgent()).getDobaCakania().addSample(mm2.getPasazier().timeInSystem()/60d);
+					((AgentNastupov) myAgent()).getDobaCakaniaNaLinke().get(mm2.getVozidlo().getLinka()).addSample(mm2.getPasazier().timeInSystem()/60d);
 				}
 				else {
 					break;
@@ -161,6 +161,7 @@ public class ManagerNastupov extends Manager {
 		if (!mm.getVozidlo().nastupujuLudia()) {
 			if (!mm.getVozidlo().maMiesto()) {
 				ukonciObsluhuVozidla(mm);
+				return;
 			}
 
 			if (mm.getVozidlo().getTypVozidlo().getCaka() * aVarianta.getNasobic() > 0 && mm.getVozidlo().getStav() == Vozidlo.VozidloState.NotWaiting) {

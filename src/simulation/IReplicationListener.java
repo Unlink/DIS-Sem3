@@ -3,6 +3,8 @@
  */
 package simulation;
 
+import OSPABA.Simulation;
+
 /**
  *
  * @author Unlink
@@ -13,10 +15,10 @@ public interface IReplicationListener {
 	
 	public void onEnd();
 	
-	public void onReplicationDone(MySimulation simulation);
+	public void onReplicationDone(Simulation simulation);
 	
-	public void onReplicationBegin(MySimulation simulation);
+	public void onReplicationBegin(Simulation simulation);
 	
-	public void onRefresh(MySimulation simulation);
+	public void onRefresh(Simulation simulation);
 	
 }

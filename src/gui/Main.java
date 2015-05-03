@@ -90,7 +90,10 @@ public class Main extends javax.swing.JFrame implements IReplicationListener {
 	public void onReplicationDone(Simulation paSimulation) {
 		String result = rpl.getStatis().toString();
 
-		SwingUtilities.invokeLater(() -> jTextArea1.setText(result));
+		SwingUtilities.invokeLater(() -> {
+			jTextArea1.setText(result);
+			jTextArea1.setCaretPosition(0);
+		});
 		
 		if (rpl.getActualRepl() > rpl.getReplCount()*0.15) {
 			aCharts[0].addPoint(rpl.getActualRepl(), ((MySimulationStatistics)rpl.getStatis()).getCasCakania());

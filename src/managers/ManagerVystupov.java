@@ -27,7 +27,7 @@ public class ManagerVystupov extends Manager {
 		}
 		else {
 			mm.getVozidlo().setStav(Vozidlo.VozidloState.Vystup);
-			((AgentVystupov) myAgent()).insertVytazenostSample(mm.getVozidlo().getLinka(), mm.getVozidlo().getAktObsadenost() / (double) mm.getVozidlo().getTypVozidlo().getKapacita());
+			((AgentVystupov) myAgent()).insertVytazenostSample(mm.getVozidlo(), mm.getVozidlo().getAktObsadenost() / (double) mm.getVozidlo().getTypVozidlo().getKapacita());
 			((AgentVystupov) myAgent()).insertVytazenost(mm.getVozidlo().getTypVozidlo().getId(), mm.getVozidlo().getAktObsadenost());
 			vystupLudi(message);
 		}

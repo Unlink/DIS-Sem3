@@ -19,10 +19,12 @@ import java.util.List;
 public class AgentVystupov extends Agent {
 
 	private HashMap<Linka, Stat> aVytazenieLiniek;
-	
+
 	private int[] aPrepravenych;
-	
-	public AgentVystupov(int id, Simulation mySim, Agent parent, List<RNG<Double>> paGeneratoryVystupov, List<Linka> paLinky, int pocetTypovVozidiel) {
+
+	private double[] aVytazenieVozidiel;
+
+	public AgentVystupov(int id, Simulation mySim, Agent parent, List<RNG<Double>> paGeneratoryVystupov, List<Linka> paLinky, int pocetTypovVozidiel, int pocVozidiel) {
 		super(id, mySim, parent);
 		init();
 		((ProcessVystupu) findAssistant(Id.processVystupu)).inject(paGeneratoryVystupov);
@@ -31,14 +33,24 @@ public class AgentVystupov extends Agent {
 			aVytazenieLiniek.put(paLinky.get(i), new Stat());
 		}
 		aPrepravenych = new int[pocetTypovVozidiel];
+
+		aVytazenieVozidiel = new double[pocVozidiel];
 	}
-	
-	public void insertVytazenostSample(Linka paLinka, double paValue) {
-		aVytazenieLiniek.get(paLinka).addSample(paValue);
+
+	public void insertVytazenostSample(Vozidlo vozidlo, double paValue) {
+		aVytazenieLiniek.get(vozidlo.getLinka()).addSample(paValue);
+		insertVytazenostVozidla(vozidlo.getId(), paValue);
 	}
-	
+
 	public void insertVytazenost(int id, int pocet) {
 		aPrepravenych[id] += pocet;
+	}
+
+	public void insertVytazenostVozidla(int id, double vytazenost) {
+		//Zaujima ma len prvá vytazenosť
+		if (aVytazenieVozidiel[id] == 0) {
+			aVytazenieVozidiel[id] = vytazenost;
+		}
 	}
 
 	public HashMap<Linka, Stat> getVytazenieLiniek() {
@@ -48,7 +60,11 @@ public class AgentVystupov extends Agent {
 	public int[] getPrepravenych() {
 		return aPrepravenych;
 	}
-	
+
+	public double[] getVytazenieVozidiel() {
+		return aVytazenieVozidiel;
+	}
+
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	private void init() {
 		new ManagerVystupov(Id.managerVystupov, mySim(), this);

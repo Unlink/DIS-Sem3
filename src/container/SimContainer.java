@@ -47,7 +47,7 @@ public class SimContainer implements IContainer {
 		this.aStartZapasu = paStartZapasu;
 		this.aOffset = paOffset;
 		this.aTrvaniePrichodov = paTrvaniePrichodov;
-		aSimStats = new MySimulationStatistics(paLinky, paTypyVozidiel);
+		aSimStats = new MySimulationStatistics(paLinky, paTypyVozidiel, paVozidla);
 	}
 
 	public void injectGeneratoryPrichodov(List<RNG<Double>> paGeneratoryPrichodov) {
